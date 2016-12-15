@@ -119,7 +119,6 @@ class DescriptorPoolTest(unittest.TestCase):
     self.assertEqual('google.protobuf.python.internal.Factory1Message',
                      msg1.full_name)
     self.assertEqual(None, msg1.containing_type)
-    self.assertFalse(msg1.has_options)
 
     nested_msg1 = msg1.nested_types[0]
     self.assertEqual('NestedFactory1Message', nested_msg1.name)
@@ -203,7 +202,6 @@ class DescriptorPoolTest(unittest.TestCase):
     self.assertIsInstance(enum1, descriptor.EnumDescriptor)
     self.assertEqual(0, enum1.values_by_name['FACTORY_1_VALUE_0'].number)
     self.assertEqual(1, enum1.values_by_name['FACTORY_1_VALUE_1'].number)
-    self.assertFalse(enum1.has_options)
 
     nested_enum1 = self.pool.FindEnumTypeByName(
         'google.protobuf.python.internal.Factory1Message.NestedFactory1Enum')
@@ -236,8 +234,6 @@ class DescriptorPoolTest(unittest.TestCase):
         'google.protobuf.python.internal.Factory1Message.list_value')
     self.assertEqual(field.name, 'list_value')
     self.assertEqual(field.label, field.LABEL_REPEATED)
-    self.assertFalse(field.has_options)
-
     with self.assertRaises(KeyError):
       self.pool.FindFieldByName('Does not exist')
 
@@ -452,7 +448,6 @@ class EnumField(object):
     test.assertTrue(field_desc.has_default_value)
     test.assertEqual(enum_desc.values_by_name[self.default_value].number,
                      field_desc.default_value)
-    test.assertFalse(enum_desc.values_by_name[self.default_value].has_options)
     test.assertEqual(msg_desc, field_desc.containing_type)
     test.assertEqual(enum_desc, field_desc.enum_type)
 

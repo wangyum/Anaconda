@@ -13,18 +13,12 @@
 # limitations under the License.
 # ==============================================================================
 
-"""## System configuration.
-
-@@get_include
-@@get_lib
-"""
+"""Load a file resource and return the contents."""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import os.path as _os_path
-
-from tensorflow.python.util.all_util import remove_undocumented
+import os.path
 
 
 # pylint: disable=g-import-not-at-top
@@ -39,7 +33,7 @@ def get_include():
   # import at the top would cause a circular import, resulting in
   # the tensorflow module missing symbols that come after sysconfig.
   import tensorflow as tf
-  return _os_path.join(_os_path.dirname(tf.__file__), 'include')
+  return os.path.join(os.path.dirname(tf.__file__), 'include')
 
 
 def get_lib():
@@ -49,7 +43,4 @@ def get_lib():
     The directory as string.
   """
   import tensorflow as tf
-  return _os_path.join(_os_path.dirname(tf.__file__), 'core')
-
-_allowed_symbols = []
-remove_undocumented(__name__, _allowed_symbols)
+  return os.path.join(os.path.dirname(tf.__file__), 'core')

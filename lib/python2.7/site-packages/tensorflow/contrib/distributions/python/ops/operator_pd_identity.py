@@ -148,7 +148,7 @@ class OperatorPDIdentity(operator_pd.OperatorPDBase):
   @property
   def inputs(self):
     """List of tensors that were provided as initialization inputs."""
-    return [self._shape_arg]
+    return [self._shape]
 
   def get_shape(self):
     """Static `TensorShape` of entire operator.

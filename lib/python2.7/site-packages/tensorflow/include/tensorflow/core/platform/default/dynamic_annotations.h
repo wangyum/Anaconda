@@ -29,6 +29,4 @@ limitations under the License.
   do {                                            \
   } while (0)
 
-#define TF_ATTRIBUTE_NO_SANITIZE_MEMORY
-
 #endif  // TENSORFLOW_CORE_PLATFORM_DEFAULT_DYNAMIC_ANNOTATIONS_H_
