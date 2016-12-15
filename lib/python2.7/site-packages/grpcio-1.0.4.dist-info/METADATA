@@ -1,0 +1,17 @@
+Metadata-Version: 2.0
+Name: grpcio
+Version: 1.0.4
+Summary: UNKNOWN
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: 3-clause BSD
+Platform: UNKNOWN
+Requires-Dist: enum34 (>=1.0.4)
+Requires-Dist: futures (>=2.2.0)
+Requires-Dist: protobuf (>=3.0.0)
+Requires-Dist: six (>=1.5.2)
+
+UNKNOWN
+
+
