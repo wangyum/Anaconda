@@ -1,0 +1,13 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "depends": [], 
+  "license": "proprietary - Intel", 
+  "license_family": "Proprietary", 
+  "name": "mkl", 
+  "platform": "linux", 
+  "requires": [], 
+  "subdir": "linux-64", 
+  "version": "11.3.1"
+}

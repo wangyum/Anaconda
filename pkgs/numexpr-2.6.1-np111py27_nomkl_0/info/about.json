@@ -1,0 +1,8 @@
+{
+  "description": "Numexpr is a fast numerical expression evaluator for NumPy. With it,\nexpressions that operate on arrays (like \"3*a+4*b\") are accelerated and use\nless memory than doing the same calculation in Python.\n", 
+  "dev_url": "https://github.com/pydata/numexpr", 
+  "doc_url": "https://github.com/pydata/numexpr/wiki/Numexpr-Users-Guide", 
+  "home": "https://github.com/pydata/numexpr", 
+  "license": "MIT", 
+  "summary": "Fast numerical expression evaluator for NumPy"
+}

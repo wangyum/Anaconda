@@ -1,0 +1,8 @@
+{
+  "description": "Tornado is a Python web framework and asynchronous networking library.\nBy using non-blocking network I/O, Tornado can scale to tens of thousands\nof open connections, making it ideal for long polling, WebSockets, and\nother applications that require a long-lived connection to each user.\n", 
+  "dev_url": "https://github.com/tornadoweb/tornado", 
+  "doc_url": "http://www.tornadoweb.org/en/stable/", 
+  "home": "http://www.tornadoweb.org/", 
+  "license": "Apache", 
+  "summary": "A Python web framework and asynchronous networking library"
+}

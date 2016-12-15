@@ -1,0 +1,8 @@
+prefix=/opt/anaconda1anaconda2anaconda3
+
+Name: Pycairo
+Description: Python bindings for cairo
+Version: 1.10.0
+Requires: cairo
+Cflags: -I${prefix}/include/pycairo
+Libs:

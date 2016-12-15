@@ -1,0 +1,12 @@
+==> 2016-07-12 14:32:09 <==
+# cmd: /opt/cloudera/parcels/Anaconda/bin/conda create -n tensorflow python=2.7
+openssl-1.0.2h-1
+pip-8.1.2-py27_0
+python-2.7.12-1
+readline-6.2-2
+setuptools-23.0.0-py27_0
+sqlite-3.13.0-0
+tk-8.5.18-0
+wheel-0.29.0-py27_0
+zlib-1.2.8-3
+# create specs: ['python 2.7*']

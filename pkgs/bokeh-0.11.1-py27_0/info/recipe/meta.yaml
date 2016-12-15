@@ -1,0 +1,81 @@
+package:
+  name: bokeh
+  version: 'nightly'
+
+build:
+  number: {{ environ.get('BINSTAR_BUILD', 1) }}
+
+extra:
+  channels:
+    - bokeh
+    - javascript
+
+requirements:
+  build:
+    - python
+    - distribute
+    - setuptools
+    - nodejs >=4.1
+    - six
+    - python-dateutil
+    - numpy
+    - yaml
+    - pyyaml
+    - jinja2
+    - tornado >=4.3
+
+  run:
+    # bokeh
+    - python
+    - six
+    - requests
+    - pyyaml
+    - python-dateutil
+    - jinja2
+    - numpy
+
+    # server
+    - tornado >=4.3
+    - futures        [py27]
+
+test:
+  requires:
+    # docs
+    - graphviz
+    - pygments
+    - sphinx >=1.3.1
+
+    # tests
+    # pyyaml installed by bokeh
+    # jinja2 installed by bokeh
+    - colorama
+    - coverage
+    - flake8
+    - mock
+    - pandas
+    - pytest
+    - pytest-cov ==1.8.1
+    - pytest-selenium
+    - beautiful-soup
+    - scipy
+    - pillow
+
+    # examples
+    - jupyter
+    - matplotlib
+    - sympy
+    - ggplot
+    - seaborn
+    - icalendar
+    - flask
+    - flexx           [py3k]
+
+  commands:
+    - bokeh -h        [linux64 or osx]
+
+  imports:
+    - bokeh
+
+about:
+  home: https://github.com/bokeh/bokeh
+  license: New BSD

@@ -1,0 +1,23 @@
+==> git log -n1 <==
+commit 05577624d3a31db081f07f9024841e1ada313dc9
+Merge: 941ab95 0839fe7
+Author: Andrew Collette <andrew.collette@gmail.com>
+Date:   Thu Apr 9 11:45:22 2015 -0600
+
+    Merge pull request #560 from ghisvail/bug/remove-dsstore
+    
+    remove extra DS_Store files from release tarball
+
+==> git describe --tags --dirty <==
+2.5.0-dirty
+
+==> git status <==
+# Not currently on any branch.
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   setup.py
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+

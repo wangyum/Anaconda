@@ -1,0 +1,37 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64", 
+  "date": "2016-04-20", 
+  "depends": [
+    "backports", 
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/backports.shutil_get_terminal_size-1.0.0-py2.7.egg-info/PKG-INFO", 
+    "lib/python2.7/site-packages/backports.shutil_get_terminal_size-1.0.0-py2.7.egg-info/SOURCES.txt", 
+    "lib/python2.7/site-packages/backports.shutil_get_terminal_size-1.0.0-py2.7.egg-info/dependency_links.txt", 
+    "lib/python2.7/site-packages/backports.shutil_get_terminal_size-1.0.0-py2.7.egg-info/top_level.txt", 
+    "lib/python2.7/site-packages/backports/shutil_get_terminal_size/__init__.py", 
+    "lib/python2.7/site-packages/backports/shutil_get_terminal_size/__init__.pyc", 
+    "lib/python2.7/site-packages/backports/shutil_get_terminal_size/get_terminal_size.py", 
+    "lib/python2.7/site-packages/backports/shutil_get_terminal_size/get_terminal_size.pyc"
+  ], 
+  "fn": "get_terminal_size-1.0.0-py27_0.tar.bz2", 
+  "license": "MIT", 
+  "link": {
+    "source": "/opt/cloudera/parcels/Anaconda/pkgs/get_terminal_size-1.0.0-py27_0", 
+    "type": "hard-link"
+  }, 
+  "md5": "25ad88504e366d061a845afef3c10f9d", 
+  "name": "get_terminal_size", 
+  "platform": "linux", 
+  "priority": 1, 
+  "requires": [], 
+  "schannel": "defaults", 
+  "size": 4518, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/get_terminal_size-1.0.0-py27_0.tar.bz2", 
+  "version": "1.0.0"
+}

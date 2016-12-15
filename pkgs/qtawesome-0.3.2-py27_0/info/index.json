@@ -1,0 +1,15 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*", 
+    "qtpy", 
+    "six"
+  ], 
+  "license": "MIT", 
+  "name": "qtawesome", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "0.3.2"
+}

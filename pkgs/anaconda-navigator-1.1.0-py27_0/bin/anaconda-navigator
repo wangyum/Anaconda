@@ -1,0 +1,6 @@
+#!/opt/anaconda1anaconda2anaconda3/bin/python
+if __name__ == '__main__':
+    import sys
+    import anaconda_navigator.app.main
+
+    sys.exit(anaconda_navigator.app.main.main())

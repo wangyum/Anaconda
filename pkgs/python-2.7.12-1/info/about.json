@@ -1,0 +1,8 @@
+{
+  "description": "Python is a widely used high-level, general-purpose, interpreted, dynamic\nprogramming language. Its design philosophy emphasizes code\nreadability, and its syntax allows programmers to express concepts in\nfewer lines of code than would be possible in languages such as C++ or\nJava. The language provides constructs intended to enable clear programs\non both a small and large scale.\n", 
+  "dev_url": "https://docs.python.org/devguide/", 
+  "doc_url": "https://www.python.org/doc/versions/", 
+  "home": "http://www.python.org/", 
+  "license": "PSF", 
+  "summary": "general purpose programming language"
+}

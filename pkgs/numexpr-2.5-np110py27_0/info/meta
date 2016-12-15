@@ -1,0 +1,7 @@
+pkg: numexpr-2.5
+dist: numexpr-2.5-np110py27_0
+home: https://github.com/pydata/numexpr
+license: MIT
+has_bin: False
+has_lib: False
+has_py: True

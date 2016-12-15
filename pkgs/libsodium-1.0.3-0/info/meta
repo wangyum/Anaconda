@@ -1,0 +1,7 @@
+pkg: libsodium-1.0.3
+dist: libsodium-1.0.3-0
+home: http://libsodium.org
+license: MIT
+has_bin: False
+has_lib: True
+has_py: False

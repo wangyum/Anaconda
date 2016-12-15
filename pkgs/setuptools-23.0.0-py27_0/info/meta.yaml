@@ -1,0 +1,44 @@
+# This file created by conda-build 2.0.0beta
+# meta.yaml template originally from:
+# /home/ilan/anaconda/packages/setuptools, last modified Fri Jun 10 13:23:16 2016
+# ------------------------------------------------
+
+package:
+    name: setuptools
+    version: 23.0.0
+source:
+    fn: setuptools-23.0.0.tar.gz
+    md5: 100a90664040f8ff232fbac02a4c5652
+    patches:
+        - nodownload.patch
+        - setup.patch
+    url: https://pypi.python.org/packages/45/5e/79ca67a0d6f2f42bfdd9e467ef97398d6ad87ee2fa9c8cdf7caf3ddcab1e/setuptools-23.0.0.tar.gz
+build:
+    entry_points:
+        - easy_install = setuptools.command.easy_install:main
+requirements:
+    build:
+        - python
+    run:
+        - python
+test:
+    commands:
+        - easy_install --help
+    imports:
+        - setuptools
+        - setuptools.version
+        - easy_install
+        - pkg_resources
+about:
+    description: 'Setuptools is a fully-featured, actively-maintained, and stable
+        library
+
+        designed to facilitate packaging Python projects.
+
+        '
+    dev_url: https://github.com/pypa/setuptools
+    doc_url: http://pythonhosted.org/setuptools/
+    home: https://pypi.python.org/pypi/setuptools
+    license: PSF or ZPL
+    license_family: PSF
+    summary: Download, build, install, upgrade, and uninstall Python packages

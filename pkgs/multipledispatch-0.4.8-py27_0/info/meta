@@ -1,0 +1,7 @@
+pkg: multipledispatch-0.4.8
+dist: multipledispatch-0.4.8-py27_0
+home: http://github.com/mrocklin/multipledispatch/
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

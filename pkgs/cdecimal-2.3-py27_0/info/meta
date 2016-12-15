@@ -1,0 +1,7 @@
+pkg: cdecimal-2.3
+dist: cdecimal-2.3-py27_0
+home: http://www.bytereef.org/mpdecimal/index.html
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

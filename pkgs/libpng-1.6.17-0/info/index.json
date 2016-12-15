@@ -1,0 +1,12 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "depends": [], 
+  "license": "libpng license (http://www.libpng.org/pub/png/src/libpng-LICENSE.txt)", 
+  "license_family": "Other", 
+  "name": "libpng", 
+  "platform": "linux", 
+  "requires": [], 
+  "version": "1.6.17"
+}

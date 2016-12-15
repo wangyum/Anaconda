@@ -1,0 +1,2638 @@
+{
+  "_mod": "Thu, 28 Jul 2016 01:56:59 GMT", 
+  "_url": "https://conda.anaconda.org/jjhelmus/linux-64/", 
+  "info": {
+    "arch": "x86_64", 
+    "default_numpy_version": "1.7", 
+    "default_python_version": "2.7", 
+    "platform": "linux", 
+    "subdir": "linux-64"
+  }, 
+  "packages": {
+    "artview-1.2-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "55f5c295a2602e54426a8d9e"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib >=1.1", 
+        "pyart >=1.5", 
+        "pyqt >=4.6", 
+        "python 2.7*"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "c61923083835f03be7498ec12baf4a62", 
+      "name": "artview", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 165858, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.2"
+    }, 
+    "artview-1.2-py33_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "55f5c295a2602e54426a8d9e"
+      }, 
+      "build": "py33_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib >=1.1", 
+        "pyart >=1.5", 
+        "pyqt >=4.6", 
+        "python 3.3*"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "92546164f1597ce0742e3ddc9265728b", 
+      "name": "artview", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 171865, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.2"
+    }, 
+    "artview-1.2-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "55f5c295a2602e54426a8d9e"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib >=1.1", 
+        "pyart >=1.5", 
+        "pyqt >=4.6", 
+        "python 3.4*"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "9a1e524445a37dc21d7097fabb6fd147", 
+      "name": "artview", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 166911, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.2"
+    }, 
+    "artview-1.2-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "55f5c295a2602e54426a8d9e"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib >=1.1", 
+        "pyart >=1.5", 
+        "pyqt >=4.6", 
+        "python 3.5*"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "2c3d1b07784886e75a36a9c9021b9cdc", 
+      "name": "artview", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 166425, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.2"
+    }, 
+    "astroid-1.0.1-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a23ad059466e6a2021f490"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "logilab-common", 
+        "python 2.7*"
+      ], 
+      "license": "LGPL", 
+      "md5": "abdf6cb4806914d111f258b617069872", 
+      "name": "astroid", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 149300, 
+      "version": "1.0.1"
+    }, 
+    "astroid-1.0.1-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a23ad059466e6a2021f490"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "logilab-common", 
+        "python 2.7*"
+      ], 
+      "md5": "92de14b096faf90416f6efa953597d39", 
+      "name": "astroid", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 149229, 
+      "version": "1.0.1"
+    }, 
+    "cbc-2.8.8-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c703fee1dad11d14528d0b"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "md5": "67e471e0543718da8a8604008fe1be4e", 
+      "name": "cbc", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3833816, 
+      "version": "2.8.8"
+    }, 
+    "cov-core-1.7-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5314c814e1dad1498efc6587"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "coverage", 
+        "python 2.7*"
+      ], 
+      "license": "MIT License", 
+      "md5": "208d9027f0521da40e260155fe9f968c", 
+      "name": "cov-core", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 8881, 
+      "version": "1.7"
+    }, 
+    "coverage-3.7-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5314c6ef5e76834d919ad63d"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "BSD License", 
+      "md5": "49bef130dfb85b5ec34dfa0fc55e31bb", 
+      "name": "coverage", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 142809, 
+      "version": "3.7"
+    }, 
+    "cvxopt_glpk-1.1.6-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52dd8403e1dad1455fffdfdc"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "md5": "6f1344a436076eaf8e8a4ccc0e538eb6", 
+      "name": "cvxopt_glpk", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1544911, 
+      "version": "1.1.6"
+    }, 
+    "cylp-0.7.2-np110py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c705e3e1dad11d197b29fd"
+      }, 
+      "build": "np110py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "cbc", 
+        "numpy 1.10*", 
+        "python 2.7*"
+      ], 
+      "license": "Common Public License Version 1.0", 
+      "machine": "x86_64", 
+      "md5": "f545c2d359f4165785c2fe8a679b16f4", 
+      "name": "cylp", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3840230, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.2"
+    }, 
+    "cylp-0.7.2-np17py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c705e3e1dad11d197b29fd"
+      }, 
+      "build": "np17py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "cbc", 
+        "numpy 1.7*", 
+        "python 2.7*"
+      ], 
+      "license": "Common Public License Version 1.0", 
+      "md5": "ca7f9db19e709c3055f2dcd0a13b1272", 
+      "name": "cylp", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3839378, 
+      "version": "0.7.2"
+    }, 
+    "cylp-0.7.2-np18py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c705e3e1dad11d197b29fd"
+      }, 
+      "build": "np18py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "cbc", 
+        "numpy 1.8*", 
+        "python 2.7*"
+      ], 
+      "license": "Common Public License Version 1.0", 
+      "md5": "448b794ec71e8a6058e7fd24ebfaecde", 
+      "name": "cylp", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3839250, 
+      "version": "0.7.2"
+    }, 
+    "cylp-0.7.2-np19py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c705e3e1dad11d197b29fd"
+      }, 
+      "build": "np19py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "cbc", 
+        "numpy 1.9*", 
+        "python 2.7*"
+      ], 
+      "license": "Common Public License Version 1.0", 
+      "machine": "x86_64", 
+      "md5": "129acc9921d01cec7d69cd50f5b0e3c1", 
+      "name": "cylp", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3839069, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.2"
+    }, 
+    "feather-format-0.1.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56fb39c00697b66150bb7dfe"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "pandas >=0.17.0", 
+        "python 2.7*"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "c635b4fac85b1cba4256482c49c5b2cf", 
+      "name": "feather-format", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 776489, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.1.0"
+    }, 
+    "feather-format-0.1.0-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56fb39c00697b66150bb7dfe"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "pandas >=0.17.0", 
+        "python 3.4*"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "0015d559de0d9b3e1bd1de964e39d822", 
+      "name": "feather-format", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 789659, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.1.0"
+    }, 
+    "feather-format-0.1.0-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56fb39c00697b66150bb7dfe"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "pandas >=0.17.0", 
+        "python 3.5*"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "a5f0e2df49fa332f1c55957ad99dea51", 
+      "name": "feather-format", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 787657, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.1.0"
+    }, 
+    "fftw-3.3.4-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "536cecfe5e768350adf764a7"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "home_page": "http://fftw.org", 
+      "license": "GNU General Public License (GPL)", 
+      "md5": "cb385f43b8aeb0f073b8e2d43c9b5a3d", 
+      "name": "fftw", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3779562, 
+      "version": "3.3.4"
+    }, 
+    "gdal-data-1.10.1-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "538f40a35e76830350768fc3"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [
+        "gdal"
+      ], 
+      "home_page": "http://www.gdal.org/", 
+      "license": "MIT", 
+      "md5": "630cbd7b0f29e046c2ce877d4cb4b947", 
+      "name": "gdal-data", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 322361, 
+      "version": "1.10.1"
+    }, 
+    "gdal-data-1.10.1-1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "538f40a35e76830350768fc3"
+      }, 
+      "build": "1", 
+      "build_number": 1, 
+      "depends": [
+        "gdal"
+      ], 
+      "home_page": "http://www.gdal.org/", 
+      "license": "MIT", 
+      "md5": "96fbc47db66c47ee9c12fb25c7100b79", 
+      "name": "gdal-data", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 322520, 
+      "version": "1.10.1"
+    }, 
+    "glpk-4.45-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "555cfb303273af3cab0e57cc"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "license": "GPL 3", 
+      "machine": "x86_64", 
+      "md5": "609a242fcc35fa8e77819b3531fbaabc", 
+      "name": "glpk", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1919222, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "4.45"
+    }, 
+    "hdf4-4.2.9-1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5547efde3273af41d346e5e9"
+      }, 
+      "build": "1", 
+      "build_number": 1, 
+      "depends": [], 
+      "license": "BSD-style (http://www.hdfgroup.org/ftp/HDF/current/src/unpacked/COPYING)", 
+      "machine": "x86_64", 
+      "md5": "b519d605e5dcfdbff2031b631a86b006", 
+      "name": "hdf4", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3476584, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "4.2.9"
+    }, 
+    "hdf4-4.2.9-2.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5547efde3273af41d346e5e9"
+      }, 
+      "build": "2", 
+      "build_number": 2, 
+      "depends": [], 
+      "license": "BSD-style (http://www.hdfgroup.org/ftp/HDF/current/src/unpacked/COPYING)", 
+      "machine": "x86_64", 
+      "md5": "8ba3fd45225a0b07384fbd345ae68d21", 
+      "name": "hdf4", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3467161, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "4.2.9"
+    }, 
+    "hdf4-4.2.9-3.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5547efde3273af41d346e5e9"
+      }, 
+      "build": "3", 
+      "build_number": 3, 
+      "depends": [], 
+      "license": "BSD-style (http://www.hdfgroup.org/ftp/HDF/current/src/unpacked/COPYING)", 
+      "machine": "x86_64", 
+      "md5": "33d6f4e47ddcfe183402ee7da65e5c68", 
+      "name": "hdf4", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3468074, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "4.2.9"
+    }, 
+    "ipdb-0.8-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a23e6859466e6a2021f496"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "ipython", 
+        "python 2.7*"
+      ], 
+      "md5": "2ade0cc091a876fd694115d3f9415dcb", 
+      "name": "ipdb", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 7857, 
+      "version": "0.8"
+    }, 
+    "line_profiler-1.0b3-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5314e9745e76834d9420ce1b"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "BSD License", 
+      "md5": "0b68bde3e8f145e634a8f361a3fd8034", 
+      "name": "line_profiler", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 69764, 
+      "version": "1.0b3"
+    }, 
+    "lmfit-0.7.4-np18py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "53908f245e76830353e4d892"
+      }, 
+      "build": "np18py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.8*", 
+        "python 2.7*", 
+        "scipy"
+      ], 
+      "home_page": "http://lmfit.github.io/lmfit-py/", 
+      "license": "BSD", 
+      "md5": "ae7668bd91a68dad3288302e4905d208", 
+      "name": "lmfit", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 164763, 
+      "version": "0.7.4"
+    }, 
+    "logilab-common-0.60.0-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a23bce59466e6a1f81ac8c"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "python 2.7*", 
+        "setuptools"
+      ], 
+      "md5": "635f1ec45e6cacf53e6582d12a87ed98", 
+      "name": "logilab-common", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 298717, 
+      "version": "0.60.0"
+    }, 
+    "logilab-common-0.61.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a23bce59466e6a1f81ac8c"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*", 
+        "setuptools"
+      ], 
+      "license": "LGPL", 
+      "md5": "c55b917caf3c789903118b1b353f2955", 
+      "name": "logilab-common", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 297982, 
+      "version": "0.61.0"
+    }, 
+    "nose-cov-1.6-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5314e7dde1dad149915a72c0"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "cov-core", 
+        "nose", 
+        "python 2.7*"
+      ], 
+      "license": "MIT License", 
+      "md5": "b02f47e5a774cd84d9f2faafd730b741", 
+      "name": "nose-cov", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 5973, 
+      "version": "1.6"
+    }, 
+    "protobuf-3.0.0a3-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56ba0ebe5b48920a4af554b5"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "python 2.7*", 
+        "setuptools"
+      ], 
+      "license": "New BSD License", 
+      "machine": "x86_64", 
+      "md5": "658a7ce01498b0caf13e3c47b45f6cc3", 
+      "name": "protobuf", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 226242, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.0a3"
+    }, 
+    "protobuf-3.0.0a3-py34_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56ba0ebe5b48920a4af554b5"
+      }, 
+      "build": "py34_1", 
+      "build_number": 1, 
+      "depends": [
+        "python 3.4*", 
+        "setuptools"
+      ], 
+      "license": "New BSD License", 
+      "machine": "x86_64", 
+      "md5": "e4160d083bfd68680b56e05cafe5c209", 
+      "name": "protobuf", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 229185, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.0a3"
+    }, 
+    "protobuf-3.0.0b2-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56ba0ebe5b48920a4af554b5"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*", 
+        "setuptools", 
+        "six"
+      ], 
+      "license": "New BSD License", 
+      "machine": "x86_64", 
+      "md5": "937466df194afd434b4a59744664db84", 
+      "name": "protobuf", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 173340, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.0b2"
+    }, 
+    "protobuf-3.0.0b2-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56ba0ebe5b48920a4af554b5"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "python 2.7*", 
+        "setuptools", 
+        "six"
+      ], 
+      "license": "New BSD License", 
+      "machine": "x86_64", 
+      "md5": "d2d64f1e781ad37854304e47000584ce", 
+      "name": "protobuf", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 177517, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.0b2"
+    }, 
+    "protobuf-3.0.0b2-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56ba0ebe5b48920a4af554b5"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 3.4*", 
+        "setuptools", 
+        "six"
+      ], 
+      "license": "New BSD License", 
+      "machine": "x86_64", 
+      "md5": "d1dabd45a1c88c1aa6bdd735b43e1ba6", 
+      "name": "protobuf", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 176416, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.0b2"
+    }, 
+    "protobuf-3.0.0b2-py34_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56ba0ebe5b48920a4af554b5"
+      }, 
+      "build": "py34_1", 
+      "build_number": 1, 
+      "depends": [
+        "python 3.4*", 
+        "setuptools", 
+        "six"
+      ], 
+      "license": "New BSD License", 
+      "machine": "x86_64", 
+      "md5": "1ffe8a280f52d3ea1301c855e4239dc3", 
+      "name": "protobuf", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 180988, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.0b2"
+    }, 
+    "protobuf-3.0.0b2-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56ba0ebe5b48920a4af554b5"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 3.5*", 
+        "setuptools", 
+        "six"
+      ], 
+      "license": "New BSD License", 
+      "machine": "x86_64", 
+      "md5": "f0ca9a7ed9447b3c873564f70a4f36dd", 
+      "name": "protobuf", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 175898, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.0b2"
+    }, 
+    "protobuf-3.0.0b2-py35_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56ba0ebe5b48920a4af554b5"
+      }, 
+      "build": "py35_1", 
+      "build_number": 1, 
+      "depends": [
+        "python 3.5*", 
+        "setuptools", 
+        "six"
+      ], 
+      "license": "New BSD License", 
+      "machine": "x86_64", 
+      "md5": "7c04a0075a872b500867cfa3da879446", 
+      "name": "protobuf", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 180618, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.0b2"
+    }, 
+    "pyamg-3.0.2-np110py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d77854266fe403c4d4c73b"
+      }, 
+      "build": "np110py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.10*", 
+        "python 2.7*", 
+        "scipy", 
+        "zlib"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "c35ed032d922d805254466e11710cc84", 
+      "name": "pyamg", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1539884, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.2"
+    }, 
+    "pyamg-3.0.2-np110py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d77854266fe403c4d4c73b"
+      }, 
+      "build": "np110py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.10*", 
+        "python 3.4*", 
+        "scipy", 
+        "zlib"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "1676da1167362cbe0ee0092768cd6ed0", 
+      "name": "pyamg", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1493125, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.2"
+    }, 
+    "pyamg-3.0.2-np110py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d77854266fe403c4d4c73b"
+      }, 
+      "build": "np110py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.10*", 
+        "python 3.5*", 
+        "scipy", 
+        "zlib"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "b0975efa4039304e52919d2c515aef35", 
+      "name": "pyamg", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1492860, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.2"
+    }, 
+    "pyamg-3.0.2-np19py26_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d77854266fe403c4d4c73b"
+      }, 
+      "build": "np19py26_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.9*", 
+        "python 2.6*", 
+        "scipy", 
+        "zlib"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "db00b53e4a87bd61f8522ab4644f4b84", 
+      "name": "pyamg", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1539461, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.2"
+    }, 
+    "pyamg-3.0.2-np19py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d77854266fe403c4d4c73b"
+      }, 
+      "build": "np19py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.9*", 
+        "python 2.7*", 
+        "scipy", 
+        "zlib"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "d4d1a0cd91cc5815df8704a867fa91b7", 
+      "name": "pyamg", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1540089, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.2"
+    }, 
+    "pyamg-3.0.2-np19py33_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d77854266fe403c4d4c73b"
+      }, 
+      "build": "np19py33_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.9*", 
+        "python 3.3*", 
+        "scipy", 
+        "zlib"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "3814859e4d3f37fe7a1789c56c9bf4cc", 
+      "name": "pyamg", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1483580, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.2"
+    }, 
+    "pyamg-3.0.2-np19py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d77854266fe403c4d4c73b"
+      }, 
+      "build": "np19py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.9*", 
+        "python 3.4*", 
+        "scipy", 
+        "zlib"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "6f9834ecd85ae4a01ad76a94349d343a", 
+      "name": "pyamg", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1493982, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.2"
+    }, 
+    "pyamg-3.0.2-np19py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d77854266fe403c4d4c73b"
+      }, 
+      "build": "np19py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy 1.9*", 
+        "python 3.5*", 
+        "scipy", 
+        "zlib"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "e0c76bbcaa8e7fe35f0aede7bdd16483", 
+      "name": "pyamg", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1492158, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.0.2"
+    }, 
+    "pyart-1.0_dev-np17py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np17py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.7*", 
+        "python 2.7*", 
+        "scipy"
+      ], 
+      "md5": "68a7ccfd18922c5d274bb3e09fb7ff2a", 
+      "name": "pyart", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 2887233, 
+      "version": "1.0_dev"
+    }, 
+    "pyart-1.4.0-np17py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np17py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.7*", 
+        "python 2.7*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "78ad5a0703b3e6357e5ad60946677559", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4241006, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "pyart-1.4.0-np17py33_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np17py33_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.7*", 
+        "python 3.3*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "72f0cb67c98a932e83d1c79404e07982", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4173894, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "pyart-1.4.0-np18py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np18py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.8*", 
+        "python 2.7*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "7ab8dbf28cedb0f0808f8dc3a9f04a33", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4240179, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "pyart-1.4.0-np18py33_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np18py33_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.8*", 
+        "python 3.3*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "ebaf028804ce870cdc74071011150bbb", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4169770, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "pyart-1.4.0-np18py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np18py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.8*", 
+        "python 3.4*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "2f0bd03713db98583d33d10d63aad428", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4325494, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "pyart-1.4.0-np19py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np19py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.9*", 
+        "python 2.7*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "098ca6adf94841436ea3eccb2c7f7595", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4240199, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "pyart-1.4.0-np19py33_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np19py33_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.9*", 
+        "python 3.3*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "d344dc47f779566f3244c3e609937b2b", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4173235, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "pyart-1.4.0-np19py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "np19py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy 1.9*", 
+        "python 3.4*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "9a9c1dd65437924740f8559f1a104f08", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4325671, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "pyart-1.5.0-nppy26_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "nppy26_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 2.6*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "1a7435bab7909803461ee1e98155d58b", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4298915, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.0"
+    }, 
+    "pyart-1.5.0-nppy27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "nppy27_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 2.7*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "d89b2ecff0883860c90ed928512929b9", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4299929, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.0"
+    }, 
+    "pyart-1.5.0-nppy33_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "nppy33_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 3.3*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "fcc4a9e0ac60317b1b08e73066b60e8d", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4227398, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.0"
+    }, 
+    "pyart-1.5.0-nppy34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "nppy34_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 3.4*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "b14fb8854fb9f67d3566ce15ca225475", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4396783, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.0"
+    }, 
+    "pyart-1.6.0-py26_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "py26_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 2.6*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "c3ca7b45726f9b77642466c75d501bda", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4505460, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.6.0"
+    }, 
+    "pyart-1.6.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 2.7*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "b330867d9f865491d44ea699f52fe1d1", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4515167, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.6.0"
+    }, 
+    "pyart-1.6.0-py33_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "py33_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 3.3*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "77a5a62b96616fbc50adfe9074f8b4c9", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4441593, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.6.0"
+    }, 
+    "pyart-1.6.0-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 3.4*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "a67cfc9c61022ae4c20dc7501b988811", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4631688, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.6.0"
+    }, 
+    "pyart-1.6.0-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52a9f09159466e6a2021f567"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "matplotlib", 
+        "netcdf4", 
+        "numpy", 
+        "python 3.5*", 
+        "scipy"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "ac56426675057930e63ad1b5bf2040d0", 
+      "name": "pyart", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4588721, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.6.0"
+    }, 
+    "pyglpk-0.3-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52dd79b55e76835abdeffb09"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "license": "GPL", 
+      "md5": "d234c418cfe276fdb6518f0a7a6742ad", 
+      "name": "pyglpk", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 95131, 
+      "version": "0.3"
+    }, 
+    "pyglpk-0.3-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52dd79b55e76835abdeffb09"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "glpk <=4.52", 
+        "gmp", 
+        "python 2.7*"
+      ], 
+      "license": "GPL", 
+      "machine": "x86_64", 
+      "md5": "b203d555f7f9bbcf18a92c186cb1c2c5", 
+      "name": "pyglpk", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 85358, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.3"
+    }, 
+    "pylint-1.1.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5314fce55e76835b47fcc596"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "astroid", 
+        "logilab-common", 
+        "python 2.7*", 
+        "setuptools"
+      ], 
+      "license": "GPL", 
+      "md5": "f7c88dae92c7c7512cb4ab1f8295de01", 
+      "name": "pylint", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 280215, 
+      "version": "1.1.0"
+    }, 
+    "pyproj-1.9.3-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c702a15e7683703d8183fb"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "md5": "f6764746c00cfbe443e29fc60c4c9a42", 
+      "name": "pyproj", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3394465, 
+      "version": "1.9.3"
+    }, 
+    "python-3.6.0a3-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "57328b127860ba6cf8d34b1c"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [
+        "ncurses 5.9*", 
+        "openssl 1.0.*", 
+        "readline 6.2*", 
+        "sqlite 3.13.*", 
+        "tk 8.5.*", 
+        "xz 5.2.*", 
+        "zlib 1.2.*"
+      ], 
+      "license": "PSF", 
+      "machine": "x86_64", 
+      "md5": "d04ef7a97621ef73ae4df5d6bc6be310", 
+      "name": "python", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 32755631, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.6.0a3"
+    }, 
+    "suds-0.4-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5314c0225e76834d9372116a"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "LGPL", 
+      "md5": "bd6ecc4747cc7d4720c37e9d8e07e406", 
+      "name": "suds", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 348505, 
+      "version": "0.4"
+    }, 
+    "szip-2.1-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "5547c92c3273af41d2ab4feb"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "license": "Free for non-commercial use", 
+      "machine": "x86_64", 
+      "md5": "4f37ea75d59eb7d4746dfe40fb252c3c", 
+      "name": "szip", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 32404, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2.1"
+    }, 
+    "tensorflow-0.5.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.9.2", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "8c7905ec9104b3c662a762aa6d7cf800", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 8722431, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.5.0"
+    }, 
+    "tensorflow-0.5.0-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy >=1.9.2", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "22af3bfdee8828de7af4f20e51131c29", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 8722605, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.5.0"
+    }, 
+    "tensorflow-0.5.0-py27_2.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_2", 
+      "build_number": 2, 
+      "depends": [
+        "numpy >=1.9.2", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "824c54da49b9905773864194bb63a579", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 8722384, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.5.0"
+    }, 
+    "tensorflow-0.6.0-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy >=1.8.2", 
+        "protobuf ==3.0.0a3", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "0c32e4d7a8de7ac7b5cf1caab408fd04", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 9108883, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.6.0"
+    }, 
+    "tensorflow-0.6.0-py34_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py34_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy >=1.8.2", 
+        "protobuf ==3.0.0a3", 
+        "python 3.4*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "e42d1f7374c13897ac7087b165981214", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 9206103, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.6.0"
+    }, 
+    "tensorflow-0.7.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.8.2", 
+        "protobuf ==3.0.0a3", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "5b0fe42ad8bd7525de64c4afc7bc0cde", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 12636137, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.0"
+    }, 
+    "tensorflow-0.7.0-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.8.2", 
+        "protobuf ==3.0.0a3", 
+        "python 3.4*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "6c33e34691726300045403141f579c7a", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 12728824, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.0"
+    }, 
+    "tensorflow-0.7.1-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "ba0db089299801ca6a5f5bde483ef4c8", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 11292557, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.1"
+    }, 
+    "tensorflow-0.7.1-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "897db30f1ed143bc204a5adde6c4f96e", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 11294239, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.1"
+    }, 
+    "tensorflow-0.7.1-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.4*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "ccdd2fe0e8513d47302621fa8a13ca0d", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 11362812, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.1"
+    }, 
+    "tensorflow-0.7.1-py34_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py34_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.4*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "579ff2f708a10aca261b6d5ef7d03e7e", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 11361577, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.1"
+    }, 
+    "tensorflow-0.7.1-py35_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py35_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.5*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "cbc681e77ff5674dc6f8b82039e89b87", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 11363781, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.1"
+    }, 
+    "tensorflow-0.8.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "c56145922ec8ddcaa44994ec976d793d", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 16633870, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.8.0"
+    }, 
+    "tensorflow-0.8.0-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.4*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "e42174fa47a44f013ffd118c9ab45c37", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 16724009, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.8.0"
+    }, 
+    "tensorflow-0.8.0-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.5*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "6971b31e4e4571a1b88465442723ac0c", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 16722029, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.8.0"
+    }, 
+    "tensorflow-0.8.0rc0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "e35b231a7c97529e695e149e86f0d34d", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 16624496, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.8.0rc0"
+    }, 
+    "tensorflow-0.8.0rc0-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.4*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "4c5a11b37eb6aed75b5fb04d05f21796", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 16724883, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.8.0rc0"
+    }, 
+    "tensorflow-0.8.0rc0-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.5*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "e9027e6f0121f742597d43c48c37df02", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 16722276, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.8.0rc0"
+    }, 
+    "tensorflow-0.9.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 2.7*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "070fedc32a7ec4f024b16ef23235a60e", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 21362328, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.9.0"
+    }, 
+    "tensorflow-0.9.0-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.4*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "d56e17045591ef36fb1947dd4321189d", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 21519593, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.9.0"
+    }, 
+    "tensorflow-0.9.0-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "564216837bb5bd601bca65c5"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "numpy >=1.10.1", 
+        "protobuf ==3.0.0b2", 
+        "python 3.5*", 
+        "six >=1.10.0"
+      ], 
+      "license": "Apache 2.0", 
+      "machine": "x86_64", 
+      "md5": "65f83ed508dd7b903fc14f8ad0fa04a1", 
+      "name": "tensorflow", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 21512658, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.9.0"
+    }, 
+    "tifffile-0.3.1-np110py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56560021eaad376b0a6e7d2c"
+      }, 
+      "build": "np110py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy 1.10*", 
+        "python 2.7*"
+      ], 
+      "license": "BSD License", 
+      "machine": "x86_64", 
+      "md5": "9469b87dbf401be80c9a04961a66e2c2", 
+      "name": "tifffile", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 115602, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.3.1"
+    }, 
+    "tifffile-0.3.1-np110py34_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56560021eaad376b0a6e7d2c"
+      }, 
+      "build": "np110py34_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy 1.10*", 
+        "python 3.4*"
+      ], 
+      "license": "BSD License", 
+      "machine": "x86_64", 
+      "md5": "baa7b434a3511b7fe12c5153bb48bde8", 
+      "name": "tifffile", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 119307, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.3.1"
+    }, 
+    "tifffile-0.3.1-np110py35_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56560021eaad376b0a6e7d2c"
+      }, 
+      "build": "np110py35_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy 1.10*", 
+        "python 3.5*"
+      ], 
+      "license": "BSD License", 
+      "machine": "x86_64", 
+      "md5": "f88c5c3af3e912e5e148c86011994803", 
+      "name": "tifffile", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 118793, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.3.1"
+    }, 
+    "tifffile-0.3.1-np19py33_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56560021eaad376b0a6e7d2c"
+      }, 
+      "build": "np19py33_1", 
+      "build_number": 1, 
+      "depends": [
+        "numpy 1.9*", 
+        "python 3.3*"
+      ], 
+      "license": "BSD License", 
+      "machine": "x86_64", 
+      "md5": "bfb832c410fb3459d38bc09040259473", 
+      "name": "tifffile", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 117967, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.3.1"
+    }, 
+    "toolz-0.6.0-py26_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56bd54d05b4892534c226156"
+      }, 
+      "build": "py26_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.6*"
+      ], 
+      "license": "New BSD", 
+      "machine": "x86_64", 
+      "md5": "647979d81ff88f61ca00f671104e68ad", 
+      "name": "toolz", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 23305, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.6.0"
+    }, 
+    "toolz-0.6.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56bd54d05b4892534c226156"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "New BSD", 
+      "machine": "x86_64", 
+      "md5": "9f02eec873096c5a6dfc9569d8377463", 
+      "name": "toolz", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 23242, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.6.0"
+    }, 
+    "toolz-0.6.0-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56bd54d05b4892534c226156"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 3.5*"
+      ], 
+      "license": "New BSD", 
+      "machine": "x86_64", 
+      "md5": "22a6feda66eb121181d0790cba9ec808", 
+      "name": "toolz", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 23596, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.6.0"
+    }, 
+    "trmm_rsl-1.44-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c61a215e7683703e4553e5"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "md5": "cfd573b81e8dc75c1be521068d4d019b", 
+      "name": "trmm_rsl", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1572424, 
+      "version": "1.44"
+    }, 
+    "trmm_rsl-1.47-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c61a215e7683703e4553e5"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "license": "LGPL", 
+      "machine": "x86_64", 
+      "md5": "18806ba53593dc74b27fee345dd6f4a2", 
+      "name": "trmm_rsl", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1597090, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.47"
+    }, 
+    "trmm_rsl-1.48-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c61a215e7683703e4553e5"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [
+        "zlib"
+      ], 
+      "license": "LGPL", 
+      "machine": "x86_64", 
+      "md5": "e78dac331a979af3f7b91cf7b41edee6", 
+      "name": "trmm_rsl", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1403133, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.48"
+    }, 
+    "trmm_rsl-1.49-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c61a215e7683703e4553e5"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [
+        "zlib"
+      ], 
+      "license": "LGPL", 
+      "machine": "x86_64", 
+      "md5": "4f64e781109b7bcb1d4b76a212629604", 
+      "name": "trmm_rsl", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1405566, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.49"
+    }, 
+    "trmm_rsl-1.49-1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "52c61a215e7683703e4553e5"
+      }, 
+      "build": "1", 
+      "build_number": 1, 
+      "depends": [
+        "zlib"
+      ], 
+      "license": "LGPL", 
+      "machine": "x86_64", 
+      "md5": "a6a54908c3a70dcb72617e716afdffcf", 
+      "name": "trmm_rsl", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1405513, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.49"
+    }, 
+    "wradlib-0.7.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "51ccb45b7536d01dda4f1d76", 
+        "package_id": "56d71375266fe40411b29f25"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "gdal", 
+        "h5py >=2.0.1", 
+        "matplotlib >=1.1.0", 
+        "netcdf4 >=1.0", 
+        "numpy >=1.7.0", 
+        "python 2.7*", 
+        "scipy >=0.9"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "4804eb8ee47b15a952d6ac6bdfd0c3ff", 
+      "name": "wradlib", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 212010, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.7.0"
+    }
+  }
+}

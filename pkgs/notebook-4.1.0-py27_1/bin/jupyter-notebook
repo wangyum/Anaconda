@@ -1,0 +1,6 @@
+#!/opt/anaconda1anaconda2anaconda3/bin/python
+if __name__ == '__main__':
+    import sys
+    import notebook.notebookapp
+
+    sys.exit(notebook.notebookapp.main())

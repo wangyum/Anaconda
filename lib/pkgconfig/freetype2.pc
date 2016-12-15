@@ -1,0 +1,14 @@
+prefix=/tmp/tmpQcQ0Zo/Anaconda-4.0.0
+exec_prefix=/tmp/tmpQcQ0Zo/Anaconda-4.0.0
+libdir=/tmp/tmpQcQ0Zo/Anaconda-4.0.0/lib
+includedir=/tmp/tmpQcQ0Zo/Anaconda-4.0.0/include/freetype2
+
+Name: FreeType 2
+URL: http://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 17.4.11
+Requires:
+Requires.private: 
+Libs: -L${libdir} -lfreetype
+Libs.private: 
+Cflags: -I${includedir}

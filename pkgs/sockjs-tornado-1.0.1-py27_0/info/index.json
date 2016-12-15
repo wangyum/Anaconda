@@ -1,0 +1,18 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*", 
+    "tornado 4.0.1"
+  ], 
+  "license": "MIT", 
+  "name": "sockjs-tornado", 
+  "platform": "linux", 
+  "requires": [
+    "python 2.7", 
+    "tornado 4.0.1"
+  ], 
+  "ucs": 4, 
+  "version": "1.0.1"
+}

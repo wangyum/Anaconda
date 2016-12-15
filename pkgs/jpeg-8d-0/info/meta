@@ -1,0 +1,8 @@
+pkg: jpeg-8d
+dist: jpeg-8d-0
+src_fn: jpegsrc.v8d.tar.gz
+home: http://www.ijg.org/
+license: ???
+has_bin: False
+has_lib: True
+has_py: False

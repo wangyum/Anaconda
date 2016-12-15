@@ -1,0 +1,14 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "decorator >=3.4", 
+    "python 2.7*"
+  ], 
+  "license": "BSD", 
+  "name": "networkx", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "1.11"
+}

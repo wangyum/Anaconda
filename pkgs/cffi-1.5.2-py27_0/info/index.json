@@ -1,0 +1,21 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "libffi 3.0.13", 
+    "pycparser", 
+    "python 2.7*"
+  ], 
+  "license": "MIT", 
+  "name": "cffi", 
+  "platform": "linux", 
+  "requires": [
+    "libffi 3.0.13", 
+    "pycparser 2.14", 
+    "python 2.7"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "1.5.2"
+}

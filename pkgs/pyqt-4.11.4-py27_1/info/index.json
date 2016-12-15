@@ -1,0 +1,16 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_1", 
+  "build_number": 1, 
+  "depends": [
+    "python 2.7*", 
+    "qt >=4.8.7", 
+    "sip >=4.16.4"
+  ], 
+  "license": "Commercial, GPLv2, GPLv3", 
+  "license_family": "GPL3", 
+  "name": "pyqt", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "4.11.4"
+}

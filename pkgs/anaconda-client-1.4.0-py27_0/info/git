@@ -1,0 +1,15 @@
+==> git log -n1 <==
+commit 51f55a977aae10165cf1640706fe0baf278a4563
+Merge: 88755db be364f9
+Author: Derek Ludwig <dludwig@continuum.io>
+Date:   Thu Mar 24 10:44:23 2016 -0700
+
+    Merge branch 'develop'
+
+==> git describe --tags --dirty <==
+1.4.0
+
+==> git status <==
+# Not currently on any branch.
+nothing to commit, working directory clean
+

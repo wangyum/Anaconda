@@ -1,0 +1,5 @@
+#!/opt/anaconda1anaconda2anaconda3/bin/python
+from jupyter_console import app
+
+if __name__ == '__main__':
+    app.main()

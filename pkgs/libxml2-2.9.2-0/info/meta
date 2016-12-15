@@ -1,0 +1,7 @@
+pkg: libxml2-2.9.2
+dist: libxml2-2.9.2-0
+home: http://xmlsoft.org/
+license: MIT
+has_bin: True
+has_lib: True
+has_py: False

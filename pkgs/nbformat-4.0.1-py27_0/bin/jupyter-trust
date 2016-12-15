@@ -1,0 +1,8 @@
+#!/opt/anaconda1anaconda2anaconda3/bin/python
+
+def main():
+    from nbformat.sign import TrustNotebookApp
+    TrustNotebookApp.launch_instance()
+
+if __name__ == '__main__':
+    main()

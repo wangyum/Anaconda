@@ -1,0 +1,10 @@
+package:
+  name: libgfortran
+  version: "3.0.0"
+
+build:
+  number: 1
+
+about:
+  license: GPL3
+  summary: GNU Fortran runtime library

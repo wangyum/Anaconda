@@ -1,0 +1,3 @@
+lib/libtiff.la
+lib/libtiffxx.la
+lib/pkgconfig/libtiff-4.pc

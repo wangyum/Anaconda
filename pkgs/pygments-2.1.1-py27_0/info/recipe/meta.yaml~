@@ -1,0 +1,31 @@
+package:
+  name: pygments
+  version: 2.1
+
+source:
+  fn: Pygments-2.1.tar.gz
+  url: https://pypi.python.org/packages/source/P/Pygments/Pygments-2.1.tar.gz
+  md5: 84533d22f72de894f6d3907c3ca9eddf
+
+build:
+  entry_points:
+    - pygmentize = pygments.cmdline:main
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+
+test:
+  commands:
+    - pygmentize -h
+  imports:
+    - pygments
+
+about:
+  home: http://pygments.org/
+  license: BSD
+  license_file: LICENSE
+  summary: Pygments is a syntax highlighting package written in Python

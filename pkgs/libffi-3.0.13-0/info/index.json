@@ -1,0 +1,9 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "name": "libffi", 
+  "platform": "linux", 
+  "requires": [], 
+  "version": "3.0.13"
+}

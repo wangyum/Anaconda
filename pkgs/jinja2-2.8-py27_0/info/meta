@@ -1,0 +1,7 @@
+pkg: jinja2-2.8
+dist: jinja2-2.8-py27_0
+home: http://jinja.pocoo.org/docs/
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

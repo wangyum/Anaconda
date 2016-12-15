@@ -1,0 +1,15 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "cairo", 
+    "python 2.7*"
+  ], 
+  "license": "LGPL 2.1, MPL 1.1", 
+  "license_family": "LGPL", 
+  "name": "pycairo", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "1.10.0"
+}

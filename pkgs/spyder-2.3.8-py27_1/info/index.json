@@ -1,0 +1,28 @@
+{
+  "app_entry": "spyder", 
+  "app_type": "desk", 
+  "arch": "x86_64", 
+  "build": "py27_1", 
+  "build_number": 1, 
+  "depends": [
+    "jedi >=0.8", 
+    "nbconvert", 
+    "pep8", 
+    "psutil", 
+    "pyflakes", 
+    "pygments", 
+    "pyqt", 
+    "python 2.7*", 
+    "qtconsole", 
+    "rope", 
+    "sphinx"
+  ], 
+  "icon": "9779607c273dc0786bd972b4cb308b58.png", 
+  "license": "MIT", 
+  "name": "spyder", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "summary": "Scientific Python Development Environment", 
+  "type": "app", 
+  "version": "2.3.8"
+}

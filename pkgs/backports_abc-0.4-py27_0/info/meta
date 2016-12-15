@@ -1,0 +1,7 @@
+pkg: backports_abc-0.4
+dist: backports_abc-0.4-py27_0
+home: https://github.com/cython/backports_abc
+license: PSF
+has_bin: False
+has_lib: False
+has_py: True

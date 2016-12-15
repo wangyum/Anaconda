@@ -1,0 +1,7 @@
+pkg: scipy-0.17.0
+dist: scipy-0.17.0-np110py27_2
+home: http://www.scipy.org/
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

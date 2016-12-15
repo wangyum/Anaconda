@@ -1,0 +1,29 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "jinja2", 
+    "jupyter_core", 
+    "mistune", 
+    "nbformat", 
+    "pygments", 
+    "python 2.7*", 
+    "traitlets"
+  ], 
+  "license": "BSD", 
+  "name": "nbconvert", 
+  "platform": "linux", 
+  "requires": [
+    "jinja2 2.8", 
+    "jupyter_core 4.0.6", 
+    "mistune 0.7.1", 
+    "nbformat 4.0.1", 
+    "pygments 2.0.2", 
+    "python 2.7", 
+    "traitlets 4.0.0"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "4.1.0"
+}

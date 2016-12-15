@@ -1,0 +1,7 @@
+pkg: requests-2.9.1
+dist: requests-2.9.1-py27_0
+home: http://docs.python-requests.org/en/latest/index.html
+license: Apache
+has_bin: False
+has_lib: False
+has_py: True

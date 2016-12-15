@@ -1,0 +1,22 @@
+package:
+  name: libdynd
+  version: 0.7.2
+
+requirements:
+  build:
+    - cmake
+
+build:
+  number: {{environ.get('TRAVIS_BUILD_NUMBER', 0)}}    # [unix]
+  number: {{environ.get('APPVEYOR_BUILD_NUMBER', 0)}}  # [win]
+  script_env:
+    - CC [linux]
+    - CXX [linux]
+
+test:
+  commands:
+    - test_libdynd
+
+about:
+  home: http://libdynd.org
+  license: BSD

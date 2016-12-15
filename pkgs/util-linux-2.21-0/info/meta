@@ -1,0 +1,8 @@
+pkg: util-linux-2.21
+dist: util-linux-2.21-0
+src_fn: util-linux-2.21.tar.bz2
+home: http://freecode.com/projects/util-linux (???)
+license: GPL
+has_bin: False
+has_lib: True
+has_py: False

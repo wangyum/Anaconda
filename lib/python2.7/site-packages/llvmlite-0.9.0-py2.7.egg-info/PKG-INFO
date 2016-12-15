@@ -1,0 +1,21 @@
+Metadata-Version: 1.1
+Name: llvmlite
+Version: 0.9.0
+Summary: lightweight wrapper around basic LLVM functionality
+Home-page: http://llvmlite.pydata.org
+Author: Continuum Analytics, Inc.
+Author-email: numba-users@continuum.io
+License: BSD
+Download-URL: https://github.com/numba/llvmlite
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Topic :: Software Development :: Code Generators
+Classifier: Topic :: Software Development :: Compilers

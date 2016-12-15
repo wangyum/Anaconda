@@ -1,0 +1,8 @@
+{
+  "description": "SciPy is a Python-based ecosystem of open-source software for mathematics,\nscience, and engineering.\n", 
+  "dev_url": "https://github.com/scipy/scipy", 
+  "doc_url": "http://www.scipy.org/docs.html", 
+  "home": "http://www.scipy.org/", 
+  "license": "BSD", 
+  "summary": "Scientific Library for Python"
+}

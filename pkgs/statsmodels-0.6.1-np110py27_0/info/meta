@@ -1,0 +1,7 @@
+pkg: statsmodels-0.6.1
+dist: statsmodels-0.6.1-np110py27_0
+home: http://statsmodels.sourceforge.net/
+license: 3-clause BSD
+has_bin: False
+has_lib: False
+has_py: True

@@ -1,0 +1,14 @@
+==> git log -n1 <==
+commit ef4a599f3d2303cfa6f3a06266c9f82bd61586b9
+Author: Carlos Cordoba <ccordoba12@gmail.com>
+Date:   Mon Mar 28 11:54:18 2016 -0500
+
+    Release 0.3.1
+
+==> git describe --tags --dirty <==
+v0.3.1
+
+==> git status <==
+# Not currently on any branch.
+nothing to commit, working directory clean
+

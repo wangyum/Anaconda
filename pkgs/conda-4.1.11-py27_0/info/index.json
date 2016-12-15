@@ -1,0 +1,27 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "pycosat", 
+    "python 2.7*", 
+    "pyyaml", 
+    "requests", 
+    "ruamel_yaml", 
+    "conda-env >=2.5.0"
+  ], 
+  "license": "BSD", 
+  "name": "conda", 
+  "platform": "linux", 
+  "requires": [
+    "conda-env 2.5.2", 
+    "pycosat 0.6.1", 
+    "python 2.7", 
+    "pyyaml 3.11", 
+    "requests 2.10.0", 
+    "ruamel_yaml 0.11.14"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "4.1.11"
+}

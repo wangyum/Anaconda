@@ -1,0 +1,27 @@
+{
+  "arch": "x86_64", 
+  "build": "np110py27_1", 
+  "build_number": 1, 
+  "depends": [
+    "hdf5 1.8.15.1", 
+    "numexpr 2.5*", 
+    "numpy 1.10*", 
+    "python 2.7*", 
+    "setuptools", 
+    "zlib 1.2*"
+  ], 
+  "license": "BSD", 
+  "name": "pytables", 
+  "platform": "linux", 
+  "requires": [
+    "hdf5 1.8.15.1", 
+    "numexpr 2.5", 
+    "numpy 1.10", 
+    "python 2.7", 
+    "setuptools 20.3", 
+    "zlib 1.2.8"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "3.2.2"
+}

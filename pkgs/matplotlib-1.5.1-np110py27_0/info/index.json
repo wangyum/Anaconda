@@ -1,0 +1,23 @@
+{
+  "arch": "x86_64", 
+  "build": "np110py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "cycler", 
+    "freetype 2.5.*", 
+    "libpng 1.6.*", 
+    "numpy 1.10*", 
+    "pycairo", 
+    "pyparsing", 
+    "pyqt", 
+    "python 2.7*", 
+    "python-dateutil", 
+    "pytz"
+  ], 
+  "license": "PSF-based (http://matplotlib.sourceforge.net/users/license.html)", 
+  "license_family": "PSF", 
+  "name": "matplotlib", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "1.5.1"
+}

@@ -1,0 +1,32 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "mkl 11.3.1", 
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/mkl/__init__.py", 
+    "lib/python2.7/site-packages/mkl/__init__.pyc", 
+    "lib/python2.7/site-packages/mkl/service.so", 
+    "lib/python2.7/site-packages/mkl/test.py", 
+    "lib/python2.7/site-packages/mkl/test.pyc"
+  ], 
+  "license": "3-clause BSD", 
+  "license_family": "BSD", 
+  "link": {
+    "source": "/tmp/tmpQcQ0Zo/Anaconda-4.0.0/pkgs/mkl-service-1.1.2-py27_0", 
+    "type": "hard-link"
+  }, 
+  "name": "mkl-service", 
+  "platform": "linux", 
+  "requires": [
+    "mkl 11.3.1", 
+    "python 2.7"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/mkl-service-1.1.2-py27_0.tar.bz2", 
+  "version": "1.1.2"
+}

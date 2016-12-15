@@ -1,0 +1,15 @@
+diff --git setuptools/package_index.py setuptools/package_index.py
+index b038862..9abe430 100644
+--- setuptools/package_index.py
++++ setuptools/package_index.py
+@@ -279,6 +279,10 @@ class PackageIndex(Environment):
+ 
+     def process_url(self, url, retrieve=False):
+         """Evaluate a URL as a possible download, and maybe retrieve it"""
++        if os.getenv("CONDA_BUILD"):
++            raise RuntimeError("Setuptools downloading is disabled in conda build. "
++                               "Be sure to add all dependencies in the meta.yaml  url=%sr" % url)
++
+         if url in self.scanned_urls and not retrieve:
+             return
+         self.scanned_urls[url] = True

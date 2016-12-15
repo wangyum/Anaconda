@@ -1,0 +1,4 @@
+/opt/anaconda1anaconda2anaconda3 text bin/f2py
+/opt/anaconda1anaconda2anaconda3 text lib/python2.7/site-packages/numpy/__config__.py
+/opt/anaconda1anaconda2anaconda3 text lib/python2.7/site-packages/numpy/distutils/__config__.py
+/opt/anaconda1anaconda2anaconda3 text lib/python2.7/site-packages/numpy/distutils/site.cfg

@@ -1,0 +1,12 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "depends": [], 
+  "name": "nomkl", 
+  "platform": "linux", 
+  "requires": [], 
+  "subdir": "linux-64", 
+  "track_features": "nomkl", 
+  "version": "1.0"
+}

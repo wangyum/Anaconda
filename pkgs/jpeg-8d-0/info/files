@@ -1,0 +1,10 @@
+.index/jpeg-8d-0
+include/jconfig.h
+include/jerror.h
+include/jmorecfg.h
+include/jpeglib.h
+lib/libjpeg.a
+lib/libjpeg.la
+lib/libjpeg.so
+lib/libjpeg.so.8
+lib/libjpeg.so.8.4.0

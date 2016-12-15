@@ -1,0 +1,7 @@
+pkg: conda-env-2.4.5
+dist: conda-env-2.4.5-py27_0
+home: https://github.com/conda/conda-env/
+license: BSD
+has_bin: True
+has_lib: False
+has_py: True

@@ -1,0 +1,14 @@
+/opt/anaconda1anaconda2anaconda3 text bin/cairo-trace
+/opt/anaconda1anaconda2anaconda3 text lib/cairo/libcairo-trace.la
+/opt/anaconda1anaconda2anaconda3 text lib/libcairo-script-interpreter.la
+/opt/anaconda1anaconda2anaconda3 text lib/libcairo.la
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-fc.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-ft.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-pdf.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-png.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-ps.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-script.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-svg.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-xlib-xrender.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo-xlib.pc
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/cairo.pc

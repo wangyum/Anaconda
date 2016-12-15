@@ -1,0 +1,11 @@
+{
+  "arch": "x86_64", 
+  "build": "1", 
+  "build_number": 1, 
+  "depends": [], 
+  "license": "GPL3", 
+  "name": "libgfortran", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "3.0.0"
+}

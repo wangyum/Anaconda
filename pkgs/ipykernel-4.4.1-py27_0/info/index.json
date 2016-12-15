@@ -1,0 +1,17 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "ipython >=4.0.0", 
+    "jupyter_client", 
+    "python 2.7*", 
+    "tornado >=4.0", 
+    "traitlets >=4.1.0"
+  ], 
+  "license": "BSD", 
+  "name": "ipykernel", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "4.4.1"
+}

@@ -1,0 +1,7 @@
+pkg: libpng-1.6.17
+dist: libpng-1.6.17-0
+home: http://www.libpng.org/pub/png/libpng.html
+license: libpng license (http://www.libpng.org/pub/png/src/libpng-LICENSE.txt)
+has_bin: True
+has_lib: True
+has_py: False

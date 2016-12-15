@@ -1,0 +1,7 @@
+pkg: libffi-3.0.13
+dist: libffi-3.0.13-0
+home: https://github.com/atgreen/libffi
+license: MIT
+has_bin: False
+has_lib: True
+has_py: False

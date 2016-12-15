@@ -1,0 +1,12 @@
+{
+    "menu_name": "Anaconda${PY_VER} ${PLATFORM}",
+    "menu_items":
+    [
+        {
+            "name": "Anaconda Navigator",
+            "pywscript": "${PYTHON_SCRIPTS}/anaconda-navigator-script.py",
+            "workdir": "${PERSONALDIR}",
+            "icon": "${MENU_DIR}/anaconda-navigator.ico"
+        }
+    ]
+}

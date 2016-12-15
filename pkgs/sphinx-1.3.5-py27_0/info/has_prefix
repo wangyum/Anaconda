@@ -1,0 +1,4 @@
+/opt/anaconda1anaconda2anaconda3 text bin/sphinx-apidoc
+/opt/anaconda1anaconda2anaconda3 text bin/sphinx-autogen
+/opt/anaconda1anaconda2anaconda3 text bin/sphinx-build
+/opt/anaconda1anaconda2anaconda3 text bin/sphinx-quickstart

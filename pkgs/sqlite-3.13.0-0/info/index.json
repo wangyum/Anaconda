@@ -1,0 +1,12 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "depends": [], 
+  "license": "Public-Domain (http://www.sqlite.org/copyright.html)", 
+  "license_family": "Public-Domain", 
+  "name": "sqlite", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "3.13.0"
+}

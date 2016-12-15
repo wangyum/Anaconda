@@ -1,0 +1,7 @@
+pkg: yaml-0.1.6
+dist: yaml-0.1.6-0
+home: http://www.yaml.org/
+license: MIT
+has_bin: False
+has_lib: True
+has_py: False

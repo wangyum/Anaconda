@@ -1,0 +1,48 @@
+{
+  "about": {
+    "home": "http://www.gevent.org/", 
+    "license": "MIT", 
+    "license_file": "LICENSE", 
+    "summary": "Coroutine-based network library"
+  }, 
+  "app": {}, 
+  "build": {
+    "entry_points": [], 
+    "features": [], 
+    "pin_depends": "", 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "gevent", 
+    "version": "1.1.0"
+  }, 
+  "requirements": {
+    "build": [
+      "python"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python", 
+      "greenlet >=0.4.9"
+    ]
+  }, 
+  "source": {
+    "fn": "gevent-1.1.0.tar.gz", 
+    "git_rev": "", 
+    "md5": "24b3e44134fbff250526f3b949763f99", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "https://pypi.python.org/packages/source/g/gevent/gevent-1.1.0.tar.gz"
+  }, 
+  "test": {
+    "commands": [], 
+    "files": [], 
+    "imports": [
+      "gevent"
+    ], 
+    "requires": []
+  }
+}

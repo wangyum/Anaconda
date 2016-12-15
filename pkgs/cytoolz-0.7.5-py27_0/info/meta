@@ -1,0 +1,7 @@
+pkg: cytoolz-0.7.5
+dist: cytoolz-0.7.5-py27_0
+home: https://github.com/pytoolz/cytoolz
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

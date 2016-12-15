@@ -1,0 +1,7 @@
+pkg: cffi-1.5.2
+dist: cffi-1.5.2-py27_0
+home: http://cffi.readthedocs.org
+license: MIT
+has_bin: False
+has_lib: False
+has_py: True

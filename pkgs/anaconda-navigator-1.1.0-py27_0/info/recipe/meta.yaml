@@ -1,0 +1,36 @@
+package:
+  name: anaconda-navigator
+  version: 1.1.0
+
+source:
+  git_url: git@github.com:ContinuumIO/navigator.git
+  git_tag: v1.1.0
+
+build:
+  entry_points:
+    - anaconda-navigator = anaconda_navigator.app.main:main
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+    - anaconda-client >=1.4.0
+    - jinja2
+    - pillow
+    - pyqt
+    - pyyaml
+    - qtpy          >=1.0
+    - qtawesome     >=0.3.2
+    - conda-manager >=0.3.1
+
+test:
+  imports:
+    - anaconda_navigator
+
+about:
+  home: https://github.com/ContinuumIO/navigator
+  license: proprietary - Continuum Analytics, Inc.
+  license_family: Proprietary
+  summary: Anaconda Navigator

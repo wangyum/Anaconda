@@ -1,0 +1,50 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "bin/get_objgraph.py", 
+    "bin/unpickle.py", 
+    "lib/python2.7/site-packages/dill-0.2.4-py2.7.egg-info", 
+    "lib/python2.7/site-packages/dill/__diff.py", 
+    "lib/python2.7/site-packages/dill/__diff.pyc", 
+    "lib/python2.7/site-packages/dill/__init__.py", 
+    "lib/python2.7/site-packages/dill/__init__.pyc", 
+    "lib/python2.7/site-packages/dill/_objects.py", 
+    "lib/python2.7/site-packages/dill/_objects.pyc", 
+    "lib/python2.7/site-packages/dill/detect.py", 
+    "lib/python2.7/site-packages/dill/detect.pyc", 
+    "lib/python2.7/site-packages/dill/dill.py", 
+    "lib/python2.7/site-packages/dill/dill.pyc", 
+    "lib/python2.7/site-packages/dill/info.py", 
+    "lib/python2.7/site-packages/dill/info.pyc", 
+    "lib/python2.7/site-packages/dill/objtypes.py", 
+    "lib/python2.7/site-packages/dill/objtypes.pyc", 
+    "lib/python2.7/site-packages/dill/pointers.py", 
+    "lib/python2.7/site-packages/dill/pointers.pyc", 
+    "lib/python2.7/site-packages/dill/settings.py", 
+    "lib/python2.7/site-packages/dill/settings.pyc", 
+    "lib/python2.7/site-packages/dill/source.py", 
+    "lib/python2.7/site-packages/dill/source.pyc", 
+    "lib/python2.7/site-packages/dill/temp.py", 
+    "lib/python2.7/site-packages/dill/temp.pyc"
+  ], 
+  "license": "3-clause BSD", 
+  "license_family": "BSD", 
+  "link": {
+    "source": "/tmp/tmpQcQ0Zo/Anaconda-4.0.0/pkgs/dill-0.2.4-py27_0", 
+    "type": "hard-link"
+  }, 
+  "name": "dill", 
+  "platform": "linux", 
+  "requires": [
+    "python 2.7"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/dill-0.2.4-py27_0.tar.bz2", 
+  "version": "0.2.4"
+}

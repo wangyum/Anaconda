@@ -1,0 +1,1112 @@
+{
+  "_mod": "Sat, 30 Jul 2016 06:13:17 GMT", 
+  "_url": "https://conda.anaconda.org/anaconda-cluster/linux-64/", 
+  "info": {
+    "arch": "x86_64", 
+    "default_numpy_version": "1.7", 
+    "default_python_version": "2.7", 
+    "platform": "linux", 
+    "subdir": "linux-64"
+  }, 
+  "packages": {
+    "apache-libcloud-0.14.1-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de706e029fe4428324f07"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "Apache License 2.0", 
+      "machine": "x86_64", 
+      "md5": "49a0295f856d82888113dea977f00c23", 
+      "name": "apache-libcloud", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 978896, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.14.1"
+    }, 
+    "apache-libcloud-0.16.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de706e029fe4428324f07"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "Apache License 2.0", 
+      "machine": "x86_64", 
+      "md5": "5d7afe67c0bb70c8d66cec46dcb816c4", 
+      "name": "apache-libcloud", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1113483, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.16.0"
+    }, 
+    "apache-libcloud-0.18.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de706e029fe4428324f07"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "Apache License 2.0", 
+      "machine": "x86_64", 
+      "md5": "85150511d98d1f44154f9b34a86d41fa", 
+      "name": "apache-libcloud", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1362690, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.18.0"
+    }, 
+    "apache-libcloud-0.20.1-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de706e029fe4428324f07"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "Apache License 2.0", 
+      "machine": "x86_64", 
+      "md5": "c9e9d1383405c21523479e02380b1ac5", 
+      "name": "apache-libcloud", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1557071, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.20.1"
+    }, 
+    "apache-maven-3.2.1-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de768e029fe441f46ce08"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "home_page": "http://maven.apache.org/", 
+      "license": "Apache License v2.0", 
+      "md5": "703013af9d3277a60eefb5ae89727fc6", 
+      "name": "apache-maven", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 6906025, 
+      "version": "3.2.1"
+    }, 
+    "apache-maven-3.2.5-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de768e029fe441f46ce08"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "license": "Apache License v2.0", 
+      "machine": "x86_64", 
+      "md5": "6aa062194c3f46e57d98a39d5a6ea633", 
+      "name": "apache-maven", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 7945885, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.2.5"
+    }, 
+    "apache-maven-3.3.3-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de768e029fe441f46ce08"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "license": "Apache License v2.0", 
+      "machine": "x86_64", 
+      "md5": "e73724251be6594c8b9003f15008ce33", 
+      "name": "apache-maven", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 8042419, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "3.3.3"
+    }, 
+    "m2crypto-0.22.3-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de71de029fe1ece2dd8f8"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "distribute", 
+        "openssl", 
+        "python 2.7*"
+      ], 
+      "license": "MIT License", 
+      "machine": "x86_64", 
+      "md5": "b5477f963fdda9a307fee98aec9b811c", 
+      "name": "m2crypto", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 653823, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.22.3"
+    }, 
+    "m2crypto-0.22.3-py27_2.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de71de029fe1ece2dd8f8"
+      }, 
+      "build": "py27_2", 
+      "build_number": 2, 
+      "depends": [
+        "distribute", 
+        "openssl", 
+        "python 2.7*"
+      ], 
+      "license": "MIT License", 
+      "machine": "x86_64", 
+      "md5": "98fedb808eaae4fd024279d6d95e00cd", 
+      "name": "m2crypto", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 22472666, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.22.3"
+    }, 
+    "m2crypto-0.23.0-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de71de029fe1ece2dd8f8"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "distribute", 
+        "openssl", 
+        "python 2.7*"
+      ], 
+      "license": "MIT License", 
+      "machine": "x86_64", 
+      "md5": "8b17bba2c4df5f3259fdb423fc234143", 
+      "name": "m2crypto", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 718536, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.23.0"
+    }, 
+    "msgpack-python-0.4.0-py27_2.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de78de029fe441f46ce0a"
+      }, 
+      "build": "py27_2", 
+      "build_number": 2, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "ache Software License", 
+      "machine": "x86_64", 
+      "md5": "4235cfe0f0de0f960b2510a551a7abc0", 
+      "name": "msgpack-python", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 22455, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.4.0"
+    }, 
+    "py4j-0.8.2.1-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de779e029fe441f46ce09"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "home_page": "http://py4j.sourceforge.net/", 
+      "license": "BSD License", 
+      "md5": "26a801eeb0d0c9a8b4dd7e02fefb08de", 
+      "name": "py4j", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 163448, 
+      "version": "0.8.2.1"
+    }, 
+    "py4j-0.8.2.1-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de779e029fe441f46ce09"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 3.4*"
+      ], 
+      "home_page": "http://py4j.sourceforge.net/", 
+      "license": "BSD License", 
+      "md5": "b1f38505c2c8b093c48da345d1392aff", 
+      "name": "py4j", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 166221, 
+      "version": "0.8.2.1"
+    }, 
+    "py4j-0.8.2.1-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de779e029fe441f46ce09"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 3.5*"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "fbd717e5aaafd57eb32453e1514323ee", 
+      "name": "py4j", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 165392, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.8.2.1"
+    }, 
+    "py4j-0.9-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de779e029fe441f46ce09"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "BSD License", 
+      "machine": "x86_64", 
+      "md5": "8307767b252fcc074b5f532d0967e049", 
+      "name": "py4j", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 179892, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.9"
+    }, 
+    "py4j-0.9-py34_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de779e029fe441f46ce09"
+      }, 
+      "build": "py34_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 3.4*"
+      ], 
+      "license": "BSD License", 
+      "machine": "x86_64", 
+      "md5": "49c8d622ac583e6acc7df6b1dec6e8ed", 
+      "name": "py4j", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 183243, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.9"
+    }, 
+    "py4j-0.9-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de779e029fe441f46ce09"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 3.5*"
+      ], 
+      "license": "BSD License", 
+      "machine": "x86_64", 
+      "md5": "a2c11498b96b0fcc27f686b4e5508ea2", 
+      "name": "py4j", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 185154, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.9"
+    }, 
+    "python-apt-0.8.5-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de7aae029fe06477f3780"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "GPL", 
+      "machine": "x86_64", 
+      "md5": "d9e6db7968c99169855cbca3f809e8b2", 
+      "name": "python-apt", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 1518361, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.8.5"
+    }, 
+    "ruamel.yaml-0.11.7-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "5722475e8634b30eb1e403bc"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 2.7*", 
+        "setuptools"
+      ], 
+      "license": "MIT", 
+      "machine": "x86_64", 
+      "md5": "a0ca6b34729ef03f0faa4c3c3da99d0d", 
+      "name": "ruamel.yaml", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 478661, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.11.7"
+    }, 
+    "ruamel.yaml-0.11.7-py35_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "5722475e8634b30eb1e403bc"
+      }, 
+      "build": "py35_0", 
+      "build_number": 0, 
+      "depends": [
+        "python 3.5*", 
+        "setuptools"
+      ], 
+      "license": "MIT", 
+      "machine": "x86_64", 
+      "md5": "a44cc136ed1f2c73e5b916f765b4ae7a", 
+      "name": "ruamel.yaml", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 511987, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "0.11.7"
+    }, 
+    "salt-2014.7.0-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de6dce029fe06477f377f"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-libcloud 0.14*", 
+        "jinja2", 
+        "m2crypto", 
+        "markupsafe", 
+        "msgpack-python", 
+        "pycrypto", 
+        "python 2.7*", 
+        "pyyaml", 
+        "pyzmq >=2.2.0", 
+        "requests"
+      ], 
+      "home_page": "http://saltstack.com", 
+      "license": null, 
+      "md5": "1b5af3023e5092c80ee40c1687b6e9bb", 
+      "name": "salt", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3014648, 
+      "version": "2014.7.0"
+    }, 
+    "salt-2014.7.6-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de6dce029fe06477f377f"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-libcloud 0.14*", 
+        "jinja2", 
+        "m2crypto", 
+        "markupsafe", 
+        "msgpack-python", 
+        "pycrypto", 
+        "python 2.7*", 
+        "python-apt", 
+        "pyyaml", 
+        "pyzmq >=2.2.0", 
+        "requests"
+      ], 
+      "license": null, 
+      "machine": "x86_64", 
+      "md5": "3e9d331d8116afb66c75c1e41ccdf572", 
+      "name": "salt", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3311914, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2014.7.6"
+    }, 
+    "salt-2015.5.0-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de6dce029fe06477f377f"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-libcloud 0.14*", 
+        "jinja2", 
+        "m2crypto", 
+        "markupsafe", 
+        "msgpack-python", 
+        "pycrypto", 
+        "python 2.7*", 
+        "python-apt", 
+        "pyyaml", 
+        "pyzmq >=2.2.0", 
+        "requests"
+      ], 
+      "license": null, 
+      "machine": "x86_64", 
+      "md5": "bc537fbae7cf0598e66b9e04398c706a", 
+      "name": "salt", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3907246, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2015.5.0"
+    }, 
+    "salt-2015.5.1-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de6dce029fe06477f377f"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-libcloud 0.14*", 
+        "jinja2", 
+        "m2crypto", 
+        "markupsafe", 
+        "msgpack-python", 
+        "pycrypto", 
+        "python 2.7*", 
+        "python-apt", 
+        "pyyaml", 
+        "pyzmq >=2.2.0", 
+        "requests"
+      ], 
+      "license": null, 
+      "machine": "x86_64", 
+      "md5": "adb663d737aebc5d573f8ee653da9ed6", 
+      "name": "salt", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3923065, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2015.5.1"
+    }, 
+    "salt-2015.5.2-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de6dce029fe06477f377f"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-libcloud 0.14*", 
+        "jinja2", 
+        "m2crypto", 
+        "markupsafe", 
+        "msgpack-python", 
+        "pycrypto", 
+        "python 2.7*", 
+        "python-apt", 
+        "pyyaml", 
+        "pyzmq >=2.2.0", 
+        "requests"
+      ], 
+      "license": null, 
+      "machine": "x86_64", 
+      "md5": "8fa9e98aaf9bd358dfdf7c8465afcf73", 
+      "name": "salt", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 3931901, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2015.5.2"
+    }, 
+    "salt-2015.5.5-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de6dce029fe06477f377f"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-libcloud 0.18*", 
+        "jinja2", 
+        "m2crypto", 
+        "markupsafe", 
+        "msgpack-python", 
+        "pycrypto", 
+        "python 2.7*", 
+        "python-apt", 
+        "pyyaml", 
+        "pyzmq >=2.2.0", 
+        "requests"
+      ], 
+      "license": null, 
+      "machine": "x86_64", 
+      "md5": "a7b7dcd9500996693ecff1c66d4c4b17", 
+      "name": "salt", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 4126820, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2015.5.5"
+    }, 
+    "salt-2015.8.7-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de6dce029fe06477f377f"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-libcloud 0.18*", 
+        "jinja2", 
+        "m2crypto", 
+        "markupsafe", 
+        "msgpack-python", 
+        "pycrypto", 
+        "python 2.7*", 
+        "pyyaml", 
+        "pyzmq >=2.2.0", 
+        "requests", 
+        "tornado"
+      ], 
+      "machine": "x86_64", 
+      "md5": "fd30b5f11286aa78e81ac33e0e109daf", 
+      "name": "salt", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 5298260, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2015.8.7"
+    }, 
+    "scala-2.10.4-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "557b3f441d4e0538f426e750"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "license": "3-clause BSD license", 
+      "machine": "x86_64", 
+      "md5": "752c1c5c1d752ce7cbc794dcdedbc39d", 
+      "name": "scala", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 30004356, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2.10.4"
+    }, 
+    "scala-2.11.1-0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "557b3f441d4e0538f426e750"
+      }, 
+      "build": "0", 
+      "build_number": 0, 
+      "depends": [], 
+      "license": "3-clause BSD license", 
+      "machine": "x86_64", 
+      "md5": "29141c86542a091f8c807b703460afa0", 
+      "name": "scala", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 25734292, 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "2.11.1"
+    }, 
+    "schematics-1.2-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "570fc5735351d85fcfc7457e"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "python 2.7*"
+      ], 
+      "license": "BSD", 
+      "machine": "x86_64", 
+      "md5": "e9f754ed8821801057b61e772f48ebd0", 
+      "name": "schematics", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 97535, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.2"
+    }, 
+    "spark-1.3.0-py27_0.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py27_0", 
+      "build_number": 0, 
+      "depends": [
+        "apache-maven", 
+        "py4j", 
+        "python 2.7*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "fc0eeb4c6525c300c757fe61ce9f5eb8", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 254743784, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.3.0"
+    }, 
+    "spark-1.3.1-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-maven", 
+        "py4j", 
+        "python 2.7*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "919c9cb059fe516fcf3f3264005ede6d", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 259017672, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.3.1"
+    }, 
+    "spark-1.4.0-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-maven", 
+        "py4j", 
+        "python 2.7*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "fb5c989d4c35fd366c969384e1aeb1f7", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 249663325, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.0"
+    }, 
+    "spark-1.4.1-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-maven", 
+        "py4j", 
+        "python 2.7*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "7f16d95cb083317f2f39c9bd67255bbd", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 249772304, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.1"
+    }, 
+    "spark-1.4.1-py34_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py34_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-maven", 
+        "py4j", 
+        "python 3.4*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "034b0dc3f421316b51f043ba1aaa6a48", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 249771647, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.4.1"
+    }, 
+    "spark-1.5.1-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-maven", 
+        "py4j", 
+        "python 2.7*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "e9353f9b196a7a4eca3434b671711ab4", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 280293467, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.1"
+    }, 
+    "spark-1.5.1-py34_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py34_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-maven", 
+        "py4j", 
+        "python 3.4*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "d6e3a08494dcf56b9fa38eb02647fa67", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 280294199, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.1"
+    }, 
+    "spark-1.5.1-py35_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py35_1", 
+      "build_number": 1, 
+      "depends": [
+        "apache-maven", 
+        "py4j", 
+        "python 3.5*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "0d843d5bf6582e9840c632a566d85b2e", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 280293649, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.1"
+    }, 
+    "spark-1.5.2-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "py4j", 
+        "python 2.7*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "df516815051873603fbb3c07333c350f", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 280287206, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.2"
+    }, 
+    "spark-1.5.2-py34_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py34_1", 
+      "build_number": 1, 
+      "depends": [
+        "py4j", 
+        "python 3.4*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "bb71a56916003f42aaef05908d42ea42", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 280287550, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.2"
+    }, 
+    "spark-1.5.2-py35_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py35_1", 
+      "build_number": 1, 
+      "depends": [
+        "py4j", 
+        "python 3.5*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "5bdb625452afb635ddab8859756f1795", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 280288780, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.5.2"
+    }, 
+    "spark-1.6.0-py27_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py27_1", 
+      "build_number": 1, 
+      "depends": [
+        "py4j", 
+        "python 2.7*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "d715396e9f48ba47cbf252213bb7911d", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 288496417, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.6.0"
+    }, 
+    "spark-1.6.0-py35_1.tar.bz2": {
+      "arch": "x86_64", 
+      "binstar": {
+        "channel": "main", 
+        "owner_id": "555de1f03273af3c85b6d997", 
+        "package_id": "555de740e029fe1ece2dd8f9"
+      }, 
+      "build": "py35_1", 
+      "build_number": 1, 
+      "depends": [
+        "py4j", 
+        "python 3.5*"
+      ], 
+      "license": "Apache 2.0 license", 
+      "machine": "x86_64", 
+      "md5": "86b2342ff7b3476a3ba9c8dcf6eed677", 
+      "name": "spark", 
+      "operatingsystem": "linux", 
+      "platform": "linux", 
+      "requires": [], 
+      "size": 288495531, 
+      "subdir": "linux-64", 
+      "target-triplet": "x86_64-any-linux", 
+      "version": "1.6.0"
+    }
+  }
+}

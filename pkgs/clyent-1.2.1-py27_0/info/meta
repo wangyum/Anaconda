@@ -1,0 +1,7 @@
+pkg: clyent-1.2.1
+dist: clyent-1.2.1-py27_0
+home: https://github.com/binstar/clyent
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

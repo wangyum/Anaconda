@@ -1,0 +1,24 @@
+{
+  "app_entry": "jupyter-qtconsole", 
+  "app_type": "desk", 
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "ipykernel >=4.1", 
+    "jupyter_client >=4.1", 
+    "jupyter_core", 
+    "pygments", 
+    "pyqt", 
+    "python 2.7*", 
+    "traitlets"
+  ], 
+  "icon": "df7feebede9861a203b480c119e38b49.png", 
+  "license": "BSD", 
+  "name": "qtconsole", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "summary": "Jupyter Qt console", 
+  "type": "app", 
+  "version": "4.2.0"
+}

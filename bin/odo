@@ -1,0 +1,4 @@
+#!/usr/bin/env python
+# EASY-INSTALL-SCRIPT: 'odo==0.4.2','odo'
+__requires__ = 'odo==0.4.2'
+__import__('pkg_resources').run_script('odo==0.4.2', 'odo')

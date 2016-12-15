@@ -1,0 +1,28 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "cairo", 
+    "python 2.7*"
+  ], 
+  "files": [
+    "include/pycairo/pycairo.h", 
+    "lib/pkgconfig/py3cairo.pc", 
+    "lib/python2.7/site-packages/cairo/__init__.py", 
+    "lib/python2.7/site-packages/cairo/__init__.pyc", 
+    "lib/python2.7/site-packages/cairo/_cairo.so", 
+    "lib/python2.7/site-packages/pycairo-1.10.0-py2.7.egg-info"
+  ], 
+  "license": "LGPL 2.1, MPL 1.1", 
+  "license_family": "LGPL", 
+  "link": {
+    "source": "/tmp/tmpQcQ0Zo/Anaconda-4.0.0/pkgs/pycairo-1.10.0-py27_0", 
+    "type": "hard-link"
+  }, 
+  "name": "pycairo", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/pycairo-1.10.0-py27_0.tar.bz2", 
+  "version": "1.10.0"
+}

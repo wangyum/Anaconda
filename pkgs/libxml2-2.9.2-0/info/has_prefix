@@ -1,0 +1,4 @@
+bin/xml2-config
+lib/libxml2.la
+lib/pkgconfig/libxml-2.0.pc
+lib/xml2Conf.sh

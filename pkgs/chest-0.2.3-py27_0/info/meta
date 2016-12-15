@@ -1,0 +1,7 @@
+pkg: chest-0.2.3
+dist: chest-0.2.3-py27_0
+home: https://github.com/ContinuumIO/chest
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

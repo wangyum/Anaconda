@@ -1,0 +1,19 @@
+==> git log -n1 <==
+commit f22ab3c6877cbdd07f058b68816b0086b1cb0e1e
+Merge: 12b1886 d08124b
+Author: Anthony Green <green@moxielogic.com>
+Date:   Sun Mar 17 18:34:54 2013 -0400
+
+    Merge branch 'master' of github.com:/atgreen/libffi
+
+==> git describe --tags --dirty <==
+v3.0.13
+
+==> git status <==
+# Not currently on any branch.
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	x86_64-unknown-linux-gnu/
+nothing added to commit but untracked files present (use "git add" to track)
+

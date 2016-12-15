@@ -1,0 +1,16 @@
+{
+  "arch": "x86_64", 
+  "build": "4", 
+  "build_number": 4, 
+  "depends": [
+    "libgfortran 3.0"
+  ], 
+  "license": "BSD", 
+  "name": "openblas", 
+  "platform": "linux", 
+  "requires": [
+    "libgfortran 3.0"
+  ], 
+  "subdir": "linux-64", 
+  "version": "0.2.14"
+}

@@ -1,0 +1,7 @@
+pkg: sqlite-3.9.2
+dist: sqlite-3.9.2-0
+home: http://www.sqlite.org/
+license: Public-Domain (http://www.sqlite.org/copyright.html)
+has_bin: True
+has_lib: True
+has_py: False

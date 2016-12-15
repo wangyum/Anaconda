@@ -1,0 +1,38 @@
+{
+  "about": {
+    "license": "GPL3", 
+    "summary": "GNU Fortran runtime library"
+  }, 
+  "app": {}, 
+  "build": {
+    "entry_points": [], 
+    "features": [], 
+    "number": "1", 
+    "pin_depends": "", 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "libgfortran", 
+    "version": "3.0.0"
+  }, 
+  "requirements": {
+    "build": [], 
+    "conflicts": [], 
+    "run": []
+  }, 
+  "source": {
+    "git_rev": "", 
+    "md5": "", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": ""
+  }, 
+  "test": {
+    "commands": [], 
+    "files": [], 
+    "imports": [], 
+    "requires": []
+  }
+}

@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: multipledispatch
+Version: 0.4.8
+Summary: Multiple dispatch
+Home-page: http://github.com/mrocklin/multipledispatch/
+Author: Matthew Rocklin
+Author-email: mrocklin@gmail.com
+License: BSD
+Description: UNKNOWN
+Keywords: dispatch
+Platform: UNKNOWN

@@ -1,0 +1,48 @@
+{
+  "about": {
+    "home": "http://pypi.python.org/pypi/decorator", 
+    "license": "BSD", 
+    "license_file": "LICENSE.txt", 
+    "summary": "Better living through Python with decorators"
+  }, 
+  "app": {}, 
+  "build": {
+    "entry_points": [], 
+    "features": [], 
+    "pin_depends": "", 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "decorator", 
+    "version": "4.0.9"
+  }, 
+  "requirements": {
+    "build": [
+      "python", 
+      "setuptools"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python"
+    ]
+  }, 
+  "source": {
+    "fn": "decorator-4.0.9.tar.gz", 
+    "git_rev": "", 
+    "md5": "f12c5651ccd707e12a0abaa4f76cd69a", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "https://pypi.python.org/packages/source/d/decorator/decorator-4.0.9.tar.gz"
+  }, 
+  "test": {
+    "commands": [], 
+    "files": [], 
+    "imports": [
+      "decorator"
+    ], 
+    "requires": []
+  }
+}

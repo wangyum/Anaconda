@@ -1,0 +1,16 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "depends": [
+    "libsodium 1.0.3"
+  ], 
+  "license": "LGPL", 
+  "name": "zeromq", 
+  "platform": "linux", 
+  "requires": [
+    "libsodium 1.0.3"
+  ], 
+  "subdir": "linux-64", 
+  "version": "4.1.3"
+}

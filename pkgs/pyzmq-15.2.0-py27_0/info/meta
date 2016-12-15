@@ -1,0 +1,7 @@
+pkg: pyzmq-15.2.0
+dist: pyzmq-15.2.0-py27_0
+home: https://github.com/zeromq/pyzmq
+license: LGPL and BSD
+has_bin: False
+has_lib: False
+has_py: True

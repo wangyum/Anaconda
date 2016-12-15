@@ -1,0 +1,27 @@
+==> git log -n1 <==
+commit 8eebc51a9615a4721992b24422a1c4fe52120f13
+Author: Andrea Bedini <andrea@andreabedini.com>
+Date:   Tue Sep 22 13:54:51 2015 +1000
+
+    Update release timeline
+
+==> git describe --tags --dirty <==
+v.3.2.2-dirty
+
+==> git status <==
+# Not currently on any branch.
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   c-blosc/hdf5/blosc_filter.c
+#	modified:   setup.py
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	dist/
+#	tables.egg-info/
+#	tmp/
+no changes added to commit (use "git add" and/or "git commit -a")
+

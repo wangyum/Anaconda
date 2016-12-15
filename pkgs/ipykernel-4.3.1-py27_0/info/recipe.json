@@ -1,0 +1,50 @@
+{
+  "about": {
+    "home": "http://ipython.org", 
+    "license": "BSD", 
+    "summary": "IPython Kernel for Jupyter"
+  }, 
+  "app": {}, 
+  "build": {
+    "entry_points": [], 
+    "features": [], 
+    "pin_depends": "", 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "ipykernel", 
+    "version": "4.3.1"
+  }, 
+  "requirements": {
+    "build": [
+      "python"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python", 
+      "ipython >=4.0", 
+      "traitlets", 
+      "jupyter_client", 
+      "tornado >=4.0"
+    ]
+  }, 
+  "source": {
+    "fn": "ipykernel-4.3.1.tar.gz", 
+    "git_rev": "", 
+    "md5": "0b1150602203af298631555509a809bd", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "https://pypi.python.org/packages/source/i/ipykernel/ipykernel-4.3.1.tar.gz"
+  }, 
+  "test": {
+    "commands": [], 
+    "files": [], 
+    "imports": [
+      "ipykernel"
+    ], 
+    "requires": []
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "description": "PyZMQ contains Python bindings for 0MQ. 0MQ is a lightweight and fast\nmessaging implementation.\n", 
+  "dev_url": "https://github.com/zeromq/pyzmq", 
+  "doc_url": "https://pyzmq.readthedocs.org/en/latest/", 
+  "home": "https://github.com/zeromq/pyzmq", 
+  "license": "LGPL and BSD", 
+  "license_family": "LGPL", 
+  "summary": "zeromq bindings for Python"
+}

@@ -1,0 +1,8 @@
+{
+  "description": "IPython provides a rich architecture for interactive computing with\na powerful interactive shell, a kernel for Jupyter, high performance\ntools for parallel computing, and more.\n", 
+  "dev_url": "https://github.com/ipython/ipython", 
+  "doc_url": "http://ipython.org/documentation.html", 
+  "home": "http://ipython.org/", 
+  "license": "BSD", 
+  "summary": "Productive Interactive Computing"
+}

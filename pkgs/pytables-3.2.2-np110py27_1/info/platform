@@ -1,0 +1,7 @@
+platform:  Linux-2.6.18-400.1.1.el5-x86_64-with-redhat-5.11-Final
+system:    Linux
+node:      centos5x64.corp.continuum.io
+release:   2.6.18-400.1.1.el5
+version:   #1 SMP Thu Dec 18 00:59:53 EST 2014
+machine:   x86_64
+processor: x86_64

@@ -1,0 +1,7 @@
+pkg: pickleshare-0.5
+dist: pickleshare-0.5-py27_0
+home: https://github.com/vivainio/pickleshare
+license: MIT
+has_bin: False
+has_lib: False
+has_py: True

@@ -1,0 +1,21 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_1", 
+  "build_number": 1, 
+  "depends": [
+    "ptyprocess 0.5", 
+    "python 2.7*", 
+    "tornado"
+  ], 
+  "license": "BSD", 
+  "name": "terminado", 
+  "platform": "linux", 
+  "requires": [
+    "ptyprocess 0.5", 
+    "python 2.7", 
+    "tornado 4.2.1"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "0.5"
+}

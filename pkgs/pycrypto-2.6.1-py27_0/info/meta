@@ -1,0 +1,7 @@
+pkg: pycrypto-2.6.1
+dist: pycrypto-2.6.1-py27_0
+home: http://www.pycrypto.org/
+license: Public Domain
+has_bin: False
+has_lib: False
+has_py: True

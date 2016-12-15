@@ -1,0 +1,7 @@
+pkg: terminado-0.5
+dist: terminado-0.5-py27_1
+home: https://github.com/takluyver/terminado
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

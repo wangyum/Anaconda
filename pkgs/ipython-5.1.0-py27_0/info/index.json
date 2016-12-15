@@ -1,0 +1,22 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "decorator", 
+    "get_terminal_size", 
+    "pathlib2", 
+    "pexpect", 
+    "pickleshare", 
+    "prompt_toolkit >=1.0.3,<2.0.0", 
+    "pygments", 
+    "python 2.7*", 
+    "simplegeneric >0.8", 
+    "traitlets >=4.2"
+  ], 
+  "license": "BSD", 
+  "name": "ipython", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "5.1.0"
+}

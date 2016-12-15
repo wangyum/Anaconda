@@ -1,0 +1,14 @@
+==> git log -n1 <==
+commit d18b5a6eed2ce8213656e703a2a55856cd11877e
+Author: Antoine Pitrou <antoine@python.org>
+Date:   Mon Feb 29 17:57:07 2016 +0100
+
+    Mark 0.9.0 released
+
+==> git describe --tags --dirty <==
+v0.9.0
+
+==> git status <==
+# Not currently on any branch.
+nothing to commit (working directory clean)
+

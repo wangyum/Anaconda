@@ -1,0 +1,7 @@
+pkg: scikit-learn-0.17.1
+dist: scikit-learn-0.17.1-np110py27_0
+home: http://scikit-learn.org/stable/
+license: 3-clause BSD
+has_bin: False
+has_lib: False
+has_py: True

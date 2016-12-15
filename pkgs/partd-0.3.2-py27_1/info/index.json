@@ -1,0 +1,16 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_1", 
+  "build_number": 1, 
+  "depends": [
+    "locket", 
+    "pandas", 
+    "python 2.7*", 
+    "toolz"
+  ], 
+  "license": "BSD", 
+  "name": "partd", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "0.3.2"
+}

@@ -1,0 +1,8 @@
+bin/ipcluster
+bin/ipcontroller
+bin/ipengine
+bin/iplogger
+bin/iptest
+bin/ipython
+bin/irunner
+bin/pycolor

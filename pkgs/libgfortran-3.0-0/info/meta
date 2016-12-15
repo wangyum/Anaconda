@@ -1,0 +1,7 @@
+pkg: libgfortran-3.0
+dist: libgfortran-3.0-0
+home: None
+license: GPL3
+has_bin: False
+has_lib: True
+has_py: False

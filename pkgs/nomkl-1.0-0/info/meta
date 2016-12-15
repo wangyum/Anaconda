@@ -1,0 +1,7 @@
+pkg: nomkl-1.0
+dist: nomkl-1.0-0
+home: None
+license: None
+has_bin: False
+has_lib: False
+has_py: False

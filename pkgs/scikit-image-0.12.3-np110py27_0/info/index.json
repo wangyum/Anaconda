@@ -1,0 +1,30 @@
+{
+  "arch": "x86_64", 
+  "build": "np110py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "matplotlib", 
+    "networkx", 
+    "numpy 1.10*", 
+    "pillow", 
+    "python 2.7*", 
+    "scipy", 
+    "six"
+  ], 
+  "license": "3-clause BSD", 
+  "license_family": "BSD", 
+  "name": "scikit-image", 
+  "platform": "linux", 
+  "requires": [
+    "matplotlib 1.5.1", 
+    "networkx 1.11", 
+    "numpy 1.10", 
+    "pillow 3.1.1", 
+    "python 2.7", 
+    "scipy 0.17.0", 
+    "six 1.10.0"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "0.12.3"
+}

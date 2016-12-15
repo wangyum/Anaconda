@@ -1,0 +1,7 @@
+pkg: mkl-11.3.1
+dist: mkl-11.3.1-0
+home: http://software.intel.com/en-us/articles/intel-mkl/
+license: proprietary - Intel
+has_bin: False
+has_lib: True
+has_py: False

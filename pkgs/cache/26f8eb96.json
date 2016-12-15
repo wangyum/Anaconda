@@ -1,0 +1,12 @@
+{
+  "_mod": "Thu, 28 Jul 2016 01:56:59 GMT", 
+  "_url": "https://conda.anaconda.org/jjhelmus/noarch/", 
+  "info": {
+    "arch": null, 
+    "default_numpy_version": "1.7", 
+    "default_python_version": "2.7", 
+    "platform": null, 
+    "subdir": "noarch"
+  }, 
+  "packages": {}
+}

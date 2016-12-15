@@ -1,0 +1,7 @@
+/opt/anaconda1anaconda2anaconda3 text bin/h5c++
+/opt/anaconda1anaconda2anaconda3 text bin/h5cc
+/opt/anaconda1anaconda2anaconda3 text lib/libhdf5.la
+/opt/anaconda1anaconda2anaconda3 text lib/libhdf5.settings
+/opt/anaconda1anaconda2anaconda3 text lib/libhdf5_cpp.la
+/opt/anaconda1anaconda2anaconda3 text lib/libhdf5_hl.la
+/opt/anaconda1anaconda2anaconda3 text lib/libhdf5_hl_cpp.la

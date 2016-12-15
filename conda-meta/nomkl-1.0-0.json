@@ -1,0 +1,26 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64", 
+  "date": "2016-01-20", 
+  "depends": [], 
+  "files": [], 
+  "fn": "nomkl-1.0-0.tar.bz2", 
+  "license": "BSD", 
+  "link": {
+    "source": "/opt/cloudera/parcels/Anaconda/pkgs/nomkl-1.0-0", 
+    "type": "hard-link"
+  }, 
+  "md5": "333ef8c779974741baef090424fecb75", 
+  "name": "nomkl", 
+  "platform": "linux", 
+  "priority": 1, 
+  "requires": [], 
+  "schannel": "defaults", 
+  "size": 402, 
+  "subdir": "linux-64", 
+  "track_features": "nomkl", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/nomkl-1.0-0.tar.bz2", 
+  "version": "1.0"
+}

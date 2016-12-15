@@ -1,0 +1,5 @@
+bin/redis-benchmark
+bin/redis-check-aof
+bin/redis-check-dump
+bin/redis-cli
+bin/redis-server

@@ -1,0 +1,6 @@
+bin/activate-global-python-argcomplete
+bin/python-argcomplete-check-easy-install-script
+bin/register-python-argcomplete
+lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/scripts/activate-global-python-argcomplete
+lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/scripts/python-argcomplete-check-easy-install-script
+lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/scripts/register-python-argcomplete

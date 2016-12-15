@@ -1,0 +1,31 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "cffi", 
+    "enum34", 
+    "idna 2.0", 
+    "ipaddress 1.0.14", 
+    "pyasn1 0.1.9", 
+    "python 2.7*", 
+    "setuptools", 
+    "six"
+  ], 
+  "license": "Apache", 
+  "name": "cryptography", 
+  "platform": "linux", 
+  "requires": [
+    "cffi 1.5.2", 
+    "enum34 1.1.2", 
+    "idna 2.0", 
+    "ipaddress 1.0.14", 
+    "pyasn1 0.1.9", 
+    "python 2.7", 
+    "setuptools 20.3", 
+    "six 1.10.0"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "1.3"
+}

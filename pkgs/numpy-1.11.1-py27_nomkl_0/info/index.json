@@ -1,0 +1,16 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_nomkl_0", 
+  "build_number": 0, 
+  "depends": [
+    "libgfortran 3.0.0", 
+    "openblas 0.2.14", 
+    "python 2.7*"
+  ], 
+  "features": "nomkl", 
+  "license": "BSD", 
+  "name": "numpy", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "1.11.1"
+}

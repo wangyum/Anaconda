@@ -1,0 +1,8 @@
+{
+  "description": "Provides the conda env interface to Conda environments. All of the usage\nis documented via the --help flag.\n", 
+  "dev_url": "https://github.com/conda/conda-env/", 
+  "doc_url": "http://conda.pydata.org/docs/", 
+  "home": "https://github.com/conda/conda-env/", 
+  "license": "BSD", 
+  "summary": "Provides a unified interface to dealing with Conda environments"
+}

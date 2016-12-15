@@ -1,0 +1,3 @@
+[console_scripts]
+translate = translate.__main__:main
+

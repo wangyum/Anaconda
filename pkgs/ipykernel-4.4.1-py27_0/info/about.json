@@ -1,0 +1,7 @@
+{
+  "dev_url": "https://github.com/ipython/ipython", 
+  "doc_url": "http://ipython.readthedocs.org/", 
+  "home": "http://ipython.org", 
+  "license": "BSD", 
+  "summary": "IPython Kernel for Jupyter"
+}

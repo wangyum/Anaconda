@@ -1,0 +1,15 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_1", 
+  "build_number": 1, 
+  "depends": [
+    "markupsafe", 
+    "python 2.7*", 
+    "setuptools"
+  ], 
+  "license": "BSD", 
+  "name": "jinja2", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "2.8"
+}

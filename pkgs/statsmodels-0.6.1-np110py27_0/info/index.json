@@ -1,0 +1,26 @@
+{
+  "arch": "x86_64", 
+  "build": "np110py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "numpy 1.10*", 
+    "pandas", 
+    "patsy", 
+    "python 2.7*", 
+    "scipy"
+  ], 
+  "license": "3-clause BSD", 
+  "license_family": "BSD", 
+  "name": "statsmodels", 
+  "platform": "linux", 
+  "requires": [
+    "numpy 1.10", 
+    "pandas 0.16.2", 
+    "patsy 0.4.0", 
+    "python 2.7", 
+    "scipy 0.16.0"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "0.6.1"
+}

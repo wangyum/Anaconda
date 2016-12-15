@@ -1,0 +1,7 @@
+pkg: tornado-4.3
+dist: tornado-4.3-py27_0
+home: http://www.tornadoweb.org/
+license: Apache
+has_bin: False
+has_lib: False
+has_py: True

@@ -1,0 +1,59 @@
+{
+  "app": {}, 
+  "build": {
+    "entry_points": [
+      "pycc = numba.pycc:main", 
+      "numba = numba.numba_entry:main"
+    ], 
+    "features": [], 
+    "number": "0", 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "numba", 
+    "version": "0.24.0"
+  }, 
+  "requirements": {
+    "build": [
+      "python", 
+      "numpy x.x", 
+      "llvmlite 0.9.*", 
+      "funcsigs", 
+      "singledispatch"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python", 
+      "numpy x.x", 
+      "llvmlite 0.9.*", 
+      "funcsigs", 
+      "singledispatch"
+    ]
+  }, 
+  "source": {
+    "git_rev": "", 
+    "git_url": "https://github.com/numba/numba", 
+    "md5": "", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": ""
+  }, 
+  "test": {
+    "commands": [
+      "pycc -h", 
+      "numba -h", 
+      "python -m numba.runtests -m -b"
+    ], 
+    "files": [
+      "mandel.py"
+    ], 
+    "imports": [], 
+    "requires": [
+      "jinja2", 
+      "cffi", 
+      "scipy"
+    ]
+  }
+}

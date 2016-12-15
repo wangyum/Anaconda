@@ -1,0 +1,9 @@
+prefix=/tmp/tmpQcQ0Zo/Anaconda-4.0.0
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: OpenSSL
+Description: Secure Sockets Layer and cryptography libraries and tools
+Version: 1.0.2g
+Requires: libssl libcrypto

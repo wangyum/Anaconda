@@ -1,0 +1,8 @@
+/opt/anaconda1anaconda2anaconda3 text bin/2to3
+/opt/anaconda1anaconda2anaconda3 text bin/idle
+/opt/anaconda1anaconda2anaconda3 text bin/pydoc
+/opt/anaconda1anaconda2anaconda3 text bin/python-config
+/opt/anaconda1anaconda2anaconda3 text bin/smtpd.py
+/opt/anaconda1anaconda2anaconda3 text lib/pkgconfig/python-2.7.pc
+/opt/anaconda1anaconda2anaconda3 text lib/python2.7/_sysconfigdata.py
+/opt/anaconda1anaconda2anaconda3 text lib/python2.7/config/Makefile

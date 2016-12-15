@@ -1,0 +1,5 @@
+{
+  "home": "https://github.com/jquast/wcwidth", 
+  "license": "MIT", 
+  "summary": "measures number of Terminal column cells of wide-character codes"
+}

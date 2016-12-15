@@ -1,0 +1,7 @@
+pkg: bottleneck-1.0.0
+dist: bottleneck-1.0.0-np110py27_0
+home: http://berkeleyanalytics.com/bottleneck
+license: Simplified BSD
+has_bin: False
+has_lib: False
+has_py: True

@@ -1,0 +1,26 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "depends": [], 
+  "files": [
+    "include/pixman-1/pixman-version.h", 
+    "include/pixman-1/pixman.h", 
+    "lib/libpixman-1.a", 
+    "lib/libpixman-1.la", 
+    "lib/libpixman-1.so", 
+    "lib/libpixman-1.so.0", 
+    "lib/libpixman-1.so.0.32.6", 
+    "lib/pkgconfig/pixman-1.pc"
+  ], 
+  "license": "MIT", 
+  "link": {
+    "source": "/tmp/tmpQcQ0Zo/Anaconda-4.0.0/pkgs/pixman-0.32.6-0", 
+    "type": "hard-link"
+  }, 
+  "name": "pixman", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/pixman-0.32.6-0.tar.bz2", 
+  "version": "0.32.6"
+}

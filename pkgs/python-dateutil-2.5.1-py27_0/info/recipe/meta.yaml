@@ -1,0 +1,28 @@
+package:
+  name: python-dateutil
+  version: 2.5.1
+
+source:
+  fn: python-dateutil-2.5.1.tar.gz
+  url: https://pypi.python.org/packages/source/p/python-dateutil/python-dateutil-2.5.1.tar.gz
+  md5: 2769f13c596427558136b34977a95269
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - six
+  run:
+    - python
+    - six
+
+test:
+  imports:
+    - dateutil
+    - dateutil.rrule
+
+about:
+  home: https://dateutil.readthedocs.org/
+  license: BSD
+  license_file: LICENSE
+  summary: Extensions to the standard Python datetime module

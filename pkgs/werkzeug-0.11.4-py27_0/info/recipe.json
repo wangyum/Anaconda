@@ -1,0 +1,47 @@
+{
+  "about": {
+    "home": "http://werkzeug.pocoo.org/", 
+    "license": "BSD", 
+    "license_file": "LICENSE", 
+    "summary": "The Swiss Army knife of Python web development"
+  }, 
+  "app": {}, 
+  "build": {
+    "entry_points": [], 
+    "features": [], 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "werkzeug", 
+    "version": "0.11.4"
+  }, 
+  "requirements": {
+    "build": [
+      "python", 
+      "setuptools"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python"
+    ]
+  }, 
+  "source": {
+    "fn": "Werkzeug-0.11.4.tar.gz", 
+    "git_rev": "", 
+    "md5": "9c5cfb704e39aea1524777caa5891eb0", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "https://pypi.python.org/packages/source/W/Werkzeug/Werkzeug-0.11.4.tar.gz"
+  }, 
+  "test": {
+    "commands": [], 
+    "files": [], 
+    "imports": [
+      "werkzeug"
+    ], 
+    "requires": []
+  }
+}

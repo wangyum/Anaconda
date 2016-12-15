@@ -1,0 +1,12 @@
+prefix=/tmp/tmpQcQ0Zo/Anaconda-4.0.0
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: cairo-script
+Description: script surface backend for cairo graphics library
+Version: 1.12.18
+
+Requires: cairo 
+Libs:  
+Cflags: -I${includedir}/cairo 

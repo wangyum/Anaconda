@@ -1,0 +1,7 @@
+pkg: idna-2.0
+dist: idna-2.0-py27_0
+home: https://github.com/kjd/idna
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

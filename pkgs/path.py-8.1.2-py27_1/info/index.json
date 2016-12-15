@@ -1,0 +1,13 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_1", 
+  "build_number": 1, 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "license": "MIT", 
+  "name": "path.py", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "8.1.2"
+}

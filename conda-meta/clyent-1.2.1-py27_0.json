@@ -1,0 +1,54 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*", 
+    "setuptools"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/clyent-1.2.1-py2.7.egg-info/PKG-INFO", 
+    "lib/python2.7/site-packages/clyent-1.2.1-py2.7.egg-info/SOURCES.txt", 
+    "lib/python2.7/site-packages/clyent-1.2.1-py2.7.egg-info/dependency_links.txt", 
+    "lib/python2.7/site-packages/clyent-1.2.1-py2.7.egg-info/top_level.txt", 
+    "lib/python2.7/site-packages/clyent/__init__.py", 
+    "lib/python2.7/site-packages/clyent/__init__.pyc", 
+    "lib/python2.7/site-packages/clyent/_version.py", 
+    "lib/python2.7/site-packages/clyent/_version.pyc", 
+    "lib/python2.7/site-packages/clyent/colors/__init__.py", 
+    "lib/python2.7/site-packages/clyent/colors/__init__.pyc", 
+    "lib/python2.7/site-packages/clyent/colors/color.py", 
+    "lib/python2.7/site-packages/clyent/colors/color.pyc", 
+    "lib/python2.7/site-packages/clyent/colors/color_formatter.py", 
+    "lib/python2.7/site-packages/clyent/colors/color_formatter.pyc", 
+    "lib/python2.7/site-packages/clyent/errors.py", 
+    "lib/python2.7/site-packages/clyent/errors.pyc", 
+    "lib/python2.7/site-packages/clyent/logs/__init__.py", 
+    "lib/python2.7/site-packages/clyent/logs/__init__.pyc", 
+    "lib/python2.7/site-packages/clyent/logs/colors/__init__.py", 
+    "lib/python2.7/site-packages/clyent/logs/colors/__init__.pyc", 
+    "lib/python2.7/site-packages/clyent/logs/colors/printer.py", 
+    "lib/python2.7/site-packages/clyent/logs/colors/printer.pyc", 
+    "lib/python2.7/site-packages/clyent/logs/handlers.py", 
+    "lib/python2.7/site-packages/clyent/logs/handlers.pyc", 
+    "lib/python2.7/site-packages/clyent/tests/__init__.py", 
+    "lib/python2.7/site-packages/clyent/tests/__init__.pyc", 
+    "lib/python2.7/site-packages/clyent/tests/test_clyent.py", 
+    "lib/python2.7/site-packages/clyent/tests/test_clyent.pyc"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/tmp/tmpQcQ0Zo/Anaconda-4.0.0/pkgs/clyent-1.2.1-py27_0", 
+    "type": "hard-link"
+  }, 
+  "name": "clyent", 
+  "platform": "linux", 
+  "requires": [
+    "python 2.7", 
+    "setuptools 19.6.2"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/clyent-1.2.1-py27_0.tar.bz2", 
+  "version": "1.2.1"
+}

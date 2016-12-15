@@ -1,0 +1,17 @@
+==> git log -n1 <==
+commit 2fe9ce10282aa504108415433e833afe52cc5f00
+Merge: ba88f45 897ae68
+Author: Kurt Smith <kwmsmith@users.noreply.github.com>
+Date:   Mon Feb 1 16:54:14 2016 -0600
+
+    Merge pull request #195 from cowlicks/remove-strided-docs
+    
+    Remove docs about "strided" type which was deprecated.
+
+==> git describe --tags --dirty <==
+0.5.1
+
+==> git status <==
+# Not currently on any branch.
+nothing to commit, working directory clean
+

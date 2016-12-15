@@ -1,0 +1,52 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*", 
+    "six"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/dateutil/__init__.py", 
+    "lib/python2.7/site-packages/dateutil/__init__.pyc", 
+    "lib/python2.7/site-packages/dateutil/easter.py", 
+    "lib/python2.7/site-packages/dateutil/easter.pyc", 
+    "lib/python2.7/site-packages/dateutil/parser.py", 
+    "lib/python2.7/site-packages/dateutil/parser.pyc", 
+    "lib/python2.7/site-packages/dateutil/relativedelta.py", 
+    "lib/python2.7/site-packages/dateutil/relativedelta.pyc", 
+    "lib/python2.7/site-packages/dateutil/rrule.py", 
+    "lib/python2.7/site-packages/dateutil/rrule.pyc", 
+    "lib/python2.7/site-packages/dateutil/tz/__init__.py", 
+    "lib/python2.7/site-packages/dateutil/tz/__init__.pyc", 
+    "lib/python2.7/site-packages/dateutil/tz/_common.py", 
+    "lib/python2.7/site-packages/dateutil/tz/_common.pyc", 
+    "lib/python2.7/site-packages/dateutil/tz/tz.py", 
+    "lib/python2.7/site-packages/dateutil/tz/tz.pyc", 
+    "lib/python2.7/site-packages/dateutil/tz/win.py", 
+    "lib/python2.7/site-packages/dateutil/tz/win.pyc", 
+    "lib/python2.7/site-packages/dateutil/tzwin.py", 
+    "lib/python2.7/site-packages/dateutil/tzwin.pyc", 
+    "lib/python2.7/site-packages/dateutil/zoneinfo/__init__.py", 
+    "lib/python2.7/site-packages/dateutil/zoneinfo/__init__.pyc", 
+    "lib/python2.7/site-packages/dateutil/zoneinfo/dateutil-zoneinfo.tar.gz", 
+    "lib/python2.7/site-packages/dateutil/zoneinfo/rebuild.py", 
+    "lib/python2.7/site-packages/dateutil/zoneinfo/rebuild.pyc", 
+    "lib/python2.7/site-packages/python_dateutil-2.5.1-py2.7.egg-info/PKG-INFO", 
+    "lib/python2.7/site-packages/python_dateutil-2.5.1-py2.7.egg-info/SOURCES.txt", 
+    "lib/python2.7/site-packages/python_dateutil-2.5.1-py2.7.egg-info/dependency_links.txt", 
+    "lib/python2.7/site-packages/python_dateutil-2.5.1-py2.7.egg-info/requires.txt", 
+    "lib/python2.7/site-packages/python_dateutil-2.5.1-py2.7.egg-info/top_level.txt", 
+    "lib/python2.7/site-packages/python_dateutil-2.5.1-py2.7.egg-info/zip-safe"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/tmp/tmpQcQ0Zo/Anaconda-4.0.0/pkgs/python-dateutil-2.5.1-py27_0", 
+    "type": "hard-link"
+  }, 
+  "name": "python-dateutil", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/python-dateutil-2.5.1-py27_0.tar.bz2", 
+  "version": "2.5.1"
+}

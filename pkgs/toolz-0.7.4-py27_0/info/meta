@@ -1,0 +1,7 @@
+pkg: toolz-0.7.4
+dist: toolz-0.7.4-py27_0
+home: http://toolz.readthedocs.org/en/latest/
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

@@ -1,0 +1,55 @@
+{
+  "about": {
+    "home": "http://pygments.org/", 
+    "license": "BSD", 
+    "license_file": "LICENSE", 
+    "summary": "Pygments is a syntax highlighting package written in Python"
+  }, 
+  "app": {}, 
+  "build": {
+    "entry_points": [
+      "pygmentize = pygments.cmdline:main"
+    ], 
+    "features": [], 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "pygments", 
+    "version": "2.1.1"
+  }, 
+  "requirements": {
+    "build": [
+      "python", 
+      "setuptools"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python"
+    ]
+  }, 
+  "source": {
+    "fn": "Pygments-2.1.1.tar.gz", 
+    "git_rev": "", 
+    "md5": "0d2f8e74b8a0966bb434e5825682704b", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "https://pypi.python.org/packages/source/P/Pygments/Pygments-2.1.1.tar.gz"
+  }, 
+  "test": {
+    "commands": [
+      "pygmentize -h"
+    ], 
+    "files": [], 
+    "imports": [
+      "pygments", 
+      "pygments.lexers", 
+      "pygments.formatters", 
+      "pygments.styles", 
+      "pygments.filters"
+    ], 
+    "requires": []
+  }
+}

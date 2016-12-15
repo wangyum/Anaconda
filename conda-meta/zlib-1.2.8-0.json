@@ -1,0 +1,25 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "depends": [], 
+  "files": [
+    "include/zconf.h", 
+    "include/zlib.h", 
+    "lib/libz.a", 
+    "lib/libz.so", 
+    "lib/libz.so.1", 
+    "lib/libz.so.1.2.8", 
+    "lib/pkgconfig/zlib.pc"
+  ], 
+  "license": "zlib (http://zlib.net/zlib_license.html)", 
+  "link": {
+    "source": "/tmp/tmpQcQ0Zo/Anaconda-4.0.0/pkgs/zlib-1.2.8-0", 
+    "type": "hard-link"
+  }, 
+  "name": "zlib", 
+  "platform": "linux", 
+  "requires": [], 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/zlib-1.2.8-0.tar.bz2", 
+  "version": "1.2.8"
+}

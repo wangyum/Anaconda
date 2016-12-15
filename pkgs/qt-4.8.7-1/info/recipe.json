@@ -1,0 +1,51 @@
+{
+  "about": {
+    "home": "http://qt-project.org", 
+    "license": "LGPL"
+  }, 
+  "build": {
+    "entry_points": [], 
+    "features": [], 
+    "number": 1, 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "qt", 
+    "version": "4.8.7"
+  }, 
+  "requirements": {
+    "build": [
+      "freetype    >=2.5.2", 
+      "fontconfig  >=2.11.1", 
+      "openssl", 
+      "libpng      1.6*"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "freetype    >=2.5.2", 
+      "fontconfig  >=2.11.1", 
+      "openssl", 
+      "libpng      1.6*"
+    ]
+  }, 
+  "source": {
+    "fn": "qt-everywhere-opensource-src-4.8.7.tar.gz", 
+    "git_rev": "", 
+    "md5": "d990ee66bf7ab0c785589776f35ba6ad", 
+    "patches": [
+      "acceptance.patch", 
+      "ubuntu_disable_scrollbars.patch"
+    ], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "http://download.qt-project.org/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
+  }, 
+  "test": {
+    "commands": [], 
+    "files": [], 
+    "imports": [], 
+    "requires": []
+  }
+}

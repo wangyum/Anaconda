@@ -1,0 +1,19 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "anaconda-client", 
+    "pip", 
+    "python 2.7*", 
+    "pyyaml", 
+    "qtawesome", 
+    "qtpy", 
+    "requests"
+  ], 
+  "license": "MIT", 
+  "name": "conda-manager", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "0.3.1"
+}

@@ -1,0 +1,7 @@
+bin/sip
+include/python2.7/sip.h
+lib/python2.7/site-packages/sip.so
+lib/python2.7/site-packages/sipconfig.py
+lib/python2.7/site-packages/sipconfig.pyc
+lib/python2.7/site-packages/sipdistutils.py
+lib/python2.7/site-packages/sipdistutils.pyc

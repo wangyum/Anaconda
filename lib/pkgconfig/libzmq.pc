@@ -1,0 +1,10 @@
+prefix=/tmp/tmpQcQ0Zo/Anaconda-4.0.0
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libzmq
+Description: 0MQ c++ library
+Version: 4.1.3
+Libs: -L${libdir} -lzmq
+Cflags: -I${includedir}

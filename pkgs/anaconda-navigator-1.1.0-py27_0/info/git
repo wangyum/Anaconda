@@ -1,0 +1,26 @@
+==> git log -n1 <==
+commit f1362bab7c0fd5310d7006937e1537fda413fbde
+Author: Carlos Cordoba <ccordoba12@gmail.com>
+Date:   Mon Mar 28 12:12:29 2016 -0500
+
+    Release 1.1.0
+
+==> git describe --tags --dirty <==
+v1.1.0-dirty
+
+==> git status <==
+# Not currently on any branch.
+# Changes not staged for commit:
+#   (use "git add/rm <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	deleted:    anaconda_navigator/app/Navigator.app/Contents/Info.plist
+#	deleted:    anaconda_navigator/app/Navigator.app/Contents/MacOS/__init__.py
+#	deleted:    anaconda_navigator/app/Navigator.app/Contents/Resources/Icon1024.png
+#	deleted:    anaconda_navigator/app/Navigator.app/Contents/Resources/__init__.py
+#	deleted:    anaconda_navigator/app/Navigator.app/Contents/Resources/main.icns
+#	deleted:    anaconda_navigator/app/Navigator.app/Contents/__init__.py
+#	deleted:    anaconda_navigator/app/Navigator.app/__init__.py
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+

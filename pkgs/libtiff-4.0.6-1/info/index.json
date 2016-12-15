@@ -1,0 +1,23 @@
+{
+  "arch": "x86_64", 
+  "build": "1", 
+  "build_number": 1, 
+  "depends": [
+    "jbig 2.1", 
+    "jpeg 8d", 
+    "xz 5.0.5", 
+    "zlib 1.2*"
+  ], 
+  "license": "BSD-like (http://www.libtiff.org/misc.html)", 
+  "license_family": "BSD", 
+  "name": "libtiff", 
+  "platform": "linux", 
+  "requires": [
+    "jbig 2.1", 
+    "jpeg 8d", 
+    "xz 5.0.5", 
+    "zlib 1.2.8"
+  ], 
+  "subdir": "linux-64", 
+  "version": "4.0.6"
+}

@@ -1,0 +1,7 @@
+pkg: jdcal-1.2
+dist: jdcal-1.2-py27_0
+home: http://github.com/phn/jdcal
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

@@ -1,0 +1,18 @@
+prefix=/tmp/tmpQcQ0Zo/Anaconda-4.0.0
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+sysconfdir=${prefix}/etc
+localstatedir=${prefix}/var
+PACKAGE=fontconfig
+confdir=${sysconfdir}/fonts
+cachedir=${localstatedir}/cache/${PACKAGE}
+
+Name: Fontconfig
+Description: Font configuration and customization library
+Version: 2.11.1
+Requires:  freetype2
+Requires.private:  libxml-2.0
+Libs: -L${libdir} -lfontconfig
+Libs.private:  -L/tmp/tmpQcQ0Zo/Anaconda-4.0.0/lib -lfreetype    -L/tmp/tmpQcQ0Zo/Anaconda-4.0.0/lib -lxml2  
+Cflags: -I${includedir}  -I/tmp/tmpQcQ0Zo/Anaconda-4.0.0/include/freetype2    -I/tmp/tmpQcQ0Zo/Anaconda-4.0.0/include/libxml2  

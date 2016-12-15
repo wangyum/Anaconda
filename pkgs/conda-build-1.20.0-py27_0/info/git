@@ -1,0 +1,14 @@
+==> git log -n1 <==
+commit 9ec525ff8f70fddc3b27b65266995aabd900d13e
+Author: Kale Franz <kfranz@continuum.io>
+Date:   Fri Mar 25 11:30:49 2016 -0500
+
+    CHANGELOG update 1.20.0
+
+==> git describe --tags --dirty <==
+1.20.0
+
+==> git status <==
+# Not currently on any branch.
+nothing to commit, working directory clean
+

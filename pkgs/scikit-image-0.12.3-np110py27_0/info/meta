@@ -1,0 +1,7 @@
+pkg: scikit-image-0.12.3
+dist: scikit-image-0.12.3-np110py27_0
+home: http://scikit-image.org/
+license: 3-clause BSD
+has_bin: True
+has_lib: False
+has_py: True

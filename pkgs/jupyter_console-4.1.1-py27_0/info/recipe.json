@@ -1,0 +1,51 @@
+{
+  "about": {
+    "home": "http://jupyter.org", 
+    "license": "BSD", 
+    "summary": "Jupyter terminal console"
+  }, 
+  "app": {}, 
+  "build": {
+    "entry_points": [], 
+    "features": [], 
+    "pin_depends": "", 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "jupyter_console", 
+    "version": "4.1.1"
+  }, 
+  "requirements": {
+    "build": [
+      "python"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python", 
+      "ipython", 
+      "ipykernel", 
+      "jupyter_client"
+    ]
+  }, 
+  "source": {
+    "fn": "jupyter_console-4.1.1.tar.gz", 
+    "git_rev": "", 
+    "md5": "a80bfb1b129fc3c8d6c33e3306af933c", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "https://pypi.python.org/packages/source/j/jupyter_console/jupyter_console-4.1.1.tar.gz"
+  }, 
+  "test": {
+    "commands": [
+      "jupyter-console -h"
+    ], 
+    "files": [], 
+    "imports": [
+      "jupyter_console"
+    ], 
+    "requires": []
+  }
+}

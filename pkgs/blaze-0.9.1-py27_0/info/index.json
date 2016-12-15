@@ -1,0 +1,25 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "cytoolz", 
+    "dask", 
+    "flask", 
+    "flask-cors", 
+    "h5py", 
+    "numba", 
+    "odo", 
+    "psutil", 
+    "pytables >=3.0.0", 
+    "python 2.7*", 
+    "pyyaml", 
+    "requests", 
+    "sqlalchemy"
+  ], 
+  "license": "BSD", 
+  "name": "blaze", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "0.9.1"
+}

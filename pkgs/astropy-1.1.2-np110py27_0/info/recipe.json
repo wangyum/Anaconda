@@ -1,0 +1,61 @@
+{
+  "about": {
+    "home": "http://www.astropy.org/", 
+    "license": "BSD", 
+    "summary": "Community-developed python astronomy tools"
+  }, 
+  "app": {}, 
+  "build": {
+    "entry_points": [
+      "fits2bitmap = astropy.visualization.scripts.fits2bitmap:main", 
+      "fitscheck = astropy.io.fits.scripts.fitscheck:main", 
+      "fitsdiff = astropy.io.fits.scripts.fitsdiff:main", 
+      "fitsheader = astropy.io.fits.scripts.fitsheader:main", 
+      "samp_hub = astropy.vo.samp.hub_script:hub_script", 
+      "volint = astropy.io.votable.volint:main", 
+      "wcslint = astropy.wcs.wcslint:main"
+    ], 
+    "features": [], 
+    "pin_depends": "", 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "astropy", 
+    "version": "1.1.2"
+  }, 
+  "requirements": {
+    "build": [
+      "python", 
+      "setuptools", 
+      "numpy x.x"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python", 
+      "numpy x.x"
+    ]
+  }, 
+  "source": {
+    "fn": "astropy-1.1.2.tar.gz", 
+    "git_rev": "", 
+    "md5": "cbe32023b5b1177d1e2498a0d00cda51", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "https://pypi.python.org/packages/source/a/astropy/astropy-1.1.2.tar.gz"
+  }, 
+  "test": {
+    "commands": [
+      "fitscheck --help", 
+      "fitsdiff --help", 
+      "volint --help"
+    ], 
+    "files": [], 
+    "imports": [
+      "astropy"
+    ], 
+    "requires": []
+  }
+}

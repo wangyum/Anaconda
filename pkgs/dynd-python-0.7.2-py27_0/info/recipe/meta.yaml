@@ -1,0 +1,35 @@
+package:
+  name: dynd-python
+  version: 0.7.2
+
+build:
+  number: {{environ.get('TRAVIS_BUILD_NUMBER', 0)}}    # [unix]
+  number: {{environ.get('APPVEYOR_BUILD_NUMBER', 0)}}  # [win]
+  rpaths:
+    - lib                                                     # [unix]
+    - lib/python{{environ.get('PY_VER')}}/site-packages/dynd  # [unix]
+  script_env:
+    - CC [linux]
+    - CXX [linux]
+
+requirements:
+  build:
+#    - cmake [unix]
+    - python
+    - setuptools
+    - cython
+    - numpy
+    - libdynd
+  run:
+    - python
+    - numpy
+    - libdynd
+
+# Test separately to avoid unsatisfiable package dependencies bug on Win32.
+#test:
+#  commands:
+#    - python -c "import dynd; dynd.test(verbosity=2, exit=True)"
+
+about:
+  home: http://libdynd.org
+  license: BSD

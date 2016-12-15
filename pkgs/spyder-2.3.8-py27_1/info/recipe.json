@@ -1,0 +1,66 @@
+{
+  "about": {
+    "home": "https://github.com/spyder-ide/spyder", 
+    "license": "MIT", 
+    "license_file": "LICENSE", 
+    "summary": "Scientific PYthon Development EnviRonment"
+  }, 
+  "app": {
+    "entry": "spyder", 
+    "icon": "logo.png", 
+    "summary": "Scientific Python Development Environment", 
+    "type": "desk"
+  }, 
+  "build": {
+    "entry_points": [], 
+    "features": [], 
+    "number": "1", 
+    "osx_is_app": true, 
+    "pin_depends": "", 
+    "script_env": [], 
+    "string": "", 
+    "track_features": []
+  }, 
+  "package": {
+    "name": "spyder", 
+    "version": "2.3.8"
+  }, 
+  "requirements": {
+    "build": [
+      "python"
+    ], 
+    "conflicts": [], 
+    "run": [
+      "python", 
+      "pyqt", 
+      "rope", 
+      "pyflakes", 
+      "jedi >=0.8", 
+      "qtconsole", 
+      "nbconvert", 
+      "pygments", 
+      "sphinx", 
+      "pep8", 
+      "psutil"
+    ]
+  }, 
+  "source": {
+    "fn": "spyder-2.3.8.zip", 
+    "git_rev": "", 
+    "md5": "fb890dc956f606c43d560558159f3491", 
+    "patches": [], 
+    "path": "", 
+    "svn_rev": "", 
+    "url": "https://pypi.python.org/packages/source/s/spyder/spyder-2.3.8.zip"
+  }, 
+  "test": {
+    "commands": [
+      "spyder -h"
+    ], 
+    "files": [], 
+    "imports": [
+      "spyderlib"
+    ], 
+    "requires": []
+  }
+}

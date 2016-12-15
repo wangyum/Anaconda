@@ -1,0 +1,21 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "libxml2 2.9*", 
+    "libxslt 1.1.28", 
+    "python 2.7*"
+  ], 
+  "license": "BSD", 
+  "name": "lxml", 
+  "platform": "linux", 
+  "requires": [
+    "libxml2 2.9.2", 
+    "libxslt 1.1.28", 
+    "python 2.7"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "3.6.0"
+}

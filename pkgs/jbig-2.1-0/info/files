@@ -1,0 +1,5 @@
+include/jbig.h
+include/jbig85.h
+include/jbig_ar.h
+lib/libjbig.a
+lib/libjbig85.a

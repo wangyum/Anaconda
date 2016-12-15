@@ -1,0 +1,8 @@
+prefix=/tmp/tmpQcQ0Zo/Anaconda-4.0.0
+
+Name: Pycairo
+Description: Python bindings for cairo
+Version: 1.10.0
+Requires: cairo
+Cflags: -I${prefix}/include/pycairo
+Libs:

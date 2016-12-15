@@ -1,0 +1,7 @@
+pkg: pyyaml-3.11
+dist: pyyaml-3.11-py27_1
+home: http://pyyaml.org/wiki/PyYAML
+license: MIT
+has_bin: False
+has_lib: False
+has_py: True

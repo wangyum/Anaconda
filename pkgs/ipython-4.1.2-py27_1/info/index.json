@@ -1,0 +1,18 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_1", 
+  "build_number": 1, 
+  "depends": [
+    "decorator", 
+    "pexpect", 
+    "pickleshare", 
+    "python 2.7*", 
+    "simplegeneric >0.8", 
+    "traitlets"
+  ], 
+  "license": "BSD", 
+  "name": "ipython", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "4.1.2"
+}

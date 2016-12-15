@@ -1,0 +1,16 @@
+MANIFEST.in
+setup.cfg
+setup.py
+QtAwesome.egg-info/PKG-INFO
+QtAwesome.egg-info/SOURCES.txt
+QtAwesome.egg-info/dependency_links.txt
+QtAwesome.egg-info/requires.txt
+QtAwesome.egg-info/top_level.txt
+qtawesome/__init__.py
+qtawesome/_version.py
+qtawesome/animation.py
+qtawesome/iconic_font.py
+qtawesome/fonts/elusiveicons-webfont-charmap.json
+qtawesome/fonts/elusiveicons-webfont.ttf
+qtawesome/fonts/fontawesome-webfont-charmap.json
+qtawesome/fonts/fontawesome-webfont.ttf

@@ -1,0 +1,19 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "clyent", 
+    "python 2.7*", 
+    "python-dateutil", 
+    "pytz", 
+    "pyyaml", 
+    "requests", 
+    "setuptools"
+  ], 
+  "license": "BSD", 
+  "name": "anaconda-client", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "1.4.0"
+}

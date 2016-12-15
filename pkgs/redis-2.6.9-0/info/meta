@@ -1,0 +1,7 @@
+pkg: redis-2.6.9
+dist: redis-2.6.9-0
+home: http://redis.io/download/
+license: ???
+has_bin: True
+has_lib: False
+has_py: False

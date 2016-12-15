@@ -1,0 +1,7 @@
+pkg: flask-0.10.1
+dist: flask-0.10.1-py27_1
+home: http://flask.pocoo.org/
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

@@ -1,0 +1,7 @@
+pkg: ipaddress-1.0.14
+dist: ipaddress-1.0.14-py27_0
+home: https://github.com/phihag/ipaddress
+license: PSF
+has_bin: False
+has_lib: False
+has_py: True

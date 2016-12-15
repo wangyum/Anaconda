@@ -1,0 +1,15 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "et_xmlfile", 
+    "jdcal", 
+    "python 2.7*"
+  ], 
+  "license": "MIT", 
+  "name": "openpyxl", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "2.3.2"
+}

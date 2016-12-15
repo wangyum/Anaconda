@@ -1,0 +1,7 @@
+pkg: pillow-3.1.1
+dist: pillow-3.1.1-py27_0
+home: http://python-pillow.github.io/
+license: PIL license
+has_bin: False
+has_lib: False
+has_py: True

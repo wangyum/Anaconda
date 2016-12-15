@@ -1,0 +1,18 @@
+prefix=/opt/anaconda1anaconda2anaconda3anaconda4anaconda5anaconda6anaconda7anaconda8anaconda9anaconda10anaconda11anaconda12anaconda13an
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+sysconfdir=${prefix}/etc
+localstatedir=${prefix}/var
+PACKAGE=fontconfig
+confdir=${sysconfdir}/fonts
+cachedir=${localstatedir}/cache/${PACKAGE}
+
+Name: Fontconfig
+Description: Font configuration and customization library
+Version: 2.11.1
+Requires:  freetype2
+Requires.private:  libxml-2.0
+Libs: -L${libdir} -lfontconfig
+Libs.private:  -L/opt/anaconda1anaconda2anaconda3anaconda4anaconda5anaconda6anaconda7anaconda8anaconda9anaconda10anaconda11anaconda12anaconda13an/lib -lfreetype    -L/opt/anaconda1anaconda2anaconda3anaconda4anaconda5anaconda6anaconda7anaconda8anaconda9anaconda10anaconda11anaconda12anaconda13an/lib -lxml2  
+Cflags: -I${includedir}  -I/opt/anaconda1anaconda2anaconda3anaconda4anaconda5anaconda6anaconda7anaconda8anaconda9anaconda10anaconda11anaconda12anaconda13an/include/freetype2    -I/opt/anaconda1anaconda2anaconda3anaconda4anaconda5anaconda6anaconda7anaconda8anaconda9anaconda10anaconda11anaconda12anaconda13an/include/libxml2  

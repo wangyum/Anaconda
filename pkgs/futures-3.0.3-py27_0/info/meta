@@ -1,0 +1,7 @@
+pkg: futures-3.0.3
+dist: futures-3.0.3-py27_0
+home: http://code.google.com/p/pythonfutures
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

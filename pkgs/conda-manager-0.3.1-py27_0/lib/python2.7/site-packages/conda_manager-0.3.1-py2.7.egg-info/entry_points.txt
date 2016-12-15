@@ -1,0 +1,3 @@
+[gui_scripts]
+condamanager = conda_manager.app.main:main
+

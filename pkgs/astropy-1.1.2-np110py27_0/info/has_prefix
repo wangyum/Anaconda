@@ -1,0 +1,8 @@
+/opt/anaconda1anaconda2anaconda3 text bin/fits2bitmap
+/opt/anaconda1anaconda2anaconda3 text bin/fitscheck
+/opt/anaconda1anaconda2anaconda3 text bin/fitsdiff
+/opt/anaconda1anaconda2anaconda3 text bin/fitsheader
+/opt/anaconda1anaconda2anaconda3 text bin/fitsinfo
+/opt/anaconda1anaconda2anaconda3 text bin/samp_hub
+/opt/anaconda1anaconda2anaconda3 text bin/volint
+/opt/anaconda1anaconda2anaconda3 text bin/wcslint

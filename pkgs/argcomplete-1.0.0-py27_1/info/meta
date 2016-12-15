@@ -1,0 +1,7 @@
+pkg: argcomplete-1.0.0
+dist: argcomplete-1.0.0-py27_1
+home: https://github.com/kislyuk/argcomplete
+license: Apache
+has_bin: True
+has_lib: False
+has_py: True

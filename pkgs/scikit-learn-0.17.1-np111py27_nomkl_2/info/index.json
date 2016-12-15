@@ -1,0 +1,18 @@
+{
+  "arch": "x86_64", 
+  "build": "np111py27_nomkl_2", 
+  "build_number": 2, 
+  "depends": [
+    "numpy 1.11*", 
+    "openblas 0.2.14", 
+    "python 2.7*", 
+    "scipy"
+  ], 
+  "features": "nomkl", 
+  "license": "3-clause BSD", 
+  "license_family": "BSD", 
+  "name": "scikit-learn", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "0.17.1"
+}

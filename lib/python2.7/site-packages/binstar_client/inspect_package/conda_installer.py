@@ -1,0 +1,75 @@
+import logging
+from os import path
+
+import yaml
+
+
+log = logging.getLogger(__name__)
+
+PACKAGE_TYPE = 'installer'
+
+def is_installer(filename):
+    # TODO: allow
+    if not filename.endswith('.sh'):
+        return False
+
+    with open(filename) as fd:
+        fd.readline()
+        cio_copyright = fd.readline()
+        # Copyright (c) 2012-2014 Continuum Analytics, Inc.
+
+        # TODO: it would be great if the installers had a unique identifier in the header
+
+        # Made by CAS installer
+        if "CAS-INSTALLER" in cio_copyright:
+            return True
+
+        # miniconda installer
+        elif "Copyright" not in cio_copyright:
+            return False
+
+        elif "Continuum Analytics, Inc." not in cio_copyright:
+            return False
+
+        return True
+
+    return False
+
+def inspect_package(filename, fileobj):
+
+    # skip #!/bin/bash
+    line = fileobj.readline()
+    lines = []
+    while line.startswith('#'):
+        if ':' in line:
+            lines.append(line.strip(" #\n"))
+        line = fileobj.readline()
+
+    try:
+        installer_data = yaml.load("\n".join(lines))
+    finally:
+        log.error("Could not load installer info as YAML")
+
+
+    summary = "Conda installer for platform %s" % installer_data.pop('PLAT')
+    name = installer_data.pop('NAME')
+    version = installer_data.pop('VER')
+
+    attrs = installer_data
+
+    package_data = {'name': name,
+                    'summary': summary,
+                    'license': None,
+
+                    }
+    release_data = {
+                    'version': version,
+                    'description': summary,
+                    }
+    file_data = {
+                 'basename': path.basename(filename),
+                 'attrs': attrs,
+                 'binstar_package_type': 'file',
+                 }
+
+    return package_data, release_data, file_data

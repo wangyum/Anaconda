@@ -1,0 +1,6 @@
+#!/opt/cloudera/parcels/Anaconda/bin/python
+if __name__ == '__main__':
+    import sys
+    from conda.cli.main import main
+
+    sys.exit(main())

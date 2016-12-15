@@ -1,0 +1,16 @@
+CHANGELOG.rst
+LICENSE.rst
+MANIFEST.in
+README.rst
+VERSION
+pathlib2.py
+requirements.txt
+setup.cfg
+setup.py
+test_pathlib2.py
+test_pathlib2_with_py2_unicode_literals.py
+pathlib2.egg-info/PKG-INFO
+pathlib2.egg-info/SOURCES.txt
+pathlib2.egg-info/dependency_links.txt
+pathlib2.egg-info/requires.txt
+pathlib2.egg-info/top_level.txt

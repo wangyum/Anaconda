@@ -1,0 +1,19 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "path.py 7.6", 
+    "python 2.7*"
+  ], 
+  "license": "MIT", 
+  "name": "pickleshare", 
+  "platform": "linux", 
+  "requires": [
+    "path.py 7.6", 
+    "python 2.7"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "0.5"
+}

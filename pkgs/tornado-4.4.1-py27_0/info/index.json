@@ -1,0 +1,16 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "backports_abc", 
+    "python 2.7*", 
+    "singledispatch", 
+    "ssl_match_hostname"
+  ], 
+  "license": "Apache", 
+  "name": "tornado", 
+  "platform": "linux", 
+  "subdir": "linux-64", 
+  "version": "4.4.1"
+}

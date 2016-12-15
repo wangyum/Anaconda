@@ -1,0 +1,7 @@
+pkg: jedi-0.9.0
+dist: jedi-0.9.0-py27_0
+home: https://github.com/davidhalter/jedi
+license: MIT
+has_bin: False
+has_lib: False
+has_py: True

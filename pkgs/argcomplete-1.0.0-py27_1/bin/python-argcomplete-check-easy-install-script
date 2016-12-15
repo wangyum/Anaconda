@@ -1,0 +1,4 @@
+#!/opt/anaconda1anaconda2anaconda3/bin/python
+# EASY-INSTALL-SCRIPT: 'argcomplete==1.0.0','python-argcomplete-check-easy-install-script'
+__requires__ = 'argcomplete==1.0.0'
+__import__('pkg_resources').run_script('argcomplete==1.0.0', 'python-argcomplete-check-easy-install-script')

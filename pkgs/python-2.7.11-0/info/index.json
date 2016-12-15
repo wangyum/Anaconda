@@ -1,0 +1,25 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "depends": [
+    "openssl 1.0.2d", 
+    "readline 6.2*", 
+    "sqlite", 
+    "tk 8.5*", 
+    "zlib 1.2*"
+  ], 
+  "license": "PSF", 
+  "name": "python", 
+  "platform": "linux", 
+  "requires": [
+    "openssl 1.0.2d", 
+    "readline 6.2", 
+    "sqlite 3.8.4.1", 
+    "tk 8.5.18", 
+    "zlib 1.2.8"
+  ], 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "version": "2.7.11"
+}

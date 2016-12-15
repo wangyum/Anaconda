@@ -1,0 +1,7 @@
+pkg: bitarray-0.8.1
+dist: bitarray-0.8.1-py27_0
+home: https://github.com/ilanschnell/bitarray
+license: PSF
+has_bin: False
+has_lib: False
+has_py: True

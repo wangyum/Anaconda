@@ -1,0 +1,7 @@
+bin/xslt-config
+include/libxslt/xsltconfig.h
+lib/libexslt.la
+lib/libxslt.la
+lib/pkgconfig/libexslt.pc
+lib/pkgconfig/libxslt.pc
+lib/xsltConf.sh

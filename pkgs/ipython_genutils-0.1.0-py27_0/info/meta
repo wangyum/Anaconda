@@ -1,0 +1,7 @@
+pkg: ipython_genutils-0.1.0
+dist: ipython_genutils-0.1.0-py27_0
+home: http://jupyter.org
+license: BSD
+has_bin: False
+has_lib: False
+has_py: True

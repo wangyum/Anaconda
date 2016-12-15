@@ -1,0 +1,15 @@
+HISTORY.rst
+LICENSE
+MANIFEST.in
+README.rst
+setup.cfg
+setup.py
+test_shutil_get_terminal_size.py
+tox.ini
+backports/__init__.py
+backports.shutil_get_terminal_size.egg-info/PKG-INFO
+backports.shutil_get_terminal_size.egg-info/SOURCES.txt
+backports.shutil_get_terminal_size.egg-info/dependency_links.txt
+backports.shutil_get_terminal_size.egg-info/top_level.txt
+backports/shutil_get_terminal_size/__init__.py
+backports/shutil_get_terminal_size/get_terminal_size.py

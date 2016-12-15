@@ -1,0 +1,7 @@
+pkg: nose-1.3.7
+dist: nose-1.3.7-py27_0
+home: http://readthedocs.org/docs/nose/
+license: LGPL
+has_bin: True
+has_lib: False
+has_py: True

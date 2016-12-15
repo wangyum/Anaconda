@@ -1,0 +1,3 @@
+==> git log -n1 <==
+==> git describe --tags --dirty <==
+==> git status <==

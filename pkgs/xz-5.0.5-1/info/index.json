@@ -1,0 +1,13 @@
+{
+  "arch": "x86_64", 
+  "build": "1", 
+  "build_number": 1, 
+  "depends": [], 
+  "license": "Public-Domain, GPLv2", 
+  "license_family": "GPL2", 
+  "name": "xz", 
+  "platform": "linux", 
+  "requires": [], 
+  "subdir": "linux-64", 
+  "version": "5.0.5"
+}
