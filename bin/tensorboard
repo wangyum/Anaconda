@@ -1,4 +1,4 @@
-#!/data/anaconda/bin/python
+#!/opt/cloudera/parcels/Anaconda/bin/python
 
 # -*- coding: utf-8 -*-
 import re
