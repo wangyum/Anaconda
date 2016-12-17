@@ -7,8 +7,8 @@
     }
   ], 
   "extraVersionInfo": {
-    "baseVersion": "4.0.11", 
-    "fullVersion": "4.0.11-el6", 
+    "baseVersion": "__VERSION__", 
+    "fullVersion": "__VERSION__-el6", 
     "patchCount": "p0"
   }, 
   "groups": [], 
@@ -724,5 +724,5 @@
   }, 
   "setActiveSymlink": true, 
   "users": {}, 
-  "version": "4.0.11"
+  "version": "__VERSION__"
 }
