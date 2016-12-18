@@ -6,7 +6,7 @@ set -ex
 
 ANACONDA_SOURCE_DIR=/home/tandem/wangyuming/Anaconda
 ANACONDA_DEPLOP_DIR=/var/www/html/anaconda/deploy
-VERSION="d$(date '+%Y%m%d-%H.%M.%S')"
+VERSION="d$(date '+%Y%m%d-%H.%M.%S')-$(git log --format="%H" -n 1)"
 PARCEL_NAME="Anaconda-${VERSION}"
 PARCEL_PATH=${ANACONDA_DEPLOP_DIR}/${PARCEL_NAME}
 
