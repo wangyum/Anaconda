@@ -4,7 +4,7 @@ set -ex
 
 # git pull
 
-ANACONDA_SOURCE_DIR=/home/tandem/wangyuming/Anaconda
+ANACONDA_SOURCE_DIR=`pwd`
 ANACONDA_DEPLOP_DIR=/var/www/html/anaconda/deploy
 VERSION="d$(date '+%Y%m%d-%H.%M.%S')-$(git log --format="%H" -n 1)"
 PARCEL_NAME="Anaconda-${VERSION}"
@@ -21,4 +21,4 @@ cd ${ANACONDA_DEPLOP_DIR}
 tar -zcf ${PARCEL_NAME}-el6.parcel ${PARCEL_NAME} --remove-files 
 
 sha1sum ${PARCEL_PATH}-el6.parcel | awk -F" " '{print $1}' > ${PARCEL_PATH}-el6.parcel.sha
-/opt/cloudera/parcels/Anaconda/bin/python2.7 /home/tandem/wangyuming/apps/cm_ext/make_manifest/make_manifest.py ${ANACONDA_DEPLOP_DIR}
+/opt/cloudera/parcels/Anaconda/bin/python2.7 ${ANACONDA_SOURCE_DIR}/cm_ext/make_manifest/make_manifest.py ${ANACONDA_DEPLOP_DIR}
