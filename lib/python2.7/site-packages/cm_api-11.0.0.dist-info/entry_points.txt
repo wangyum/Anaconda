@@ -1,0 +1,3 @@
+[console_scripts]
+cmps = cm_shell.cmps:main
+
