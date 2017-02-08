@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/opt/cloudera/parcels/Anaconda/bin/python
 # Author: Chris Moyer <cmoyer@newstex.com>
 # Description: CloudWatch Utility
 # For listing stats, creating alarms, and managing 

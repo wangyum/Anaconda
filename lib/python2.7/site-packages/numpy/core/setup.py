@@ -17,7 +17,7 @@ from setup_common import *
 
 # Set to True to enable relaxed strides checking. This (mostly) means
 # that `strides[dim]` is ignored if `shape[dim] == 1` when setting flags.
-NPY_RELAXED_STRIDES_CHECKING = (os.environ.get('NPY_RELAXED_STRIDES_CHECKING', "0") != "0")
+NPY_RELAXED_STRIDES_CHECKING = (os.environ.get('NPY_RELAXED_STRIDES_CHECKING', "1") != "0")
 
 # XXX: ugly, we use a class to avoid calling twice some expensive functions in
 # config.h/numpyconfig.h. I don't see a better way because distutils force
@@ -152,12 +152,14 @@ def check_math_capabilities(config, moredefs, mathlibs):
     for tup in OPTIONAL_INTRINSICS:
         headers = None
         if len(tup) == 2:
-            f, args = tup
+            f, args, m = tup[0], tup[1], fname2def(tup[0])
+        elif len(tup) == 3:
+            f, args, headers, m = tup[0], tup[1], [tup[2]], fname2def(tup[0])
         else:
-            f, args, headers = tup[0], tup[1], [tup[2]]
+            f, args, headers, m = tup[0], tup[1], [tup[2]], fname2def(tup[3])
         if config.check_func(f, decl=False, call=True, call_args=args,
                              headers=headers):
-            moredefs.append((fname2def(f), 1))
+            moredefs.append((m, 1))
 
     for dec, fn in OPTIONAL_FUNCTION_ATTRIBUTES:
         if config.check_gcc_function_attribute(dec, fn):
@@ -178,7 +180,7 @@ def check_complex(config, mathlibs):
 
     try:
         if os.uname()[0] == "Interix":
-            warnings.warn("Disabling broken complex support. See #1365")
+            warnings.warn("Disabling broken complex support. See #1365", stacklevel=2)
             return priv, pub
     except:
         # os.uname not available on all platforms. blanket except ugly but safe
@@ -265,13 +267,20 @@ def check_types(config_cmd, ext, build_dir):
     # Check we have the python header (-dev* packages on Linux)
     result = config_cmd.check_header('Python.h')
     if not result:
+        python = 'python'
+        if '__pypy__' in sys.builtin_module_names:
+            python = 'pypy'
         raise SystemError(
                 "Cannot compile 'Python.h'. Perhaps you need to "
-                "install python-dev|python-devel.")
+                "install {0}-dev|{0}-devel.".format(python))
     res = config_cmd.check_header("endian.h")
     if res:
         private_defines.append(('HAVE_ENDIAN_H', 1))
         public_defines.append(('NPY_HAVE_ENDIAN_H', 1))
+    res = config_cmd.check_header("sys/endian.h")
+    if res:
+        private_defines.append(('HAVE_SYS_ENDIAN_H', 1))
+        public_defines.append(('NPY_HAVE_SYS_ENDIAN_H', 1))
 
     # Check basic types sizes
     for type in ('short', 'int', 'long'):
@@ -605,9 +614,12 @@ def configuration(parent_package='',top_path=None):
     config.add_include_dirs(join('src', 'npysort'))
 
     config.add_define_macros([("HAVE_NPY_CONFIG_H", "1")])
-    config.add_define_macros([("_FILE_OFFSET_BITS", "64")])
-    config.add_define_macros([('_LARGEFILE_SOURCE', '1')])
-    config.add_define_macros([('_LARGEFILE64_SOURCE', '1')])
+    if sys.platform[:3] == "aix":
+        config.add_define_macros([("_LARGE_FILES", None)])
+    else:
+        config.add_define_macros([("_FILE_OFFSET_BITS", "64")])
+        config.add_define_macros([('_LARGEFILE_SOURCE', '1')])
+        config.add_define_macros([('_LARGEFILE64_SOURCE', '1')])
 
     config.numpy_include_dirs.extend(config.paths('include'))
 

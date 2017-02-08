@@ -45,9 +45,8 @@ def issequence(seq):
     Is seq a sequence (ndarray, list or tuple)?
 
     """
-    if isinstance(seq, (ndarray, tuple, list)):
-        return True
-    return False
+    return isinstance(seq, (ndarray, tuple, list))
+
 
 def count_masked(arr, axis=None):
     """
@@ -103,6 +102,7 @@ def count_masked(arr, axis=None):
     m = getmaskarray(arr)
     return m.sum(axis)
 
+
 def masked_all(shape, dtype=float):
     """
     Empty masked array with all elements masked.
@@ -153,6 +153,7 @@ def masked_all(shape, dtype=float):
     a = masked_array(np.empty(shape, dtype),
                      mask=np.ones(shape, make_mask_descr(dtype)))
     return a
+
 
 def masked_all_like(arr):
     """
@@ -221,6 +222,9 @@ class _fromnxfunction:
     as the wrapped NumPy function. The docstring of `newfunc` is adapted from
     the wrapped function as well, see `getdoc`.
 
+    This class should not be used directly. Instead, one of its extensions that
+    provides support for a specific type of input should be used.
+
     Parameters
     ----------
     funcname : str
@@ -261,48 +265,100 @@ class _fromnxfunction:
         return
 
     def __call__(self, *args, **params):
+        pass
+
+
+class _fromnxfunction_single(_fromnxfunction):
+    """
+    A version of `_fromnxfunction` that is called with a single array
+    argument followed by auxiliary args that are passed verbatim for
+    both the data and mask calls.
+    """
+    def __call__(self, x, *args, **params):
         func = getattr(np, self.__name__)
-        if len(args) == 1:
-            x = args[0]
-            if isinstance(x, ndarray):
-                _d = func(x.__array__(), **params)
-                _m = func(getmaskarray(x), **params)
-                return masked_array(_d, mask=_m)
-            elif isinstance(x, tuple) or isinstance(x, list):
-                _d = func(tuple([np.asarray(a) for a in x]), **params)
-                _m = func(tuple([getmaskarray(a) for a in x]), **params)
-                return masked_array(_d, mask=_m)
-            else:
-                _d = func(np.asarray(x), **params)
-                _m = func(getmaskarray(x), **params)
-                return masked_array(_d, mask=_m)
+        if isinstance(x, ndarray):
+            _d = func(x.__array__(), *args, **params)
+            _m = func(getmaskarray(x), *args, **params)
+            return masked_array(_d, mask=_m)
         else:
-            arrays = []
-            args = list(args)
-            while len(args) > 0 and issequence(args[0]):
-                arrays.append(args.pop(0))
-            res = []
-            for x in arrays:
-                _d = func(np.asarray(x), *args, **params)
-                _m = func(getmaskarray(x), *args, **params)
-                res.append(masked_array(_d, mask=_m))
-            return res
+            _d = func(np.asarray(x), *args, **params)
+            _m = func(getmaskarray(x), *args, **params)
+            return masked_array(_d, mask=_m)
 
-atleast_1d = _fromnxfunction('atleast_1d')
-atleast_2d = _fromnxfunction('atleast_2d')
-atleast_3d = _fromnxfunction('atleast_3d')
-#atleast_1d = np.atleast_1d
-#atleast_2d = np.atleast_2d
-#atleast_3d = np.atleast_3d
 
-vstack = row_stack = _fromnxfunction('vstack')
-hstack = _fromnxfunction('hstack')
-column_stack = _fromnxfunction('column_stack')
-dstack = _fromnxfunction('dstack')
+class _fromnxfunction_seq(_fromnxfunction):
+    """
+    A version of `_fromnxfunction` that is called with a single sequence
+    of arrays followed by auxiliary args that are passed verbatim for
+    both the data and mask calls.
+    """
+    def __call__(self, x, *args, **params):
+        func = getattr(np, self.__name__)
+        _d = func(tuple([np.asarray(a) for a in x]), *args, **params)
+        _m = func(tuple([getmaskarray(a) for a in x]), *args, **params)
+        return masked_array(_d, mask=_m)
 
-hsplit = _fromnxfunction('hsplit')
 
-diagflat = _fromnxfunction('diagflat')
+class _fromnxfunction_args(_fromnxfunction):
+    """
+    A version of `_fromnxfunction` that is called with multiple array
+    arguments. The first non-array-like input marks the beginning of the
+    arguments that are passed verbatim for both the data and mask calls.
+    Array arguments are processed independently and the results are
+    returned in a list. If only one array is found, the return value is
+    just the processed array instead of a list.
+    """
+    def __call__(self, *args, **params):
+        func = getattr(np, self.__name__)
+        arrays = []
+        args = list(args)
+        while len(args) > 0 and issequence(args[0]):
+            arrays.append(args.pop(0))
+        res = []
+        for x in arrays:
+            _d = func(np.asarray(x), *args, **params)
+            _m = func(getmaskarray(x), *args, **params)
+            res.append(masked_array(_d, mask=_m))
+        if len(arrays) == 1:
+            return res[0]
+        return res
+
+
+class _fromnxfunction_allargs(_fromnxfunction):
+    """
+    A version of `_fromnxfunction` that is called with multiple array
+    arguments. Similar to `_fromnxfunction_args` except that all args
+    are converted to arrays even if they are not so already. This makes
+    it possible to process scalars as 1-D arrays. Only keyword arguments
+    are passed through verbatim for the data and mask calls. Arrays
+    arguments are processed independently and the results are returned
+    in a list. If only one arg is present, the return value is just the
+    processed array instead of a list.
+    """
+    def __call__(self, *args, **params):
+        func = getattr(np, self.__name__)
+        res = []
+        for x in args:
+            _d = func(np.asarray(x), **params)
+            _m = func(getmaskarray(x), **params)
+            res.append(masked_array(_d, mask=_m))
+        if len(args) == 1:
+            return res[0]
+        return res
+
+
+atleast_1d = _fromnxfunction_allargs('atleast_1d')
+atleast_2d = _fromnxfunction_allargs('atleast_2d')
+atleast_3d = _fromnxfunction_allargs('atleast_3d')
+
+vstack = row_stack = _fromnxfunction_seq('vstack')
+hstack = _fromnxfunction_seq('hstack')
+column_stack = _fromnxfunction_seq('column_stack')
+dstack = _fromnxfunction_seq('dstack')
+
+hsplit = _fromnxfunction_single('hsplit')
+
+diagflat = _fromnxfunction_single('diagflat')
 
 
 #####--------------------------------------------------------------------------
@@ -643,15 +699,21 @@ def median(a, axis=None, out=None, overwrite_input=False, keepdims=False):
         return r
 
 def _median(a, axis=None, out=None, overwrite_input=False):
+    # when an unmasked NaN is present return it, so we need to sort the NaN
+    # values behind the mask
+    if np.issubdtype(a.dtype, np.inexact):
+        fill_value = np.inf
+    else:
+        fill_value = None
     if overwrite_input:
         if axis is None:
             asorted = a.ravel()
-            asorted.sort()
+            asorted.sort(fill_value=fill_value)
         else:
-            a.sort(axis=axis)
+            a.sort(axis=axis, fill_value=fill_value)
             asorted = a
     else:
-        asorted = sort(a, axis=axis)
+        asorted = sort(a, axis=axis, fill_value=fill_value)
 
     if axis is None:
         axis = 0
@@ -659,8 +721,28 @@ def _median(a, axis=None, out=None, overwrite_input=False):
         axis += asorted.ndim
 
     if asorted.ndim == 1:
+        counts = count(asorted)
         idx, odd = divmod(count(asorted), 2)
-        return asorted[idx + odd - 1 : idx + 1].mean(out=out)
+        mid = asorted[idx + odd - 1:idx + 1]
+        if np.issubdtype(asorted.dtype, np.inexact) and asorted.size > 0:
+            # avoid inf / x = masked
+            s = mid.sum(out=out)
+            if not odd:
+                s = np.true_divide(s, 2., casting='safe', out=out)
+                # masked ufuncs do not fullfill `returned is out` (gh-8416)
+                # fix this to return the same in the nd path
+                if out is not None:
+                    s = out
+            s = np.lib.utils._median_nancheck(asorted, s, axis, out)
+        else:
+            s = mid.mean(out=out)
+
+        # if result is masked either the input contained enough
+        # minimum_fill_value so that it would be the median or all values
+        # masked
+        if np.ma.is_masked(s) and not np.all(asorted.mask):
+            return np.ma.minimum_fill_value(asorted)
+        return s
 
     counts = count(asorted, axis=axis)
     h = counts // 2
@@ -671,24 +753,35 @@ def _median(a, axis=None, out=None, overwrite_input=False):
     ind = np.meshgrid(*axes_grid, sparse=True, indexing='ij')
 
     # insert indices of low and high median
-    ind.insert(axis, np.maximum(0, h - 1))
+    ind.insert(axis, h - 1)
     low = asorted[tuple(ind)]
-    ind[axis] = h
+    ind[axis] = np.minimum(h, asorted.shape[axis] - 1)
     high = asorted[tuple(ind)]
 
     # duplicate high if odd number of elements so mean does nothing
     odd = counts % 2 == 1
-    if asorted.ndim > 1:
-        np.copyto(low, high, where=odd)
-    elif odd:
-        low = high
+    np.copyto(low, high, where=odd)
+    # not necessary for scalar True/False masks
+    try:
+        np.copyto(low.mask, high.mask, where=odd)
+    except:
+        pass
 
     if np.issubdtype(asorted.dtype, np.inexact):
         # avoid inf / x = masked
         s = np.ma.sum([low, high], axis=0, out=out)
         np.true_divide(s.data, 2., casting='unsafe', out=s.data)
+
+        s = np.lib.utils._median_nancheck(asorted, s, axis, out)
     else:
         s = np.ma.mean([low, high], axis=0, out=out)
+
+    # if result is masked either the input contained enough minimum_fill_value
+    # so that it would be the median or all values masked
+    if np.ma.is_masked(s):
+        rep = (~np.all(asorted.mask, axis=axis)) & s.mask
+        s.data[rep] = np.ma.minimum_fill_value(asorted)
+        s.mask[rep] = False
     return s
 
 
@@ -1290,7 +1383,7 @@ def corrcoef(x, y=None, rowvar=True, bias=np._NoValue, allow_masked=True,
     msg = 'bias and ddof have no effect and are deprecated'
     if bias is not np._NoValue or ddof is not np._NoValue:
         # 2015-03-15, 1.10
-        warnings.warn(msg, DeprecationWarning)
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
     # Get the data
     (x, xnotmask, rowvar) = _covhelper(x, y, rowvar, allow_masked)
     # Compute the covariance matrix

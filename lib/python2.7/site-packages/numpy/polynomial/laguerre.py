@@ -1007,7 +1007,7 @@ def laggrid2d(x, y, c):
 
     This function returns the values:
 
-    .. math:: p(a,b) = \sum_{i,j} c_{i,j} * L_i(a) * L_j(b)
+    .. math:: p(a,b) = \\sum_{i,j} c_{i,j} * L_i(a) * L_j(b)
 
     where the points `(a, b)` consist of all pairs formed by taking
     `a` from `x` and `b` from `y`. The resulting points form a grid with
@@ -1390,7 +1390,7 @@ def lagfit(x, y, deg, rcond=None, full=False, w=None):
     deg : int or 1-D array_like
         Degree(s) of the fitting polynomials. If `deg` is a single integer
         all terms up to and including the `deg`'th term are included in the
-        fit. For Numpy versions >= 1.11 a list of integers specifying the
+        fit. For NumPy versions >= 1.11.0 a list of integers specifying the
         degrees of the terms to include may be used instead.
     rcond : float, optional
         Relative condition number of the fit. Singular values smaller than
@@ -1557,7 +1557,7 @@ def lagfit(x, y, deg, rcond=None, full=False, w=None):
     # warn on rank reduction
     if rank != order and not full:
         msg = "The fit may be poorly conditioned"
-        warnings.warn(msg, pu.RankWarning)
+        warnings.warn(msg, pu.RankWarning, stacklevel=2)
 
     if full:
         return c, [resids, rank, s, rcond]
@@ -1674,8 +1674,8 @@ def laggauss(deg):
 
     Computes the sample points and weights for Gauss-Laguerre quadrature.
     These sample points and weights will correctly integrate polynomials of
-    degree :math:`2*deg - 1` or less over the interval :math:`[0, \inf]`
-    with the weight function :math:`f(x) = \exp(-x)`.
+    degree :math:`2*deg - 1` or less over the interval :math:`[0, \\inf]`
+    with the weight function :math:`f(x) = \\exp(-x)`.
 
     Parameters
     ----------
@@ -1736,7 +1736,7 @@ def lagweight(x):
     """Weight function of the Laguerre polynomials.
 
     The weight function is :math:`exp(-x)` and the interval of integration
-    is :math:`[0, \inf]`. The Laguerre polynomials are orthogonal, but not
+    is :math:`[0, \\inf]`. The Laguerre polynomials are orthogonal, but not
     normalized, with respect to this weight function.
 
     Parameters

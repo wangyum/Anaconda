@@ -11,7 +11,7 @@ import numpy as np
 from numpy.testing import (
     TestCase, run_module_suite, assert_, assert_equal, assert_raises,
     assert_array_equal, assert_almost_equal, assert_array_almost_equal,
-    dec, assert_allclose, assert_no_warnings
+    dec, assert_allclose, assert_no_warnings, suppress_warnings
 )
 
 
@@ -300,9 +300,8 @@ class TestRemainder(TestCase):
             assert_(rem >= -b, 'dt: %s' % dt)
 
         # Check nans, inf
-        with warnings.catch_warnings():
-            warnings.simplefilter('always')
-            warnings.simplefilter('ignore', RuntimeWarning)
+        with suppress_warnings() as sup:
+            sup.filter(RuntimeWarning, "invalid value encountered in remainder")
             for dt in np.typecodes['Float']:
                 fone = np.array(1.0, dtype=dt)
                 fzer = np.array(0.0, dtype=dt)
@@ -424,6 +423,57 @@ class TestPower(TestCase):
         # Check that the fast path ignores 1-element not 0-d arrays
         res = x ** np.array([[[2]]])
         assert_equal(res.shape, (1, 1, 3))
+
+    def test_integer_power(self):
+        a = np.array([15, 15], 'i8')
+        b = np.power(a, a)
+        assert_equal(b, [437893890380859375, 437893890380859375])
+
+    def test_integer_power_with_integer_zero_exponent(self):
+        dtypes = np.typecodes['Integer']
+        for dt in dtypes:
+            arr = np.arange(-10, 10, dtype=dt)
+            assert_equal(np.power(arr, 0), np.ones_like(arr))
+
+        dtypes = np.typecodes['UnsignedInteger']
+        for dt in dtypes:
+            arr = np.arange(10, dtype=dt)
+            assert_equal(np.power(arr, 0), np.ones_like(arr))
+
+    def test_integer_power_of_1(self):
+        dtypes = np.typecodes['AllInteger']
+        for dt in dtypes:
+            arr = np.arange(10, dtype=dt)
+            assert_equal(np.power(1, arr), np.ones_like(arr))
+
+    def test_integer_power_of_zero(self):
+        dtypes = np.typecodes['AllInteger']
+        for dt in dtypes:
+            arr = np.arange(1, 10, dtype=dt)
+            assert_equal(np.power(0, arr), np.zeros_like(arr))
+
+    def test_integer_to_negative_power(self):
+        dtypes = np.typecodes['Integer']
+        for dt in dtypes:
+            a = np.array([0, 1, 2, 3], dtype=dt)
+            b = np.array([0, 1, 2, -3], dtype=dt)
+            one = np.array(1, dtype=dt)
+            minusone = np.array(-1, dtype=dt)
+            assert_raises(ValueError, np.power, a, b)
+            assert_raises(ValueError, np.power, a, minusone)
+            assert_raises(ValueError, np.power, one, b)
+            assert_raises(ValueError, np.power, one, minusone)
+
+
+class TestFloat_power(TestCase):
+    def test_type_conversion(self):
+        arg_type = '?bhilBHILefdgFDG'
+        res_type = 'ddddddddddddgDDG'
+        for dtin, dtout in zip(arg_type, res_type):
+            msg = "dtin: %s, dtout: %s" % (dtin, dtout)
+            arg = np.ones(1, dtype=dtin)
+            res = np.float_power(arg, arg)
+            assert_(res.dtype.name == np.dtype(dtout).name, msg)
 
 
 class TestLog2(TestCase):
@@ -991,6 +1041,91 @@ class TestBool(TestCase):
         assert_equal(np.bitwise_xor(arg1, arg2), out)
 
 
+class TestBitwiseUFuncs(TestCase):
+
+    bitwise_types = [np.dtype(c) for c in '?' + 'bBhHiIlLqQ' + 'O']
+
+    def test_values(self):
+        for dt in self.bitwise_types:
+            zeros = np.array([0], dtype=dt)
+            ones = np.array([-1], dtype=dt)
+            msg = "dt = '%s'" % dt.char
+
+            assert_equal(np.bitwise_not(zeros), ones, err_msg=msg)
+            assert_equal(np.bitwise_not(ones), zeros, err_msg=msg)
+
+            assert_equal(np.bitwise_or(zeros, zeros), zeros, err_msg=msg)
+            assert_equal(np.bitwise_or(zeros, ones), ones, err_msg=msg)
+            assert_equal(np.bitwise_or(ones, zeros), ones, err_msg=msg)
+            assert_equal(np.bitwise_or(ones, ones), ones, err_msg=msg)
+
+            assert_equal(np.bitwise_xor(zeros, zeros), zeros, err_msg=msg)
+            assert_equal(np.bitwise_xor(zeros, ones), ones, err_msg=msg)
+            assert_equal(np.bitwise_xor(ones, zeros), ones, err_msg=msg)
+            assert_equal(np.bitwise_xor(ones, ones), zeros, err_msg=msg)
+
+            assert_equal(np.bitwise_and(zeros, zeros), zeros, err_msg=msg)
+            assert_equal(np.bitwise_and(zeros, ones), zeros, err_msg=msg)
+            assert_equal(np.bitwise_and(ones, zeros), zeros, err_msg=msg)
+            assert_equal(np.bitwise_and(ones, ones), ones, err_msg=msg)
+
+    def test_types(self):
+        for dt in self.bitwise_types:
+            zeros = np.array([0], dtype=dt)
+            ones = np.array([-1], dtype=dt)
+            msg = "dt = '%s'" % dt.char
+
+            assert_(np.bitwise_not(zeros).dtype == dt, msg)
+            assert_(np.bitwise_or(zeros, zeros).dtype == dt, msg)
+            assert_(np.bitwise_xor(zeros, zeros).dtype == dt, msg)
+            assert_(np.bitwise_and(zeros, zeros).dtype == dt, msg)
+
+
+    def test_identity(self):
+        assert_(np.bitwise_or.identity == 0, 'bitwise_or')
+        assert_(np.bitwise_xor.identity == 0, 'bitwise_xor')
+        assert_(np.bitwise_and.identity == -1, 'bitwise_and')
+
+    def test_reduction(self):
+        binary_funcs = (np.bitwise_or, np.bitwise_xor, np.bitwise_and)
+
+        for dt in self.bitwise_types:
+            zeros = np.array([0], dtype=dt)
+            ones = np.array([-1], dtype=dt)
+            for f in binary_funcs:
+                msg = "dt: '%s', f: '%s'" % (dt, f)
+                assert_equal(f.reduce(zeros), zeros, err_msg=msg)
+                assert_equal(f.reduce(ones), ones, err_msg=msg)
+
+        # Test empty reduction, no object dtype
+        for dt in self.bitwise_types[:-1]:
+            # No object array types
+            empty = np.array([], dtype=dt)
+            for f in binary_funcs:
+                msg = "dt: '%s', f: '%s'" % (dt, f)
+                tgt = np.array(f.identity, dtype=dt)
+                res = f.reduce(empty)
+                assert_equal(res, tgt, err_msg=msg)
+                assert_(res.dtype == tgt.dtype, msg)
+
+        # Empty object arrays use the identity.  Note that the types may
+        # differ, the actual type used is determined by the assign_identity
+        # function and is not the same as the type returned by the identity
+        # method.
+        for f in binary_funcs:
+            msg = "dt: '%s'" % (f,)
+            empty = np.array([], dtype=object)
+            tgt = f.identity
+            res = f.reduce(empty)
+            assert_equal(res, tgt, err_msg=msg)
+
+        # Non-empty object arrays do not use the identity
+        for f in binary_funcs:
+            msg = "dt: '%s'" % (f,)
+            btype = np.array([True], dtype=object)
+            assert_(type(f.reduce(btype)) is bool, msg)
+
+
 class TestInt(TestCase):
     def test_logical_not(self):
         x = np.ones(10, dtype=np.int16)
@@ -1104,8 +1239,9 @@ class TestAbsoluteNegative(TestCase):
                             assert_array_equal(out, d, err_msg=msg)
 
                             assert_array_equal(-inp, -1*inp, err_msg=msg)
+                            d = -1 * inp
                             np.negative(inp, out=out)
-                            assert_array_equal(out, -1*inp, err_msg=msg)
+                            assert_array_equal(out, d, err_msg=msg)
 
     def test_lower_align(self):
         # check data that is not aligned to element size
@@ -2056,6 +2192,12 @@ def test_rint_big_int():
     assert_equal(val, int(float(val)))
     # Rint should not change the value
     assert_equal(val, np.rint(val))
+
+
+def test_signaling_nan_exceptions():
+    with assert_no_warnings():
+        a = np.ndarray(shape=(), dtype='float32', buffer=b'\x00\xe0\xbf\xff')
+        np.isnan(a)
 
 
 if __name__ == "__main__":

@@ -65,7 +65,7 @@ class Mingw32CCompiler(distutils.cygwinccompiler.CygwinCCompiler):
                                  stdout=subprocess.PIPE)
             out_string = p.stdout.read()
             p.stdout.close()
-            result = re.search('(\d+\.\d+)', out_string)
+            result = re.search(r'(\d+\.\d+)', out_string)
             if result:
                 self.gcc_version = StrictVersion(result.group(1))
 
@@ -172,7 +172,7 @@ class Mingw32CCompiler(distutils.cygwinccompiler.CygwinCCompiler):
              extra_postargs=None,
              build_temp=None,
              target_lang=None):
-        # Include the appropiate MSVC runtime library if Python was built
+        # Include the appropriate MSVC runtime library if Python was built
         # with MSVC >= 7.0 (MinGW standard is msvcrt)
         runtime_library = msvc_runtime_library()
         if runtime_library:

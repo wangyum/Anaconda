@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/opt/cloudera/parcels/Anaconda/bin/python
 # Author: Chris Moyer
 #
 # route53 is similar to sdbadmin for Route53, it's a simple

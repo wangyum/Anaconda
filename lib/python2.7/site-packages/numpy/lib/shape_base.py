@@ -35,7 +35,7 @@ def apply_along_axis(func1d, axis, arr, *args, **kwargs):
         Input array.
     args : any
         Additional arguments to `func1d`.
-    kwargs: any
+    kwargs : any
         Additional named arguments to `func1d`.
 
         .. versionadded:: 1.9.0
@@ -74,7 +74,7 @@ def apply_along_axis(func1d, axis, arr, *args, **kwargs):
            [2, 5, 6]])
 
     """
-    arr = asarray(arr)
+    arr = asanyarray(arr)
     nd = arr.ndim
     if axis < 0:
         axis += nd
@@ -109,11 +109,13 @@ def apply_along_axis(func1d, axis, arr, *args, **kwargs):
             k += 1
         return outarr
     else:
+        res = asanyarray(res)
         Ntot = product(outshape)
         holdshape = outshape
         outshape = list(arr.shape)
-        outshape[axis] = len(res)
-        outarr = zeros(outshape, asarray(res).dtype)
+        outshape[axis] = res.size
+        outarr = zeros(outshape, res.dtype)
+        outarr = res.__array_wrap__(outarr)
         outarr[tuple(i.tolist())] = res
         k = 1
         while k < Ntot:
@@ -125,9 +127,11 @@ def apply_along_axis(func1d, axis, arr, *args, **kwargs):
                 ind[n] = 0
                 n -= 1
             i.put(indlist, ind)
-            res = func1d(arr[tuple(i.tolist())], *args, **kwargs)
+            res = asanyarray(func1d(arr[tuple(i.tolist())], *args, **kwargs))
             outarr[tuple(i.tolist())] = res
             k += 1
+        if res.shape == ():
+            outarr = outarr.squeeze(axis)
         return outarr
 
 
@@ -324,6 +328,10 @@ def dstack(tup):
     to make a single array. Rebuilds arrays divided by `dsplit`.
     This is a simple way to stack 2D arrays (images) into a single
     3D array for processing.
+
+    This function continues to be supported for backward compatibility, but
+    you should prefer ``np.concatenate`` or ``np.stack``. The ``np.stack``
+    function was added in NumPy 1.10.
 
     Parameters
     ----------
