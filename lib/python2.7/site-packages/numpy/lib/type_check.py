@@ -266,7 +266,15 @@ def iscomplexobj(x):
     True
 
     """
-    return issubclass(asarray(x).dtype.type, _nx.complexfloating)
+    try:
+        dtype = x.dtype
+    except AttributeError:
+        dtype = asarray(x).dtype
+    try:
+        return issubclass(dtype.type, _nx.complexfloating)
+    except AttributeError:
+        return False
+
 
 def isrealobj(x):
     """
@@ -300,7 +308,7 @@ def isrealobj(x):
     False
 
     """
-    return not issubclass(asarray(x).dtype.type, _nx.complexfloating)
+    return not iscomplexobj(x)
 
 #-----------------------------------------------------------------------------
 
@@ -334,7 +342,7 @@ def nan_to_num(x):
 
     See Also
     --------
-    isinf : Shows which elements are negative or negative infinity.
+    isinf : Shows which elements are positive or negative infinity.
     isneginf : Shows which elements are negative infinity.
     isposinf : Shows which elements are positive infinity.
     isnan : Shows which elements are Not a Number (NaN).
@@ -342,7 +350,7 @@ def nan_to_num(x):
 
     Notes
     -----
-    Numpy uses the IEEE Standard for Binary Floating-Point for Arithmetic
+    NumPy uses the IEEE Standard for Binary Floating-Point for Arithmetic
     (IEEE 754). This means that Not a Number is not equivalent to infinity.
 
 
@@ -424,7 +432,7 @@ def real_if_close(a,tol=100):
         from numpy.core import getlimits
         f = getlimits.finfo(a.dtype.type)
         tol = f.eps * tol
-    if _nx.allclose(a.imag, 0, atol=tol):
+    if _nx.all(_nx.absolute(a.imag) < tol):
         a = a.real
     return a
 

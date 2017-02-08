@@ -1007,7 +1007,7 @@ def hermgrid2d(x, y, c):
 
     This function returns the values:
 
-    .. math:: p(a,b) = \sum_{i,j} c_{i,j} * H_i(a) * H_j(b)
+    .. math:: p(a,b) = \\sum_{i,j} c_{i,j} * H_i(a) * H_j(b)
 
     where the points `(a, b)` consist of all pairs formed by taking
     `a` from `x` and `b` from `y`. The resulting points form a grid with
@@ -1391,7 +1391,7 @@ def hermfit(x, y, deg, rcond=None, full=False, w=None):
     deg : int or 1-D array_like
         Degree(s) of the fitting polynomials. If `deg` is a single integer
         all terms up to and including the `deg`'th term are included in the
-        fit. For Numpy versions >= 1.11 a list of integers specifying the
+        fit. For NumPy versions >= 1.11.0 a list of integers specifying the
         degrees of the terms to include may be used instead.
     rcond : float, optional
         Relative condition number of the fit. Singular values smaller than
@@ -1558,7 +1558,7 @@ def hermfit(x, y, deg, rcond=None, full=False, w=None):
     # warn on rank reduction
     if rank != order and not full:
         msg = "The fit may be poorly conditioned"
-        warnings.warn(msg, pu.RankWarning)
+        warnings.warn(msg, pu.RankWarning, stacklevel=2)
 
     if full:
         return c, [resids, rank, s, rcond]
@@ -1719,8 +1719,8 @@ def hermgauss(deg):
 
     Computes the sample points and weights for Gauss-Hermite quadrature.
     These sample points and weights will correctly integrate polynomials of
-    degree :math:`2*deg - 1` or less over the interval :math:`[-\inf, \inf]`
-    with the weight function :math:`f(x) = \exp(-x^2)`.
+    degree :math:`2*deg - 1` or less over the interval :math:`[-\\inf, \\inf]`
+    with the weight function :math:`f(x) = \\exp(-x^2)`.
 
     Parameters
     ----------
@@ -1784,8 +1784,8 @@ def hermweight(x):
     """
     Weight function of the Hermite polynomials.
 
-    The weight function is :math:`\exp(-x^2)` and the interval of
-    integration is :math:`[-\inf, \inf]`. the Hermite polynomials are
+    The weight function is :math:`\\exp(-x^2)` and the interval of
+    integration is :math:`[-\\inf, \\inf]`. the Hermite polynomials are
     orthogonal, but not normalized, with respect to this weight function.
 
     Parameters

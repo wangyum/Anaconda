@@ -12,7 +12,7 @@ from numpy.random import rand, randint, randn
 from numpy.testing import (
     TestCase, run_module_suite, assert_, assert_equal, assert_raises,
     assert_raises_regex, assert_array_equal, assert_almost_equal,
-    assert_array_almost_equal, dec
+    assert_array_almost_equal, dec, HAS_REFCOUNT, suppress_warnings
 )
 
 
@@ -65,6 +65,13 @@ class TestNonarrayArgs(TestCase):
                [5, 6, 7, 8, 9]]
         tgt = [[5, 6, 7, 8, 9]]
         out = np.compress([0, 1], arr, axis=0)
+        assert_equal(out, tgt)
+
+    def test_count_nonzero(self):
+        arr = [[0, 1, 7, 0, 0],
+               [3, 0, 0, 2, 19]]
+        tgt = np.array([2, 3])
+        out = np.count_nonzero(arr, axis=1)
         assert_equal(out, tgt)
 
     def test_cumproduct(self):
@@ -338,6 +345,30 @@ class TestBoolCmp(TestCase):
         self.nf[self.ef] = np.nan
         self.nd[self.ed] = np.nan
 
+        self.inff = self.f.copy()
+        self.infd = self.d.copy()
+        self.inff[::3][self.ef[::3]] = np.inf
+        self.infd[::3][self.ed[::3]] = np.inf
+        self.inff[1::3][self.ef[1::3]] = -np.inf
+        self.infd[1::3][self.ed[1::3]] = -np.inf
+        self.inff[2::3][self.ef[2::3]] = np.nan
+        self.infd[2::3][self.ed[2::3]] = np.nan
+        self.efnonan = self.ef.copy()
+        self.efnonan[2::3] = False
+        self.ednonan = self.ed.copy()
+        self.ednonan[2::3] = False
+
+        self.signf = self.f.copy()
+        self.signd = self.d.copy()
+        self.signf[self.ef] *= -1.
+        self.signd[self.ed] *= -1.
+        self.signf[1::6][self.ef[1::6]] = -np.inf
+        self.signd[1::6][self.ed[1::6]] = -np.inf
+        self.signf[3::6][self.ef[3::6]] = -np.nan
+        self.signd[3::6][self.ed[3::6]] = -np.nan
+        self.signf[4::6][self.ef[4::6]] = -0.
+        self.signd[4::6][self.ed[4::6]] = -0.
+
     def test_float(self):
         # offset for alignment test
         for i in range(4):
@@ -359,6 +390,10 @@ class TestBoolCmp(TestCase):
 
             # isnan on amd64 takes the same code path
             assert_array_equal(np.isnan(self.nf[i:]), self.ef[i:])
+            assert_array_equal(np.isfinite(self.nf[i:]), ~self.ef[i:])
+            assert_array_equal(np.isfinite(self.inff[i:]), ~self.ef[i:])
+            assert_array_equal(np.isinf(self.inff[i:]), self.efnonan[i:])
+            assert_array_equal(np.signbit(self.signf[i:]), self.ef[i:])
 
     def test_double(self):
         # offset for alignment test
@@ -381,6 +416,10 @@ class TestBoolCmp(TestCase):
 
             # isnan on amd64 takes the same code path
             assert_array_equal(np.isnan(self.nd[i:]), self.ed[i:])
+            assert_array_equal(np.isfinite(self.nd[i:]), ~self.ed[i:])
+            assert_array_equal(np.isfinite(self.infd[i:]), ~self.ed[i:])
+            assert_array_equal(np.isinf(self.infd[i:]), self.ednonan[i:])
+            assert_array_equal(np.signbit(self.signd[i:]), self.ed[i:])
 
 
 class TestSeterr(TestCase):
@@ -959,9 +998,110 @@ class TestNonzero(TestCase):
                         assert_(type(nzx_i) is np.ndarray)
                         assert_(nzx_i.flags.writeable)
 
-    # Tests that the array method
-    # call works
+    def test_count_nonzero_axis(self):
+        # Basic check of functionality
+        m = np.array([[0, 1, 7, 0, 0], [3, 0, 0, 2, 19]])
+
+        expected = np.array([1, 1, 1, 1, 1])
+        assert_equal(np.count_nonzero(m, axis=0), expected)
+
+        expected = np.array([2, 3])
+        assert_equal(np.count_nonzero(m, axis=1), expected)
+
+        assert_raises(ValueError, np.count_nonzero, m, axis=(1, 1))
+        assert_raises(TypeError, np.count_nonzero, m, axis='foo')
+        assert_raises(ValueError, np.count_nonzero, m, axis=3)
+        assert_raises(TypeError, np.count_nonzero,
+                      m, axis=np.array([[1], [2]]))
+
+    def test_count_nonzero_axis_all_dtypes(self):
+        # More thorough test that the axis argument is respected
+        # for all dtypes and responds correctly when presented with
+        # either integer or tuple arguments for axis
+        msg = "Mismatch for dtype: %s"
+
+        for dt in np.typecodes['All']:
+            err_msg = msg % (np.dtype(dt).name,)
+
+            if dt != 'V':
+                if dt != 'M':
+                    m = np.zeros((3, 3), dtype=dt)
+                    n = np.ones(1, dtype=dt)
+
+                    m[0, 0] = n[0]
+                    m[1, 0] = n[0]
+
+                else:  # np.zeros doesn't work for np.datetime64
+                    m = np.array(['1970-01-01'] * 9)
+                    m = m.reshape((3, 3))
+
+                    m[0, 0] = '1970-01-12'
+                    m[1, 0] = '1970-01-12'
+                    m = m.astype(dt)
+
+                expected = np.array([2, 0, 0])
+                assert_equal(np.count_nonzero(m, axis=0),
+                             expected, err_msg=err_msg)
+
+                expected = np.array([1, 1, 0])
+                assert_equal(np.count_nonzero(m, axis=1),
+                             expected, err_msg=err_msg)
+
+                expected = np.array(2)
+                assert_equal(np.count_nonzero(m, axis=(0, 1)),
+                             expected, err_msg=err_msg)
+                assert_equal(np.count_nonzero(m, axis=None),
+                             expected, err_msg=err_msg)
+                assert_equal(np.count_nonzero(m),
+                             expected, err_msg=err_msg)
+
+            if dt == 'V':
+                # There are no 'nonzero' objects for np.void, so the testing
+                # setup is slightly different for this dtype
+                m = np.array([np.void(1)] * 6).reshape((2, 3))
+
+                expected = np.array([0, 0, 0])
+                assert_equal(np.count_nonzero(m, axis=0),
+                             expected, err_msg=err_msg)
+
+                expected = np.array([0, 0])
+                assert_equal(np.count_nonzero(m, axis=1),
+                             expected, err_msg=err_msg)
+
+                expected = np.array(0)
+                assert_equal(np.count_nonzero(m, axis=(0, 1)),
+                             expected, err_msg=err_msg)
+                assert_equal(np.count_nonzero(m, axis=None),
+                             expected, err_msg=err_msg)
+                assert_equal(np.count_nonzero(m),
+                             expected, err_msg=err_msg)
+
+    def test_count_nonzero_axis_consistent(self):
+        # Check that the axis behaviour for valid axes in
+        # non-special cases is consistent (and therefore
+        # correct) by checking it against an integer array
+        # that is then casted to the generic object dtype
+        from itertools import combinations, permutations
+
+        axis = (0, 1, 2, 3)
+        size = (5, 5, 5, 5)
+        msg = "Mismatch for axis: %s"
+
+        rng = np.random.RandomState(1234)
+        m = rng.randint(-100, 100, size=size)
+        n = m.astype(np.object)
+
+        for length in range(len(axis)):
+            for combo in combinations(axis, length):
+                for perm in permutations(combo):
+                    assert_equal(
+                        np.count_nonzero(m, axis=perm),
+                        np.count_nonzero(n, axis=perm),
+                        err_msg=msg % (perm,))
+
     def test_array_method(self):
+        # Tests that the array method
+        # call to nonzero works
         m = np.array([[1, 0, 0], [4, 0, 6]])
         tgt = [[0, 1, 1], [0, 0, 2]]
 
@@ -989,12 +1129,25 @@ class TestBinaryRepr(TestCase):
     def test_zero(self):
         assert_equal(np.binary_repr(0), '0')
 
-    def test_large(self):
-        assert_equal(np.binary_repr(10736848), '101000111101010011010000')
+    def test_positive(self):
+        assert_equal(np.binary_repr(10), '1010')
+        assert_equal(np.binary_repr(12522),
+                     '11000011101010')
+        assert_equal(np.binary_repr(10736848),
+                     '101000111101010011010000')
 
     def test_negative(self):
         assert_equal(np.binary_repr(-1), '-1')
-        assert_equal(np.binary_repr(-1, width=8), '11111111')
+        assert_equal(np.binary_repr(-10), '-1010')
+        assert_equal(np.binary_repr(-12522),
+                     '-11000011101010')
+        assert_equal(np.binary_repr(-10736848),
+                     '-101000111101010011010000')
+
+    def test_sufficient_width(self):
+        assert_equal(np.binary_repr(0, width=5), '00000')
+        assert_equal(np.binary_repr(10, width=7), '0001010')
+        assert_equal(np.binary_repr(-5, width=7), '1111011')
 
 
 class TestBaseRepr(TestCase):
@@ -1011,6 +1164,12 @@ class TestBaseRepr(TestCase):
         assert_equal(np.base_repr(-12, 10), '-12')
         assert_equal(np.base_repr(-12, 10, 4), '-000012')
         assert_equal(np.base_repr(-12, 4), '-30')
+
+    def test_base_range(self):
+        with self.assertRaises(ValueError):
+            np.base_repr(1, 1)
+        with self.assertRaises(ValueError):
+            np.base_repr(1, 37)
 
 
 class TestArrayComparisons(TestCase):
@@ -1796,49 +1955,47 @@ class TestStdVarComplex(TestCase):
 
 
 class TestCreationFuncs(TestCase):
-    # Test ones, zeros, empty and filled
+    # Test ones, zeros, empty and full.
 
     def setUp(self):
-        self.dtypes = ('b', 'i', 'u', 'f', 'c', 'S', 'a', 'U', 'V')
+        dtypes = {np.dtype(tp) for tp in itertools.chain(*np.sctypes.values())}
+        # void, bytes, str
+        variable_sized = {tp for tp in dtypes if tp.str.endswith('0')}
+        self.dtypes = sorted(dtypes - variable_sized |
+                             {np.dtype(tp.str.replace("0", str(i)))
+                              for tp in variable_sized for i in range(1, 10)},
+                             key=lambda dtype: dtype.str)
         self.orders = {'C': 'c_contiguous', 'F': 'f_contiguous'}
         self.ndims = 10
 
     def check_function(self, func, fill_value=None):
-        par = (
-            (0, 1, 2),
-            range(self.ndims),
-            self.orders,
-            self.dtypes,
-            2**np.arange(9)
-        )
+        par = ((0, 1, 2),
+               range(self.ndims),
+               self.orders,
+               self.dtypes)
         fill_kwarg = {}
         if fill_value is not None:
             fill_kwarg = {'fill_value': fill_value}
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', DeprecationWarning)
-            for size, ndims, order, type, bytes in itertools.product(*par):
-                shape = ndims * [size]
-                try:
-                    dtype = np.dtype('{0}{1}'.format(type, bytes))
-                except TypeError:  # dtype combination does not exist
-                    continue
+
+        for size, ndims, order, dtype in itertools.product(*par):
+            shape = ndims * [size]
+
+            # do not fill void type
+            if fill_kwarg and dtype.str.startswith('|V'):
+                continue
+
+            arr = func(shape, order=order, dtype=dtype,
+                       **fill_kwarg)
+
+            assert_equal(arr.dtype, dtype)
+            assert_(getattr(arr.flags, self.orders[order]))
+
+            if fill_value is not None:
+                if dtype.str.startswith('|S'):
+                    val = str(fill_value)
                 else:
-                    # do not fill void type
-                    if fill_value is not None and type in 'V':
-                        continue
-
-                    arr = func(shape, order=order, dtype=dtype,
-                               **fill_kwarg)
-
-                    assert_(arr.dtype == dtype)
-                    assert_(getattr(arr.flags, self.orders[order]))
-
-                    if fill_value is not None:
-                        if dtype.str.startswith('|S'):
-                            val = str(fill_value)
-                        else:
-                            val = fill_value
-                        assert_equal(arr, dtype.type(val))
+                    val = fill_value
+                assert_equal(arr, dtype.type(val))
 
     def test_zeros(self):
         self.check_function(np.zeros)
@@ -1849,10 +2006,11 @@ class TestCreationFuncs(TestCase):
     def test_empty(self):
         self.check_function(np.empty)
 
-    def test_filled(self):
+    def test_full(self):
         self.check_function(np.full, 0)
         self.check_function(np.full, 1)
 
+    @dec.skipif(not HAS_REFCOUNT, "python has no sys.getrefcount")
     def test_for_reference_leak(self):
         # Make sure we have an object for reference
         dim = 1
@@ -2093,6 +2251,42 @@ class TestRoll(TestCase):
         assert_equal(x2r, np.array([[5, 6, 7, 8, 9], [0, 1, 2, 3, 4]]))
 
         x2r = np.roll(x2, 1, axis=1)
+        assert_equal(x2r, np.array([[4, 0, 1, 2, 3], [9, 5, 6, 7, 8]]))
+
+        # Roll multiple axes at once.
+        x2r = np.roll(x2, 1, axis=(0, 1))
+        assert_equal(x2r, np.array([[9, 5, 6, 7, 8], [4, 0, 1, 2, 3]]))
+
+        x2r = np.roll(x2, (1, 0), axis=(0, 1))
+        assert_equal(x2r, np.array([[5, 6, 7, 8, 9], [0, 1, 2, 3, 4]]))
+
+        x2r = np.roll(x2, (-1, 0), axis=(0, 1))
+        assert_equal(x2r, np.array([[5, 6, 7, 8, 9], [0, 1, 2, 3, 4]]))
+
+        x2r = np.roll(x2, (0, 1), axis=(0, 1))
+        assert_equal(x2r, np.array([[4, 0, 1, 2, 3], [9, 5, 6, 7, 8]]))
+
+        x2r = np.roll(x2, (0, -1), axis=(0, 1))
+        assert_equal(x2r, np.array([[1, 2, 3, 4, 0], [6, 7, 8, 9, 5]]))
+
+        x2r = np.roll(x2, (1, 1), axis=(0, 1))
+        assert_equal(x2r, np.array([[9, 5, 6, 7, 8], [4, 0, 1, 2, 3]]))
+
+        x2r = np.roll(x2, (-1, -1), axis=(0, 1))
+        assert_equal(x2r, np.array([[6, 7, 8, 9, 5], [1, 2, 3, 4, 0]]))
+
+        # Roll the same axis multiple times.
+        x2r = np.roll(x2, 1, axis=(0, 0))
+        assert_equal(x2r, np.array([[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]))
+
+        x2r = np.roll(x2, 1, axis=(1, 1))
+        assert_equal(x2r, np.array([[3, 4, 0, 1, 2], [8, 9, 5, 6, 7]]))
+
+        # Roll more than one turn in either direction.
+        x2r = np.roll(x2, 6, axis=1)
+        assert_equal(x2r, np.array([[4, 0, 1, 2, 3], [9, 5, 6, 7, 8]]))
+
+        x2r = np.roll(x2, -4, axis=1)
         assert_equal(x2r, np.array([[4, 0, 1, 2, 3], [9, 5, 6, 7, 8]]))
 
     def test_roll_empty(self):
@@ -2409,6 +2603,7 @@ class TestBroadcast(TestCase):
                 np.broadcast(arrs[0], np.broadcast(*arrs[1:-1]), arrs[-1])]
         for mit in mits:
             assert_equal(mit.shape, (5, 6, 7))
+            assert_equal(mit.ndim, 3)
             assert_equal(mit.nd, 3)
             assert_equal(mit.numiter, 4)
             for a, ia in zip(arrs, mit.iters):
@@ -2419,6 +2614,7 @@ class TestBroadcast(TestCase):
         arrs = [np.empty((5, 6, 7))]
         mit = np.broadcast(*arrs)
         assert_equal(mit.shape, (5, 6, 7))
+        assert_equal(mit.ndim, 3)
         assert_equal(mit.nd, 3)
         assert_equal(mit.numiter, 1)
         assert_(arrs[0] is mit.iters[0].base)

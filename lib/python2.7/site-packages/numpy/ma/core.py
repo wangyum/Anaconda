@@ -56,10 +56,10 @@ __all__ = [
     'argmax', 'argmin', 'argsort', 'around', 'array', 'asanyarray',
     'asarray', 'bitwise_and', 'bitwise_or', 'bitwise_xor', 'bool_', 'ceil',
     'choose', 'clip', 'common_fill_value', 'compress', 'compressed',
-    'concatenate', 'conjugate', 'copy', 'cos', 'cosh', 'count', 'cumprod',
-    'cumsum', 'default_fill_value', 'diag', 'diagonal', 'diff', 'divide',
-    'dump', 'dumps', 'empty', 'empty_like', 'equal', 'exp', 'expand_dims',
-    'fabs', 'filled', 'fix_invalid', 'flatten_mask',
+    'concatenate', 'conjugate', 'convolve', 'copy', 'correlate', 'cos', 'cosh',
+    'count', 'cumprod', 'cumsum', 'default_fill_value', 'diag', 'diagonal',
+    'diff', 'divide', 'dump', 'dumps', 'empty', 'empty_like', 'equal', 'exp',
+    'expand_dims', 'fabs', 'filled', 'fix_invalid', 'flatten_mask',
     'flatten_structured_array', 'floor', 'floor_divide', 'fmod',
     'frombuffer', 'fromflex', 'fromfunction', 'getdata', 'getmask',
     'getmaskarray', 'greater', 'greater_equal', 'harden_mask', 'hypot',
@@ -811,8 +811,11 @@ class _DomainCheckInterval:
 
     def __call__(self, x):
         "Execute the call behavior."
-        return umath.logical_or(umath.greater(x, self.b),
-                                umath.less(x, self.a))
+        # nans at masked positions cause RuntimeWarnings, even though
+        # they are masked. To avoid this we suppress warnings.
+        with np.errstate(invalid='ignore'):
+            return umath.logical_or(umath.greater(x, self.b),
+                                    umath.less(x, self.a))
 
 
 class _DomainTan:
@@ -829,7 +832,8 @@ class _DomainTan:
 
     def __call__(self, x):
         "Executes the call behavior."
-        return umath.less(umath.absolute(umath.cos(x)), self.eps)
+        with np.errstate(invalid='ignore'):
+            return umath.less(umath.absolute(umath.cos(x)), self.eps)
 
 
 class _DomainSafeDivide:
@@ -849,7 +853,8 @@ class _DomainSafeDivide:
             self.tolerance = np.finfo(float).tiny
         # don't call ma ufuncs from __array_wrap__ which would fail for scalars
         a, b = np.asarray(a), np.asarray(b)
-        return umath.absolute(a) * self.tolerance >= umath.absolute(b)
+        with np.errstate(invalid='ignore'):
+            return umath.absolute(a) * self.tolerance >= umath.absolute(b)
 
 
 class _DomainGreater:
@@ -864,7 +869,8 @@ class _DomainGreater:
 
     def __call__(self, x):
         "Executes the call behavior."
-        return umath.less_equal(x, self.critical_value)
+        with np.errstate(invalid='ignore'):
+            return umath.less_equal(x, self.critical_value)
 
 
 class _DomainGreaterEqual:
@@ -879,7 +885,8 @@ class _DomainGreaterEqual:
 
     def __call__(self, x):
         "Executes the call behavior."
-        return umath.less(x, self.critical_value)
+        with np.errstate(invalid='ignore'):
+            return umath.less(x, self.critical_value)
 
 
 class _MaskedUnaryOperation:
@@ -918,6 +925,8 @@ class _MaskedUnaryOperation:
         # Deal with domain
         if self.domain is not None:
             # Case 1.1. : Domained function
+            # nans at masked positions cause RuntimeWarnings, even though
+            # they are masked. To avoid this we suppress warnings.
             with np.errstate(divide='ignore', invalid='ignore'):
                 result = self.f(d, *args, **kwargs)
             # Make a mask
@@ -927,7 +936,8 @@ class _MaskedUnaryOperation:
         else:
             # Case 1.2. : Function without a domain
             # Get the result and the mask
-            result = self.f(d, *args, **kwargs)
+            with np.errstate(divide='ignore', invalid='ignore'):
+                result = self.f(d, *args, **kwargs)
             m = getmask(a)
 
         if not result.ndim:
@@ -1027,12 +1037,7 @@ class _MaskedBinaryOperation:
         if m is not nomask and m.any():
             # any errors, just abort; impossible to guarantee masked values
             try:
-                np.copyto(result, 0, casting='unsafe', where=m)
-                # avoid using "*" since this may be overlaid
-                masked_da = umath.multiply(m, da)
-                # only add back if it can be cast safely
-                if np.can_cast(masked_da.dtype, result.dtype, casting='safe'):
-                    result += masked_da
+                np.copyto(result, da, casting='unsafe', where=m)
             except:
                 pass
 
@@ -1163,7 +1168,7 @@ class _DomainedBinaryOperation:
         # Apply the domain
         domain = ufunc_domain.get(self.f, None)
         if domain is not None:
-            m |= filled(domain(da, db), True)
+            m |= domain(da, db)
         # Take care of the scalar case first
         if (not m.ndim):
             if m:
@@ -2995,28 +3000,33 @@ class MaskedArray(ndarray):
             if domain is not None:
                 # Take the domain, and make sure it's a ndarray
                 if len(args) > 2:
-                    d = filled(reduce(domain, args), True)
+                    with np.errstate(divide='ignore', invalid='ignore'):
+                        d = filled(reduce(domain, args), True)
                 else:
-                    d = filled(domain(*args), True)
-                # Fill the result where the domain is wrong
-                try:
-                    # Binary domain: take the last value
-                    fill_value = ufunc_fills[func][-1]
-                except TypeError:
-                    # Unary domain: just use this one
-                    fill_value = ufunc_fills[func]
-                except KeyError:
-                    # Domain not recognized, use fill_value instead
-                    fill_value = self.fill_value
-                result = result.copy()
-                np.copyto(result, fill_value, where=d)
-                # Update the mask
-                if m is nomask:
-                    if d is not nomask:
+                    with np.errstate(divide='ignore', invalid='ignore'):
+                        d = filled(domain(*args), True)
+
+                if d.any():
+                    # Fill the result where the domain is wrong
+                    try:
+                        # Binary domain: take the last value
+                        fill_value = ufunc_fills[func][-1]
+                    except TypeError:
+                        # Unary domain: just use this one
+                        fill_value = ufunc_fills[func]
+                    except KeyError:
+                        # Domain not recognized, use fill_value instead
+                        fill_value = self.fill_value
+                    result = result.copy()
+                    np.copyto(result, fill_value, where=d)
+
+                    # Update the mask
+                    if m is nomask:
                         m = d
-                else:
-                    # Don't modify inplace, we risk back-propagation
-                    m = (m | d)
+                    else:
+                        # Don't modify inplace, we risk back-propagation
+                        m = (m | d)
+
             # Make sure the mask has the proper size
             if result.shape == () and m:
                 return masked
@@ -3188,11 +3198,11 @@ class MaskedArray(ndarray):
                 if self._fill_value is not None:
                     dout._fill_value = self._fill_value[indx]
 
-                    # If we're indexing a multidimensional field in a 
+                    # If we're indexing a multidimensional field in a
                     # structured array (such as dtype("(2,)i2,(2,)i1")),
                     # dimensionality goes up (M[field].ndim == M.ndim +
-                    # len(M.dtype[field].shape)).  That's fine for 
-                    # M[field] but problematic for M[field].fill_value 
+                    # len(M.dtype[field].shape)).  That's fine for
+                    # M[field] but problematic for M[field].fill_value
                     # which should have shape () to avoid breaking several
                     # methods. There is no great way out, so set to
                     # first element.  See issue #6723.
@@ -3205,7 +3215,8 @@ class MaskedArray(ndarray):
                                 "of fill_value at 0. Discarding "
                                 "heterogeneous fill_value and setting "
                                 "all to {fv!s}.".format(indx=indx,
-                                    fv=dout._fill_value[0]))
+                                    fv=dout._fill_value[0]),
+                                stacklevel=2)
                         dout._fill_value = dout._fill_value.flat[0]
                 dout._isfield = True
             # Update the mask if needed
@@ -3269,12 +3280,13 @@ class MaskedArray(ndarray):
             # We want to remove the unshare logic from this place in the
             # future. Note that _sharedmask has lots of false positives.
             if not self._isfield:
+                notthree = getattr(sys, 'getrefcount', False) and (sys.getrefcount(_mask) != 3)
                 if self._sharedmask and not (
                         # If no one else holds a reference (we have two
                         # references (_mask and self._mask) -- add one for
                         # getrefcount) and the array owns its own data
                         # copying the mask should do nothing.
-                        (sys.getrefcount(_mask) == 3) and _mask.flags.owndata):
+                        (not notthree) and _mask.flags.owndata):
                     # 2016.01.15 -- v1.11.0
                     warnings.warn(
                        "setting an item on a masked array which has a shared "
@@ -3573,7 +3585,14 @@ class MaskedArray(ndarray):
         """
         if self._fill_value is None:
             self._fill_value = _check_fill_value(None, self.dtype)
-        return self._fill_value[()]
+
+        # Temporary workaround to account for the fact that str and bytes
+        # scalars cannot be indexed with (), whereas all other numpy
+        # scalars can. See issues #7259 and #7267.
+        # The if-block can be removed after #7267 has been fixed.
+        if isinstance(self._fill_value, ndarray):
+            return self._fill_value[()]
+        return self._fill_value
 
     def set_fill_value(self, value=None):
         """
@@ -4182,7 +4201,7 @@ class MaskedArray(ndarray):
             raise TypeError("Only length-1 arrays can be converted "
                             "to Python scalars")
         elif self._mask:
-            warnings.warn("Warning: converting a masked element to nan.")
+            warnings.warn("Warning: converting a masked element to nan.", stacklevel=2)
             return np.nan
         return float(self.item())
 
@@ -5038,7 +5057,7 @@ class MaskedArray(ndarray):
 
         if self._mask is nomask:
             result = super(MaskedArray, self).mean(axis=axis,
-                                                   dtype=dtype, **kwargs)
+                                                   dtype=dtype, **kwargs)[()]
         else:
             dsum = self.sum(axis=axis, dtype=dtype, **kwargs)
             cnt = self.count(axis=axis, **kwargs)
@@ -5115,8 +5134,14 @@ class MaskedArray(ndarray):
 
         # Easy case: nomask, business as usual
         if self._mask is nomask:
-            return self._data.var(axis=axis, dtype=dtype, out=out,
-                                  ddof=ddof, **kwargs)
+            ret = super(MaskedArray, self).var(axis=axis, dtype=dtype, out=out,
+                                               ddof=ddof, **kwargs)[()]
+            if out is not None:
+                if isinstance(out, MaskedArray):
+                    out.__setmask__(nomask)
+                return out
+            return ret
+
         # Some data are masked, yay!
         cnt = self.count(axis=axis, **kwargs) - ddof
         danom = self - self.mean(axis, dtype, keepdims=True)
@@ -5599,7 +5624,7 @@ class MaskedArray(ndarray):
 
     def ptp(self, axis=None, out=None, fill_value=None):
         """
-        Return (maximum - minimum) along the the given dimension
+        Return (maximum - minimum) along the given dimension
         (i.e. peak-to-peak value).
 
         Parameters
@@ -5841,17 +5866,8 @@ class MaskedArray(ndarray):
 
         """
         cf = 'CF'[self.flags.fnc]
-        state = (1,
-                 self.shape,
-                 self.dtype,
-                 self.flags.fnc,
-                 self._data.tobytes(cf),
-                 # self._data.tolist(),
-                 getmaskarray(self).tobytes(cf),
-                 # getmaskarray(self).tolist(),
-                 self._fill_value,
-                 )
-        return state
+        data_state = super(MaskedArray, self).__reduce__()[2]
+        return data_state + (getmaskarray(self).tobytes(cf), self._fill_value)
 
     def __setstate__(self, state):
         """Restore the internal state of the masked array, for
@@ -6899,7 +6915,7 @@ def rank(obj):
     # 2015-04-12, 1.10.0
     warnings.warn(
         "`rank` is deprecated; use the `ndim` function instead. ",
-        np.VisibleDeprecationWarning)
+        np.VisibleDeprecationWarning, stacklevel=2)
     return np.ndim(getdata(obj))
 
 rank.__doc__ = np.rank.__doc__
@@ -7350,6 +7366,81 @@ outer.__doc__ = doc_note(np.outer.__doc__,
 outerproduct = outer
 
 
+def _convolve_or_correlate(f, a, v, mode, propagate_mask):
+    """
+    Helper function for ma.correlate and ma.convolve
+    """
+    if propagate_mask:
+        # results which are contributed to by either item in any pair being invalid
+        mask = (
+            f(getmaskarray(a), np.ones(np.shape(v), dtype=np.bool), mode=mode)
+          | f(np.ones(np.shape(a), dtype=np.bool), getmaskarray(v), mode=mode)
+        )
+        data = f(getdata(a), getdata(v), mode=mode)
+    else:
+        # results which are not contributed to by any pair of valid elements
+        mask = ~f(~getmaskarray(a), ~getmaskarray(v))
+        data = f(filled(a, 0), filled(v, 0), mode=mode)
+
+    return masked_array(data, mask=mask)
+
+
+def correlate(a, v, mode='valid', propagate_mask=True):
+    """
+    Cross-correlation of two 1-dimensional sequences.
+
+    Parameters
+    ----------
+    a, v : array_like
+        Input sequences.
+    mode : {'valid', 'same', 'full'}, optional
+        Refer to the `np.convolve` docstring.  Note that the default
+        is 'valid', unlike `convolve`, which uses 'full'.
+    propagate_mask : bool
+        If True, then a result element is masked if any masked element contributes towards it.
+        If False, then a result element is only masked if no non-masked element
+        contribute towards it
+
+    Returns
+    -------
+    out : MaskedArray
+        Discrete cross-correlation of `a` and `v`.
+
+    See Also
+    --------
+    numpy.correlate : Equivalent function in the top-level NumPy module.
+    """
+    return _convolve_or_correlate(np.correlate, a, v, mode, propagate_mask)
+
+
+def convolve(a, v, mode='full', propagate_mask=True):
+    """
+    Returns the discrete, linear convolution of two one-dimensional sequences.
+
+    Parameters
+    ----------
+    a, v : array_like
+        Input sequences.
+    mode : {'valid', 'same', 'full'}, optional
+        Refer to the `np.convolve` docstring.
+    propagate_mask : bool
+        If True, then if any masked element is included in the sum for a result
+        element, then the result is masked.
+        If False, then the result element is only masked if no non-masked cells
+        contribute towards it
+
+    Returns
+    -------
+    out : MaskedArray
+        Discrete, linear convolution of `a` and `v`.
+
+    See Also
+    --------
+    numpy.convolve : Equivalent function in the top-level NumPy module.
+    """
+    return _convolve_or_correlate(np.convolve, a, v, mode, propagate_mask)
+
+
 def allequal(a, b, fill_value=True):
     """
     Return True if all entries of a and b are equal, using
@@ -7496,8 +7587,7 @@ def allclose(a, b, masked_equal=True, rtol=1e-5, atol=1e-8):
         return False
     # No infs at all
     if not np.any(xinf):
-        d = filled(umath.less_equal(umath.absolute(x - y),
-                                    atol + rtol * umath.absolute(y)),
+        d = filled(less_equal(absolute(x - y), atol + rtol * absolute(y)),
                    masked_equal)
         return np.all(d)
 
@@ -7506,8 +7596,7 @@ def allclose(a, b, masked_equal=True, rtol=1e-5, atol=1e-8):
     x = x[~xinf]
     y = y[~xinf]
 
-    d = filled(umath.less_equal(umath.absolute(x - y),
-                                atol + rtol * umath.absolute(y)),
+    d = filled(less_equal(absolute(x - y), atol + rtol * absolute(y)),
                masked_equal)
 
     return np.all(d)

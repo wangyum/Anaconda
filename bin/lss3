@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/opt/cloudera/parcels/Anaconda/bin/python
 import boto
 from boto.exception import S3ResponseError
 from boto.s3.connection import OrdinaryCallingFormat

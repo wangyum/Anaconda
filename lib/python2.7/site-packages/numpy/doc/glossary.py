@@ -182,7 +182,7 @@ Glossary
          >>> [item**2 for item in x]
          [1, 4, 9]
 
-       It is often used in combintion with ``enumerate``::
+       It is often used in combination with ``enumerate``::
          >>> keys = ['a','b','c']
          >>> for n, k in enumerate(keys):
          ...     print("Key %d: %s" % (n, k))
@@ -305,7 +305,7 @@ Glossary
            [1, 2, 3, 4, 5, 6]
 
        Row-major order is also known as the C order, as the C programming
-       language uses it. New Numpy arrays are by default in row-major order.
+       language uses it. New NumPy arrays are by default in row-major order.
 
    self
        Often seen in method signatures, ``self`` refers to the instance
