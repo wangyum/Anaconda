@@ -4,4 +4,8 @@
 
 ### What is the issue No.?
 
-(Put link here,  e.g, #1  and add [issue No.] in PR title, e.g., [1])
+(Put link here,  e.g, #1)
+
+### How was this patch tested?
+
+(Please explain how this patch was tested. e.g., `Anaconda/tests/ittests/tensorflow/basic.py`)
