@@ -51,7 +51,6 @@ coefvalue = Gradclf.feature_importances_
 coefdf = pd.DataFrame({'name': df_tot.columns[select_x], 'value': coefvalue})
 
 ##Insert into hive tables
-##spark.sql("CREATE TABLE tmp.kgl_output_test (name string, value double)")
 
 fields = [StructField("name", StringType(), True), StructField("value", DoubleType(), True)]
 schema = StructType(fields)
