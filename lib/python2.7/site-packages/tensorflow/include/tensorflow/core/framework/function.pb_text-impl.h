@@ -34,13 +34,6 @@ bool ProtoParseFromScanner(
 
 void AppendProtoDebugString(
     ::tensorflow::strings::ProtoTextOutput* o,
-    const ::tensorflow::FunctionDef_Node& msg);
-bool ProtoParseFromScanner(
-    ::tensorflow::strings::Scanner* scanner, bool nested, bool close_curly,
-    ::tensorflow::FunctionDef_Node* msg);
-
-void AppendProtoDebugString(
-    ::tensorflow::strings::ProtoTextOutput* o,
     const ::tensorflow::FunctionDef& msg);
 bool ProtoParseFromScanner(
     ::tensorflow::strings::Scanner* scanner, bool nested, bool close_curly,
