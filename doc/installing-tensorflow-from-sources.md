@@ -16,29 +16,35 @@ gcc -v
 
 ### Install bazel:
 ```bash
-git clone https://github.com/bazelbuild/bazel.git
-cd bazel
+wget https://github.com/bazelbuild/bazel/releases/download/0.4.2/bazel-0.4.2-dist.zip
+unzip bazel-0.4.2-dist.zip -d bazel
 ./compile.sh
 ```
 ### Configure the installation
 ```
-export PATH=/opt/cloudera/parcels/Anaconda/bin/:/root/wangyuming/bazel/output/:${PATH}
+export PATH=/opt/cloudera/parcels/Anaconda/bin/:/root/bazel/output/:${PATH}
 
 git clone https://github.com/tensorflow/tensorflow
-
+git checkout v1.0.0-rc2
 # ./configure
-Please specify the location of python. [Default is /opt/cloudera/parcels/Anaconda/bin/python]: 
+Please specify optimization flags to use during compilation [Default is -march=native]: 
+Do you wish to use jemalloc as the malloc implementation? (Linux only) [Y/n] n
+jemalloc disabled on Linux
 Do you wish to build TensorFlow with Google Cloud Platform support? [y/N] N
 No Google Cloud Platform support will be enabled for TensorFlow
 Do you wish to build TensorFlow with Hadoop File System support? [y/N] y
 Hadoop File System support will be enabled for TensorFlow
+Do you wish to build TensorFlow with the XLA just-in-time compiler (experimental)? [y/N] 
+No XLA support will be enabled for TensorFlow
 Found possible Python library paths:
   /opt/cloudera/parcels/Anaconda/lib/python2.7/site-packages
 Please input the desired Python library path to use.  Default is [/opt/cloudera/parcels/Anaconda/lib/python2.7/site-packages]
 
-PYTHON_LIB_PATH
-Do you wish to build TensorFlow with GPU support? [y/N] N
-No GPU support will be enabled for TensorFlow
+Using python library path: /opt/cloudera/parcels/Anaconda/lib/python2.7/site-packages
+Do you wish to build TensorFlow with OpenCL support? [y/N] N
+No OpenCL support will be enabled for TensorFlow
+Do you wish to build TensorFlow with CUDA support? [y/N] N
+No CUDA support will be enabled for TensorFlow
 Configuration finished
 ```
 
@@ -50,5 +56,5 @@ bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
 ### Install tensorflow
 ```bash
-pip install --ignore-installed --upgrade /tmp/tensorflow_pkg/tensorflow-0.11.0rc1-py2-none-any.whl
+pip install --ignore-installed --upgrade /tmp/tensorflow_pkg/tensorflow-1.0.0rc2-cp27-cp27mu-linux_x86_64.whl
 ```
