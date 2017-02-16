@@ -12,7 +12,7 @@ PARCEL_PATH=${ANACONDA_DEPLOP_DIR}/${PARCEL_NAME}
 
 rm -rf ${ANACONDA_DEPLOP_DIR}/*
 
-rsync -av --exclude='.git/' ${ANACONDA_SOURCE_DIR}/*  ${PARCEL_PATH}
+rsync -av --exclude='.git/' --exclude='cm_ext/' --exclude='Examples/' --exclude='.github/' --exclude='*.tar.bz2'  ${ANACONDA_SOURCE_DIR}/*  ${PARCEL_PATH}
 
 sed -i "s/__VERSION__/${VERSION}/g"     ${PARCEL_PATH}/meta/parcel.json
 
