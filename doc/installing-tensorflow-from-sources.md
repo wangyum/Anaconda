@@ -18,14 +18,14 @@ gcc -v
 ```bash
 wget https://github.com/bazelbuild/bazel/releases/download/0.4.2/bazel-0.4.2-dist.zip
 unzip bazel-0.4.2-dist.zip -d bazel
-./compile.sh
+sh bazel/compile.sh
 ```
 ### Configure the installation
 ```
 export PATH=/opt/cloudera/parcels/Anaconda/bin/:/root/bazel/output/:${PATH}
 
-git clone https://github.com/tensorflow/tensorflow
-git checkout v1.0.0-rc2
+git clone https://github.com/tensorflow/tensorflow && cd tensorflow
+git checkout v1.0.0
 # ./configure
 Please specify optimization flags to use during compilation [Default is -march=native]: 
 Do you wish to use jemalloc as the malloc implementation? (Linux only) [Y/n] n
@@ -56,5 +56,5 @@ bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
 ### Install tensorflow
 ```bash
-pip install --ignore-installed --upgrade /tmp/tensorflow_pkg/tensorflow-1.0.0rc2-cp27-cp27mu-linux_x86_64.whl
+pip install /tmp/tensorflow_pkg/tensorflow-1.0.0-cp27-cp27mu-linux_x86_64.whl
 ```
