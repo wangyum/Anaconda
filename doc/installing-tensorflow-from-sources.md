@@ -18,9 +18,7 @@ gcc -v
 ```
 wget --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u102-b14/jdk-8u102-linux-x64.rpm
 sudo yum localinstall -y jdk-8u102-linux-x64.rpm
-echo "export JAVA_HOME=/usr/java/jdk1.8.0_102" >> ~/.bashrc
-echo "export PATH=$JAVA_HOME/bin:${PATH}" >> ~/.bashrc
-source ~/.bashrc
+export JAVA_HOME=/usr/java/jdk1.8.0_102
 ```
 
 ### Install Anaconda(optional):
@@ -73,5 +71,5 @@ bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
 ### Install tensorflow
 ```bash
-pip install /tmp/tensorflow_pkg/tensorflow-1.0.1-cp27-cp27mu-linux_x86_64.whl
+pip install --upgrade /tmp/tensorflow_pkg/tensorflow-1.0.1-cp27-cp27mu-linux_x86_64.whl
 ```
