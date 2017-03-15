@@ -23,9 +23,7 @@ export JAVA_HOME=/usr/java/jdk1.8.0_102
 
 ### Install Anaconda(optional):
 ```
-mkdir -p /opt/cloudera/parcels
-cd /opt/cloudera/parcels
-git clone https://github.com/wangyum/Anaconda.git
+git clone https://github.com/wangyum/Anaconda.git "/opt/cloudera/parcels/Anaconda"
 ```
 
 ### Install bazel:
