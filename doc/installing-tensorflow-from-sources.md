@@ -37,7 +37,7 @@ sh bazel/compile.sh
 export PATH=/opt/cloudera/parcels/Anaconda/bin/:/root/bazel/output/:${PATH}
 
 git clone https://github.com/tensorflow/tensorflow && cd tensorflow
-git checkout v1.0.1
+git checkout v1.1.0-rc1
 # ./configure 
 Please specify the location of python. [Default is /opt/cloudera/parcels/Anaconda/bin/python]: 
 Please specify optimization flags to use during compilation when bazel option "--config=opt" is specified [Default is -march=native]: 
