@@ -7,7 +7,7 @@ CentOS 6.7, JDK 1.8, Cloudera Manager 5.5.1, CDH 5.4.3, Anaconda 4.0.0, Spark 2.
 ### Upgrade gcc to 4.8.2
 ```bash
 wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-yum install -y zip unzip libcurl-devel git devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
+yum install -y zip unzip patch libcurl-devel git devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
 # active devtoolset-2
 scl enable devtoolset-2 bash
 # verification
@@ -28,8 +28,8 @@ git clone https://github.com/wangyum/Anaconda.git "/opt/cloudera/parcels/Anacond
 
 ### Install bazel:
 ```bash
-wget https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-dist.zip
-unzip bazel-0.4.4-dist.zip -d bazel
+wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip
+unzip bazel-0.4.5-dist.zip -d bazel
 sh bazel/compile.sh
 ```
 ### Configure the installation
@@ -40,9 +40,9 @@ git clone https://github.com/tensorflow/tensorflow && cd tensorflow
 git checkout v1.0.1
 # ./configure 
 Please specify the location of python. [Default is /opt/cloudera/parcels/Anaconda/bin/python]: 
-Please specify optimization flags to use during compilation [Default is -march=native]: 
-Do you wish to use jemalloc as the malloc implementation? (Linux only) [Y/n] n
-jemalloc disabled on Linux
+Please specify optimization flags to use during compilation when bazel option "--config=opt" is specified [Default is -march=native]: 
+Do you wish to use jemalloc as the malloc implementation? [Y/n] n
+jemalloc disabled
 Do you wish to build TensorFlow with Google Cloud Platform support? [y/N] 
 No Google Cloud Platform support will be enabled for TensorFlow
 Do you wish to build TensorFlow with Hadoop File System support? [y/N] y
@@ -58,6 +58,7 @@ Do you wish to build TensorFlow with OpenCL support? [y/N]
 No OpenCL support will be enabled for TensorFlow
 Do you wish to build TensorFlow with CUDA support? [y/N] 
 No CUDA support will be enabled for TensorFlow
+INFO: Starting clean (this may take a while). Consider using --async if the clean takes more than several minutes.
 Configuration finished
 ```
 
