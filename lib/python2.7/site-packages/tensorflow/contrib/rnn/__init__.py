@@ -12,60 +12,45 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-"""Module for constructing RNN Cells and additional RNN operations.
+"""RNN Cells and additional RNN operations.
 
-## Base interface for all RNN Cells
+See @{$python/contrib.rnn} guide.
 
 @@RNNCell
-
-## RNN Cells for use with TensorFlow's core RNN methods
-
 @@BasicRNNCell
 @@BasicLSTMCell
 @@GRUCell
 @@LSTMCell
 @@LayerNormBasicLSTMCell
-
-## Classes storing split `RNNCell` state
-
 @@LSTMStateTuple
-
-## RNN Cell wrappers (RNNCells that wrap other RNNCells)
-
 @@MultiRNNCell
 @@LSTMBlockWrapper
 @@DropoutWrapper
 @@EmbeddingWrapper
 @@InputProjectionWrapper
 @@OutputProjectionWrapper
-
-### Block RNNCells
+@@DeviceWrapper
+@@ResidualWrapper
 @@LSTMBlockCell
 @@GRUBlockCell
-
-### Fused RNNCells
 @@FusedRNNCell
 @@FusedRNNCellAdaptor
 @@TimeReversedFusedRNN
 @@LSTMBlockFusedCell
-
-### LSTM-like cells
 @@CoupledInputForgetGateLSTMCell
 @@TimeFreqLSTMCell
 @@GridLSTMCell
+@@BidirectionalGridLSTMCell
+@@NASCell
 
 ### RNNCell wrappers
 @@AttentionCellWrapper
-
-
-## Recurrent Neural Networks
-
-TensorFlow provides a number of methods for constructing Recurrent Neural
-Networks.
-
+@@CompiledWrapper
 @@static_rnn
 @@static_state_saving_rnn
 @@static_bidirectional_rnn
+@@stack_bidirectional_dynamic_rnn
+@@stack_bidirectional_rnn
 """
 
 from __future__ import absolute_import
@@ -78,6 +63,7 @@ from tensorflow.contrib.rnn.python.ops.core_rnn import static_state_saving_rnn
 
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import BasicLSTMCell
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import BasicRNNCell
+from tensorflow.contrib.rnn.python.ops.core_rnn_cell import DeviceWrapper
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import DropoutWrapper
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import EmbeddingWrapper
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import GRUCell
@@ -86,6 +72,7 @@ from tensorflow.contrib.rnn.python.ops.core_rnn_cell import LSTMCell
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import LSTMStateTuple
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import MultiRNNCell
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import OutputProjectionWrapper
+from tensorflow.contrib.rnn.python.ops.core_rnn_cell import ResidualWrapper
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import RNNCell
 
 # pylint: disable=unused-import,wildcard-import,line-too-long
