@@ -35,6 +35,7 @@ from tensorflow.contrib.keras.python.keras.engine.topology import Input
 from tensorflow.contrib.keras.python.keras.engine.topology import Layer
 from tensorflow.contrib.keras.python.keras.engine.training import Model
 from tensorflow.contrib.keras.python.keras.utils.io_utils import ask_to_proceed_with_overwrite
+from tensorflow.python.framework import ops
 
 
 # pylint: disable=g-import-not-at-top
@@ -208,7 +209,7 @@ def load_model(filepath, custom_objects=None):
       ValueError: In case of an invalid savefile.
   """
   if h5py is None:
-    raise ImportError('`save_model` requires h5py.')
+    raise ImportError('`load_model` requires h5py.')
 
   if not custom_objects:
     custom_objects = {}
@@ -220,7 +221,7 @@ def load_model(filepath, custom_objects=None):
         obj: object, dict, or list.
 
     Returns:
-        The same structure, where occurences
+        The same structure, where occurrences
             of a custom object name have been replaced
             with the custom object.
     """
@@ -419,6 +420,14 @@ class Sequential(Model):
       prefix = 'sequential_'
       name = prefix + str(K.get_uid(prefix))
     self.name = name
+
+    # The following properties are not actually used by Keras;
+    # they exist for compatibility with TF's variable scoping mechanism.
+    self._updates = []
+    self._scope = None
+    self._reuse = None
+    self._base_name = name
+    self._graph = ops.get_default_graph()
 
     # Add to the model any layers passed to the constructor.
     if layers:
@@ -1014,7 +1023,7 @@ class Sequential(Model):
         steps_per_epoch: Total number of steps (batches of samples)
             to yield from `generator` before declaring one epoch
             finished and starting the next epoch. It should typically
-            be equal to the number of unique samples if your dataset
+            be equal to the number of unique samples of your dataset
             divided by the batch size.
         epochs: Integer, total number of iterations on the data.
         verbose: Verbosity mode, 0, 1, or 2.
@@ -1025,8 +1034,10 @@ class Sequential(Model):
             - A tuple (inputs, targets, sample_weights).
         validation_steps: Only relevant if `validation_data`
             is a generator.
-            Number of samples to use from validation generator
-            at the end of every epoch.
+            Number of steps to yield from validation generator
+            at the end of every epoch. It should typically
+            be equal to the number of unique samples of your
+            validation dataset divided by the batch size.
         class_weight: Dictionary mapping class indices to a weight
             for the class.
         max_q_size: Maximum size for the generator queue
@@ -1058,7 +1069,7 @@ class Sequential(Model):
                     # and labels, from each line in the file
                     x, y = process_line(line)
                     yield (x, y)
-                f.close()
+                    f.close()
 
         model.fit_generator(generate_arrays_from_file('/my_file.txt'),
                             samples_per_epoch=10000, epochs=10)
@@ -1127,7 +1138,8 @@ class Sequential(Model):
                         steps,
                         max_q_size=10,
                         workers=1,
-                        pickle_safe=False):
+                        pickle_safe=False,
+                        verbose=0):
     """Generates predictions for the input samples from a data generator.
 
     The generator should return the same kind of data as accepted by
@@ -1144,6 +1156,7 @@ class Sequential(Model):
             relies on multiprocessing, you should not pass
             non picklable arguments to the generator
             as they can't be passed easily to children processes.
+        verbose: verbosity mode, 0 or 1.
 
     Returns:
         A Numpy array of predictions.
@@ -1155,7 +1168,8 @@ class Sequential(Model):
         steps,
         max_q_size=max_q_size,
         workers=workers,
-        pickle_safe=pickle_safe)
+        pickle_safe=pickle_safe,
+        verbose=verbose)
 
   def get_config(self):
     config = []
@@ -1167,9 +1181,9 @@ class Sequential(Model):
     return copy.deepcopy(config)
 
   @classmethod
-  def from_config(cls, config):
+  def from_config(cls, config, custom_objects=None):
     model = cls()
     for conf in config:
-      layer = layer_module.deserialize(conf)
+      layer = layer_module.deserialize(conf, custom_objects=custom_objects)
       model.add(layer)
     return model

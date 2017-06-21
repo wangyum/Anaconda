@@ -376,6 +376,23 @@ class TestSubarray(TestCase):
         assert_(isinstance(dt['a'].shape, tuple))
         assert_(isinstance(dt['a'].shape[0], int))
 
+    def test_shape_matches_ndim(self):
+        dt = np.dtype([('a', 'f4', ())])
+        assert_equal(dt['a'].shape, ())
+        assert_equal(dt['a'].ndim, 0)
+
+        dt = np.dtype([('a', 'f4')])
+        assert_equal(dt['a'].shape, ())
+        assert_equal(dt['a'].ndim, 0)
+
+        dt = np.dtype([('a', 'f4', 4)])
+        assert_equal(dt['a'].shape, (4,))
+        assert_equal(dt['a'].ndim, 1)
+
+        dt = np.dtype([('a', 'f4', (1, 2, 3))])
+        assert_equal(dt['a'].shape, (1, 2, 3))
+        assert_equal(dt['a'].ndim, 3)
+
     def test_shape_invalid(self):
         # Check that the shape is valid.
         max_int = np.iinfo(np.intc).max
@@ -593,9 +610,6 @@ class TestDtypeAttributes(TestCase):
         new_dtype = np.dtype(dtype.descr)
         assert_equal(new_dtype.itemsize, 16)
 
-
-class TestDtypeAttributes(TestCase):
-
     def test_name_builtin(self):
         for t in np.typeDict.values():
             name = t.__name__
@@ -618,6 +632,13 @@ def test_rational_dtype():
     # test that dtype detection finds user-defined types
     x = rational(1)
     assert_equal(np.array([x,x]).dtype, np.dtype(rational))
+
+
+def test_dtypes_are_true():
+    # test for gh-6294
+    assert bool(np.dtype('f8'))
+    assert bool(np.dtype('i8'))
+    assert bool(np.dtype([('a', 'i8'), ('b', 'f4')]))
 
 
 if __name__ == "__main__":

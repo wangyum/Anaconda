@@ -56,6 +56,7 @@ See the @{$python/math_ops} guide.
 @@acos
 @@asin
 @@atan
+@@atan2
 @@lgamma
 @@digamma
 @@erf
@@ -151,6 +152,7 @@ from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import gen_control_flow_ops
 from tensorflow.python.ops import gen_data_flow_ops
 from tensorflow.python.ops import gen_math_ops
+from tensorflow.python.ops import gen_nn_ops
 from tensorflow.python.ops import gen_sparse_ops
 from tensorflow.python.ops import gen_spectral_ops
 from tensorflow.python.ops import gen_state_ops
@@ -204,7 +206,7 @@ argmin.__doc__ = (gen_math_ops.arg_min.__doc__.replace("dimensions",
 # pylint: disable=anomalous-backslash-in-string,protected-access
 # pylint: disable=g-docstring-has-escape
 def abs(x, name=None):
-  """Computes the absolute value of a tensor.
+  r"""Computes the absolute value of a tensor.
 
   Given a tensor of real numbers `x`, this operation returns a tensor
   containing the absolute value of each element in `x`. For example, if x is
@@ -238,6 +240,12 @@ def abs(x, name=None):
 
 
 # pylint: enable=g-docstring-has-escape
+
+
+# pylint: disable=redefined-builtin
+def _bucketize(input, boundaries, name=None):
+  return gen_math_ops._bucketize(input=input, boundaries=boundaries, name=name)
+# pylint: enable=redefined-builtin
 
 
 class DivideDelegateWithName(object):
@@ -391,7 +399,7 @@ def sign(x, name=None):
 
 
 def square(x, name=None):
-  """Computes square of x element-wise.
+  r"""Computes square of x element-wise.
 
   I.e., \\(y = x * x = x^2\\).
 
@@ -413,7 +421,7 @@ def square(x, name=None):
 
 
 def sqrt(x, name=None):
-  """Computes square root of x element-wise.
+  r"""Computes square root of x element-wise.
 
   I.e., \\(y = \sqrt{x} = x^{1/2}\\).
 
@@ -484,7 +492,7 @@ def scalar_mul(scalar, x):
 
 
 def pow(x, y, name=None):
-  """Computes the power of one value to another.
+  r"""Computes the power of one value to another.
 
   Given a tensor `x` and a tensor `y`, this operation computes \\\\(x^y\\\\) for
   corresponding elements in `x` and `y`. For example:
@@ -584,7 +592,7 @@ def real(input, name=None):
 
 
 def imag(input, name=None):
-  """Returns the imaginary part of a complex number.
+  r"""Returns the imaginary part of a complex number.
 
   Given a tensor `input` of complex numbers, this operation returns a tensor of
   type `float32` or `float64` that is the imaginary part of each element in
@@ -817,7 +825,16 @@ def _OverrideBinaryOperatorHelper(func, op_name, clazz_object=ops.Tensor):
   def binary_op_wrapper(x, y):
     with ops.name_scope(None, op_name, [x, y]) as name:
       if not isinstance(y, sparse_tensor.SparseTensor):
-        y = ops.convert_to_tensor(y, dtype=x.dtype.base_dtype, name="y")
+        try:
+          y = ops.convert_to_tensor(y, dtype=x.dtype.base_dtype, name="y")
+        except TypeError:
+          # If the RHS is not a tensor, it might be a tensor aware object
+          # that can implement the operator with knowledge of itself
+          # and the tensor.
+          if hasattr(type(y), "__r%s__" % op_name):
+            return NotImplemented
+          else:
+            raise
       return func(x, y, name=name)
 
   def binary_op_wrapper_sparse(sp_x, y):
@@ -1065,8 +1082,6 @@ _OverrideBinaryOperatorHelper(_mul_dispatch, "mul")
 _OverrideBinaryOperatorHelper(_div_python2, "div")
 _OverrideBinaryOperatorHelper(_truediv_python3, "truediv")
 _OverrideBinaryOperatorHelper(floordiv, "floordiv")
-# TODO(aselle): Switch mod to floor_mod when ready
-# _OverrideBinaryOperatorHelper(gen_math_ops.floor_mod, "mod")
 _OverrideBinaryOperatorHelper(gen_math_ops._floor_mod, "mod")
 _OverrideBinaryOperatorHelper(pow, "pow")
 
@@ -1608,7 +1623,7 @@ def reduce_logsumexp(input_tensor,
 
 
 def trace(x, name=None):
-  """ Compute the trace of a tensor `x`.
+  """Compute the trace of a tensor `x`.
 
   `trace(x)` returns the sum along the main diagonal of each inner-most matrix
   in x. If x is of rank `k` with shape `[I, J, K, ..., L, M, N]`, then output
@@ -1919,6 +1934,12 @@ def accumulate_n(inputs, shape=None, tensor_dtype=None, name=None):
   NOTE: This operation is not differentiable and cannot be used if inputs depend
   on trainable variables. Please use `tf.add_n` for such cases.
 
+  Aside from differentiability, `tf.accumulate_n` performs the same operation as
+  `tf.add_n`, but does not wait for all of its inputs to be ready before
+  beginning to sum. This can save memory if inputs are ready at different times,
+  since minimum temporary storage is proportional to the output size rather than
+  the inputs size.
+
   For example:
 
   ```python
@@ -2002,6 +2023,24 @@ def sigmoid(x, name=None):
   with ops.name_scope(name, "Sigmoid", [x]) as name:
     x = ops.convert_to_tensor(x, name="x")
     return gen_math_ops._sigmoid(x, name=name)
+
+
+def log_sigmoid(x, name=None):
+  """Computes log sigmoid of `x` element-wise.
+
+  Specifically, `y = log(1 / (1 + exp(-x)))`.  For numerical stability,
+  we use `y = -tf.nn.softplus(-x)`.
+
+  Args:
+    x: A Tensor with type `float32` or `float64`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A Tensor with the same type as `x`.
+  """
+  with ops.name_scope(name, "LogSigmoid", [x]) as name:
+    x = ops.convert_to_tensor(x, name="x")
+    return gen_math_ops._neg(gen_nn_ops.softplus(-x), name=name)
 
 
 def tanh(x, name=None):
@@ -2100,9 +2139,10 @@ def cumsum(x, axis=0, exclusive=False, reverse=False, name=None):
     x: A `Tensor`. Must be one of the following types: `float32`, `float64`,
        `int64`, `int32`, `uint8`, `uint16`, `int16`, `int8`, `complex64`,
        `complex128`, `qint8`, `quint8`, `qint32`, `half`.
-       axis: A `Tensor` of type `int32` (default: 0).
-       reverse: A `bool` (default: False).
-       name: A name for the operation (optional).
+    axis: A `Tensor` of type `int32` (default: 0).
+    exclusive: If `True`, perform exclusive cumsum.
+    reverse: A `bool` (default: False).
+    name: A name for the operation (optional).
 
   Returns:
     A `Tensor`. Has the same type as `x`.
@@ -2147,6 +2187,7 @@ def cumprod(x, axis=0, exclusive=False, reverse=False, name=None):
        `int64`, `int32`, `uint8`, `uint16`, `int16`, `int8`, `complex64`,
        `complex128`, `qint8`, `quint8`, `qint32`, `half`.
     axis: A `Tensor` of type `int32` (default: 0).
+    exclusive: If `True`, perform exclusive cumprod.
     reverse: A `bool` (default: False).
     name: A name for the operation (optional).
 
@@ -2288,7 +2329,7 @@ def tensordot(a, b, axes, name=None):
     using `array_ops.transpose` and `array_ops.reshape`. The method takes a
     tensor and performs the correct transpose and reshape operation for a given
     set of indices. It returns the reshaped tensor as well as a list of indices
-    necesary to reshape the tensor again after matrix multiplication.
+    necessary to reshape the tensor again after matrix multiplication.
 
     Args:
       a: `Tensor`.
@@ -2304,7 +2345,6 @@ def tensordot(a, b, axes, name=None):
       the shape of a is fully specified, and free_dims_static is either a list
       of integers and None values, or None, representing the inferred
       static shape of the free dimensions
-      
     """
     if a.get_shape().is_fully_defined() and isinstance(axes, (list, tuple)):
       shape_a = a.get_shape().as_list()
@@ -2376,7 +2416,8 @@ def tensordot(a, b, axes, name=None):
     b = ops.convert_to_tensor(b, name="b")
     a_axes, b_axes = _tensordot_axes(a, axes)
     a_reshape, a_free_dims, a_free_dims_static = _tensordot_reshape(a, a_axes)
-    b_reshape, b_free_dims, b_free_dims_static = _tensordot_reshape(b, b_axes, True)
+    b_reshape, b_free_dims, b_free_dims_static = _tensordot_reshape(b, b_axes,
+                                                                    True)
     ab_matmul = matmul(a_reshape, b_reshape)
     if isinstance(a_free_dims, list) and isinstance(b_free_dims, list):
       return array_ops.reshape(ab_matmul, a_free_dims + b_free_dims, name=name)

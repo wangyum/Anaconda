@@ -14,7 +14,8 @@ import itertools
 
 import numpy as np
 from numpy.testing import (
-    TestCase, run_module_suite, assert_warns, suppress_warnings
+    TestCase, run_module_suite, assert_warns, suppress_warnings,
+    assert_raises
     )
 from numpy.ma.testutils import (
     assert_, assert_array_equal, assert_equal, assert_almost_equal
@@ -28,7 +29,7 @@ from numpy.ma.extras import (
     median, average, unique, setxor1d, setdiff1d, union1d, intersect1d, in1d,
     ediff1d, apply_over_axes, apply_along_axis, compress_nd, compress_rowcols,
     mask_rowcols, clump_masked, clump_unmasked, flatnotmasked_contiguous,
-    notmasked_contiguous, notmasked_edges, masked_all, masked_all_like,
+    notmasked_contiguous, notmasked_edges, masked_all, masked_all_like, isin,
     diagflat
     )
 import numpy.ma.extras as mae
@@ -303,6 +304,18 @@ class TestConcatenator(TestCase):
         assert_array_equal(d[:5,:], b_1)
         assert_array_equal(d[5:,:], b_2)
         assert_array_equal(d.mask, np.r_[m_1, m_2])
+
+    def test_matrix_builder(self):
+        assert_raises(np.ma.MAError, lambda: mr_['1, 2; 3, 4'])
+
+    def test_matrix(self):
+        actual = mr_['r', 1, 2, 3]
+        expected = np.ma.array(np.r_['r', 1, 2, 3])
+        assert_array_equal(actual, expected)
+
+        # outer type is masked array, inner type is matrix
+        assert_equal(type(actual), type(expected))
+        assert_equal(type(actual.data), type(expected.data))
 
 
 class TestNotMasked(TestCase):
@@ -732,7 +745,7 @@ class TestMedian(TestCase):
                 for axis, over in args:
                     try:
                         np.ma.median(x, axis=axis, overwrite_input=over)
-                    except IndexError:
+                    except np.AxisError:
                         pass
                     else:
                         raise AssertionError(msg % (mask, ndmin, axis, over))
@@ -873,7 +886,6 @@ class TestMedian(TestCase):
     def test_nan(self):
         with suppress_warnings() as w:
             w.record(RuntimeWarning)
-            w.filter(DeprecationWarning, message=r"in 3\.x, __getslice__")
             for mask in (False, np.zeros(6, dtype=np.bool)):
                 dm = np.ma.array([[1, np.nan, 3], [1, 2, 3]])
                 dm.mask = mask
@@ -923,7 +935,6 @@ class TestMedian(TestCase):
         a[2] = np.nan
         with suppress_warnings() as w:
             w.record(RuntimeWarning)
-            w.filter(DeprecationWarning, message=r"in 3\.x, __getslice__")
             assert_array_equal(np.ma.median(a), np.nan)
             assert_array_equal(np.ma.median(a, axis=0), np.nan)
             assert_(w.log[0].category is RuntimeWarning)
@@ -938,7 +949,6 @@ class TestMedian(TestCase):
         # no axis
         with suppress_warnings() as w:
             w.record(RuntimeWarning)
-            w.filter(DeprecationWarning, message=r"in 3\.x, __getslice__")
             warnings.filterwarnings('always', '', RuntimeWarning)
             assert_array_equal(np.ma.median(a), np.nan)
             assert_(np.isscalar(np.ma.median(a)))
@@ -1028,7 +1038,6 @@ class TestMedian(TestCase):
         a = np.ma.masked_array(np.array([], dtype=float))
         with suppress_warnings() as w:
             w.record(RuntimeWarning)
-            w.filter(DeprecationWarning, message=r"in 3\.x, __getslice__")
             assert_array_equal(np.ma.median(a), np.nan)
             assert_(w.log[0].category is RuntimeWarning)
 
@@ -1037,7 +1046,6 @@ class TestMedian(TestCase):
         # no axis
         with suppress_warnings() as w:
             w.record(RuntimeWarning)
-            w.filter(DeprecationWarning, message=r"in 3\.x, __getslice__")
             warnings.filterwarnings('always', '', RuntimeWarning)
             assert_array_equal(np.ma.median(a), np.nan)
             assert_(w.log[0].category is RuntimeWarning)
@@ -1439,6 +1447,27 @@ class TestArraySetOps(TestCase):
         assert_equal(test, [1, 2, 3, 4, 5, 6])
         #
         assert_array_equal([], setxor1d([], []))
+
+    def test_isin(self):
+        # the tests for in1d cover most of isin's behavior
+        # if in1d is removed, would need to change those tests to test
+        # isin instead.
+        a = np.arange(24).reshape([2, 3, 4])
+        mask = np.zeros([2, 3, 4])
+        mask[1, 2, 0] = 1
+        a = array(a, mask=mask)
+        b = array(data=[0, 10, 20, 30,  1,  3, 11, 22, 33],
+                  mask=[0,  1,  0,  1,  0,  1,  0,  1,  0])
+        ec = zeros((2, 3, 4), dtype=bool)
+        ec[0, 0, 0] = True
+        ec[0, 0, 1] = True
+        ec[0, 2, 3] = True
+        c = isin(a, b)
+        assert_(isinstance(c, MaskedArray))
+        assert_array_equal(c, ec)
+        #compare results of np.isin to ma.isin
+        d = np.isin(a, b[~b.mask]) & ~a.mask
+        assert_array_equal(c, d)
 
     def test_in1d(self):
         # Test in1d
