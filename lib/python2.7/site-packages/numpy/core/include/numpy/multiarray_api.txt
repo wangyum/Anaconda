@@ -270,7 +270,8 @@ Steals a reference to newtype --- which can be NULL
   PyObject *
   PyArray_EnsureArray(PyObject *op)
 
-This is a quick wrapper around PyArray_FromAny(op, NULL, 0, 0, ENSUREARRAY)
+This is a quick wrapper around
+PyArray_FromAny(op, NULL, 0, 0, NPY_ARRAY_ENSUREARRAY, NULL)
 that special cases Arrays and PyArray_Scalars up front
 It *steals a reference* to the object
 It also guarantees that the result is PyArray_Type
@@ -2397,11 +2398,7 @@ objects which might cause a gc)
   PyArray_MapIterArray(PyArrayObject *a, PyObject *index)
 
 
-Use advanced indexing to iterate an array. Please note
-that most of this public API is currently not guaranteed
-to stay the same between versions. If you plan on using
-it, please consider adding more utility functions here
-to accommodate new features.
+Use advanced indexing to iterate an array.
 
 ::
 
@@ -2450,4 +2447,20 @@ Allocates zeroed memory for array data.
   PyArray_CheckAnyScalarExact(PyObject *obj)
 
 return true an object is exactly a numpy scalar
+
+::
+
+  PyObject *
+  PyArray_MapIterArrayCopyIfOverlap(PyArrayObject *a, PyObject
+                                    *index, int
+                                    copy_if_overlap, PyArrayObject
+                                    *extra_op)
+
+
+Same as PyArray_MapIterArray, but:
+
+If copy_if_overlap != 0, check if `a` has memory overlap with any of the
+arrays in `index` and with `extra_op`. If yes, make copies as appropriate
+to avoid problems if `a` is modified during the iteration.
+`iter->array` may contain a copied array (with UPDATEIFCOPY set).
 

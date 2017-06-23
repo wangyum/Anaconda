@@ -30,6 +30,7 @@ from tensorflow.python.ops import array_ops
 from tensorflow.python.saved_model import signature_constants
 from tensorflow.python.training import monitored_session
 from tensorflow.python.training import session_run_hook
+from tensorflow.python.util import nest
 
 
 class ModeKeys(object):
@@ -50,6 +51,7 @@ class ModeKeys(object):
 class MetricKeys(object):
   """Metric key strings."""
   LOSS = 'loss'
+  AVERAGE_LOSS = 'average_loss'
 
 
 class EstimatorSpec(
@@ -141,10 +143,10 @@ class EstimatorSpec(
         Multi-headed models should specify one entry for each head, one of
         which must be named using
         signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY.
-      training_chief_hooks: A list of `tf.train.SessionRunHook` objects to
+      training_chief_hooks: Iterable of `tf.train.SessionRunHook` objects to
         run on the chief worker during training.
-      training_hooks: A list of `tf.train.SessionRunHook` objects that to run on
-        all workers during training.
+      training_hooks: Iterable of `tf.train.SessionRunHook` objects that to run
+        on all workers during training.
       scaffold: A `tf.train.Scaffold` object that can be used to set
         initialization, saver, and more to be used in training.
 
@@ -195,15 +197,20 @@ class EstimatorSpec(
       if not isinstance(eval_metric_ops, dict):
         raise TypeError(
             'eval_metric_ops must be a dict, given: {}'.format(eval_metric_ops))
-      for key, metric_value in six.iteritems(eval_metric_ops):
-        if (not isinstance(metric_value, tuple) or
-            len(metric_value) != 2):
+      for key, metric_value_and_update in six.iteritems(eval_metric_ops):
+        if (not isinstance(metric_value_and_update, tuple) or
+            len(metric_value_and_update) != 2):
           raise TypeError(
-              'Values of eval_metric_ops must be (metric_tensor, update_op) '
-              'tuples, given: {} for key: {}'.format(metric_value, key))
-        _check_is_tensor_or_operation(metric_value[0],
-                                      'eval_metric_ops[{}]'.format(key))
-        _check_is_tensor_or_operation(metric_value[1],
+              'Values of eval_metric_ops must be (metric_value, update_op) '
+              'tuples, given: {} for key: {}'.format(
+                  metric_value_and_update, key))
+        metric_value, metric_update = metric_value_and_update
+        for metric_value_member in nest.flatten(metric_value):
+          # Allow (possibly nested) tuples for metric values, but require that
+          # each of them be Tensors or Operations.
+          _check_is_tensor_or_operation(metric_value_member,
+                                        'eval_metric_ops[{}]'.format(key))
+        _check_is_tensor_or_operation(metric_update,
                                       'eval_metric_ops[{}]'.format(key))
 
     # Validate export_outputs.
@@ -239,16 +246,14 @@ class EstimatorSpec(
       raise ValueError('loss must be from the default graph.')
     if train_op is not None and train_op.graph is not default_graph:
       raise ValueError('train_op must be from the default graph.')
-    for value in _eval_metric_ops_values(eval_metric_ops):
+    for value in nest.flatten(list(eval_metric_ops.values())):
       if value.graph is not default_graph:
         raise ValueError(
             'eval_metric_ops values must be from the default graph.')
 
     # Validate hooks.
-    if training_chief_hooks is None:
-      training_chief_hooks = []
-    if training_hooks is None:
-      training_hooks = []
+    training_chief_hooks = tuple(training_chief_hooks or [])
+    training_hooks = tuple(training_hooks or [])
     for hook in training_hooks + training_chief_hooks:
       if not isinstance(hook, session_run_hook.SessionRunHook):
         raise TypeError(
@@ -292,14 +297,3 @@ def _prediction_values(predictions):
   if isinstance(predictions, dict):
     return list(six.itervalues(predictions))
   return [predictions]
-
-
-def _eval_metric_ops_values(eval_metric_ops):
-  """Returns the values of the given eval_metric_ops dict."""
-  if eval_metric_ops is None:
-    return []
-  result = []
-  for value_tuple in six.itervalues(eval_metric_ops):
-    result.append(value_tuple[0])
-    result.append(value_tuple[1])
-  return result

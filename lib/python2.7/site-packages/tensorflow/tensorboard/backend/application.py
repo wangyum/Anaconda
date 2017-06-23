@@ -39,12 +39,10 @@ from werkzeug import wrappers
 
 from tensorflow.python.platform import resource_loader
 from tensorflow.python.platform import tf_logging as logging
+from tensorflow.tensorboard.backend import http_util
 from tensorflow.tensorboard.backend import process_graph
 from tensorflow.tensorboard.backend.event_processing import event_accumulator
 from tensorflow.tensorboard.backend.event_processing import event_multiplexer
-from tensorflow.tensorboard.lib.python import http_util
-from tensorflow.tensorboard.plugins.debugger import debugger_plugin
-from tensorflow.tensorboard.plugins.projector import projector_plugin
 
 
 DEFAULT_SIZE_GUIDANCE = {
@@ -60,6 +58,7 @@ DATA_PREFIX = '/data'
 LOGDIR_ROUTE = '/logdir'
 RUNS_ROUTE = '/runs'
 PLUGIN_PREFIX = '/plugin'
+PLUGINS_LISTING_ROUTE = '/plugins_listing'
 SCALARS_ROUTE = '/' + event_accumulator.SCALARS
 IMAGES_ROUTE = '/' + event_accumulator.IMAGES
 AUDIO_ROUTE = '/' + event_accumulator.AUDIO
@@ -95,18 +94,26 @@ class _OutputFormat(object):
   CSV = 'csv'
 
 
-def standard_tensorboard_wsgi(logdir, purge_orphaned_data, reload_interval):
-  """Construct a TensorBoardWSGIApp with standard plugins and multiplexer."""
+def standard_tensorboard_wsgi(
+    logdir,
+    purge_orphaned_data,
+    reload_interval,
+    plugins):
+  """Construct a TensorBoardWSGIApp with standard plugins and multiplexer.
+
+  Args:
+    logdir: The path to the directory containing events files.
+    purge_orphaned_data: Whether to purge orphaned data.
+    reload_interval: The interval at which the backend reloads more data in
+        seconds.
+    plugins: A list of plugins for TensorBoard to initialize.
+
+  Returns:
+    The new TensorBoard WSGI application.
+  """
   multiplexer = event_multiplexer.EventMultiplexer(
       size_guidance=DEFAULT_SIZE_GUIDANCE,
       purge_orphaned_data=purge_orphaned_data)
-
-  plugins = {
-      debugger_plugin.PLUGIN_PREFIX_ROUTE:
-          debugger_plugin.DebuggerPlugin(multiplexer),
-      projector_plugin.PLUGIN_PREFIX_ROUTE:
-          projector_plugin.ProjectorPlugin(),
-  }
 
   return TensorBoardWSGIApp(logdir, plugins, multiplexer, reload_interval)
 
@@ -128,12 +135,16 @@ class TensorBoardWSGIApp(object):
       logdir: the logdir spec that describes where data will be loaded.
         may be a directory, or comma,separated list of directories, or colons
         can be used to provide named directories
-      plugins: Map from plugin name to plugin application
+      plugins: List of plugins that extend tensorboard.plugins.BasePlugin
       multiplexer: The EventMultiplexer with TensorBoard data to serve
       reload_interval: How often (in seconds) to reload the Multiplexer
 
     Returns:
       A WSGI application that implements the TensorBoard backend.
+
+    Raises:
+      ValueError: If some plugin has no plugin_name
+      ValueError: If two plugins have the same plugin_name
     """
     self._logdir = logdir
     self._plugins = plugins
@@ -148,45 +159,55 @@ class TensorBoardWSGIApp(object):
       reload_multiplexer(self._multiplexer, path_to_run)
 
     self.data_applications = {
-        DATA_PREFIX + LOGDIR_ROUTE:
-            self._serve_logdir,
-        DATA_PREFIX + SCALARS_ROUTE:
-            self._serve_scalars,
-        DATA_PREFIX + GRAPH_ROUTE:
-            self._serve_graph,
-        DATA_PREFIX + RUN_METADATA_ROUTE:
-            self._serve_run_metadata,
-        DATA_PREFIX + HISTOGRAMS_ROUTE:
-            self._serve_histograms,
-        DATA_PREFIX + COMPRESSED_HISTOGRAMS_ROUTE:
-            self._serve_compressed_histograms,
-        DATA_PREFIX + IMAGES_ROUTE:
-            self._serve_images,
-        DATA_PREFIX + INDIVIDUAL_IMAGE_ROUTE:
-            self._serve_image,
+        '/app.js':
+            self._serve_js,
         DATA_PREFIX + AUDIO_ROUTE:
             self._serve_audio,
+        DATA_PREFIX + COMPRESSED_HISTOGRAMS_ROUTE:
+            self._serve_compressed_histograms,
+        DATA_PREFIX + GRAPH_ROUTE:
+            self._serve_graph,
+        DATA_PREFIX + HISTOGRAMS_ROUTE:
+            self._serve_histograms,
+        DATA_PREFIX + IMAGES_ROUTE:
+            self._serve_images,
         DATA_PREFIX + INDIVIDUAL_AUDIO_ROUTE:
             self._serve_individual_audio,
+        DATA_PREFIX + INDIVIDUAL_IMAGE_ROUTE:
+            self._serve_image,
+        DATA_PREFIX + LOGDIR_ROUTE:
+            self._serve_logdir,
+        # TODO(chizeng): Delete this RPC once we have skylark rules that obviate
+        # the need for the frontend to determine which plugins are active.
+        DATA_PREFIX + PLUGINS_LISTING_ROUTE:
+            self._serve_plugins_listing,
+        DATA_PREFIX + RUN_METADATA_ROUTE:
+            self._serve_run_metadata,
         DATA_PREFIX + RUNS_ROUTE:
             self._serve_runs,
-        '/app.js':
-            self._serve_js
+        DATA_PREFIX + SCALARS_ROUTE:
+            self._serve_scalars,
     }
 
     # Serve the routes from the registered plugins using their name as the route
     # prefix. For example if plugin z has two routes /a and /b, they will be
     # served as /data/plugin/z/a and /data/plugin/z/b.
-    for name in self._plugins:
+    plugin_names_encountered = set()
+    for plugin in self._plugins:
+      if plugin.plugin_name is None:
+        raise ValueError('Plugin %s has no plugin_name' % plugin)
+      if plugin.plugin_name in plugin_names_encountered:
+        raise ValueError('Duplicate plugins for name %s' % plugin.plugin_name)
+      plugin_names_encountered.add(plugin.plugin_name)
+
       try:
-        plugin = self._plugins[name]
-        plugin_apps = plugin.get_plugin_apps(self._multiplexer.RunPaths(),
-                                             self._logdir)
+        plugin_apps = plugin.get_plugin_apps(self._multiplexer, self._logdir)
       except Exception as e:  # pylint: disable=broad-except
-        logging.warning('Plugin %s failed. Exception: %s', name, str(e))
+        logging.warning('Plugin %s failed. Exception: %s', plugin.plugin_name,
+                        str(e))
         continue
       for route, app in plugin_apps.items():
-        path = DATA_PREFIX + PLUGIN_PREFIX + '/' + name + route
+        path = DATA_PREFIX + PLUGIN_PREFIX + '/' + plugin.plugin_name + route
         self.data_applications[path] = app
 
   # We use underscore_names for consistency with inherited methods.
@@ -290,7 +311,8 @@ class TensorBoardWSGIApp(object):
     try:
       graph = self._multiplexer.Graph(run)
     except ValueError:
-      return http_util.Respond(request, '404 Not Found', code=404)
+      return http_util.Respond(
+          request, '404 Not Found', 'text/plain; charset=UTF-8', code=404)
 
     limit_attr_size = request.args.get('limit_attr_size', None)
     if limit_attr_size is not None:
@@ -324,7 +346,8 @@ class TensorBoardWSGIApp(object):
     try:
       run_metadata = self._multiplexer.RunMetadata(run, tag)
     except ValueError:
-      return http_util.Respond(request, '404 Not Found', code=404)
+      return http_util.Respond(
+          request, '404 Not Found', 'text/plain; charset=UTF-8', code=404)
     return http_util.Respond(
         request, str(run_metadata), 'text/x-protobuf')  # pbtxt
 
@@ -475,6 +498,21 @@ class TensorBoardWSGIApp(object):
         'index': index
     })
     return query_string
+
+  @wrappers.Request.application
+  def _serve_plugins_listing(self, request):
+    """Serves an object mapping plugin name to whether it is enabled.
+
+    Args:
+      request: The werkzeug.Request object.
+
+    Returns:
+      A werkzeug.Response object.
+    """
+    return http_util.Respond(
+        request,
+        {plugin.plugin_name: plugin.is_active() for plugin in self._plugins},
+        'application/json')
 
   @wrappers.Request.application
   def _serve_runs(self, request):

@@ -339,7 +339,7 @@ def who(vardict=None):
 #-----------------------------------------------------------------------------
 
 
-# NOTE:  pydoc defines a help function which works simliarly to this
+# NOTE:  pydoc defines a help function which works similarly to this
 #  except it uses a pager to take over the screen.
 
 # combine name and arguments and split to multiple lines of width
@@ -918,13 +918,6 @@ def _lookfor_generate_cache(module, import_modules, regenerate):
                             continue
 
                         try:
-                            # Catch SystemExit, too
-                            base_exc = BaseException
-                        except NameError:
-                            # Python 2.4 doesn't have BaseException
-                            base_exc = Exception
-
-                        try:
                             old_stdout = sys.stdout
                             old_stderr = sys.stderr
                             try:
@@ -934,7 +927,8 @@ def _lookfor_generate_cache(module, import_modules, regenerate):
                             finally:
                                 sys.stdout = old_stdout
                                 sys.stderr = old_stderr
-                        except base_exc:
+                        # Catch SystemExit, too
+                        except BaseException:
                             continue
 
             for n, v in _getmembers(item):

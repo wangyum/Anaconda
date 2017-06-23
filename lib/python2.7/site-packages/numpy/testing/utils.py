@@ -15,19 +15,14 @@ import contextlib
 from tempfile import mkdtemp, mkstemp
 from unittest.case import SkipTest
 
-from numpy.core import float32, empty, arange, array_repr, ndarray
+from numpy.core import(
+     float32, empty, arange, array_repr, ndarray, isnat, array)
 from numpy.lib.utils import deprecate
 
 if sys.version_info[0] >= 3:
     from io import StringIO
 else:
     from StringIO import StringIO
-
-try:
-    from threading import Lock
-except ImportError:
-    from dummy_threading import Lock
-
 
 __all__ = [
         'assert_equal', 'assert_almost_equal', 'assert_approx_equal',
@@ -47,20 +42,6 @@ class KnownFailureException(Exception):
     '''Raise this exception to mark a test as a known failing test.'''
     pass
 
-
-# Warning filtering is generally not threadsafe in python, this is also
-# true for `catch_warnings` or `suppress_warinings`. In NumPy 1.12
-# however, `assert_equal` and the array comparison asserts, use this
-# to filter out some comparison warnings. Since removing this filter
-# may also affect downstream projects and skimage (and possibly more)
-# do parallel manual parallel testing using `assert_equal`, a quick fix
-# seems to be to lock the less obvious threading trap. Ideally (in
-# master this is the case), there should simply not be warning filter
-# logic in the assert functions themself.
-# While probably not perfectly safe in principle, it is sufficient
-# in the case of skimage and probably most testing scenarios and the
-# chance of deadlocks seems very unlikely.
-_assert_comparison_lock = Lock()
 
 KnownFailureTest = KnownFailureException  # backwards compat
 verbose = 0
@@ -102,6 +83,7 @@ def assert_(val, msg=''):
     For documentation on usage, refer to the Python documentation.
 
     """
+    __tracebackhide__ = True  # Hide traceback for py.test
     if not val:
         try:
             smsg = msg()
@@ -305,7 +287,7 @@ def build_err_msg(arrays, err_msg, header='Items are not equal:',
     return '\n'.join(msg)
 
 
-def assert_equal(actual,desired,err_msg='',verbose=True):
+def assert_equal(actual, desired, err_msg='', verbose=True):
     """
     Raises an AssertionError if two objects are not equal.
 
@@ -388,12 +370,12 @@ def assert_equal(actual,desired,err_msg='',verbose=True):
         except AssertionError:
             raise AssertionError(msg)
 
+    # isscalar test to check cases such as [np.nan] != np.nan
+    if isscalar(desired) != isscalar(actual):
+        raise AssertionError(msg)
+
     # Inf/nan/negative zero handling
     try:
-        # isscalar test to check cases such as [np.nan] != np.nan
-        if isscalar(desired) != isscalar(actual):
-            raise AssertionError(msg)
-
         # If one of desired/actual is not finite, handle it specially here:
         # check that both are nan if any is a nan, and test for equality
         # otherwise
@@ -415,15 +397,23 @@ def assert_equal(actual,desired,err_msg='',verbose=True):
     except (TypeError, ValueError, NotImplementedError):
         pass
 
-    # Put lock around the warning filter, see comment at lock definition
-    with _assert_comparison_lock, suppress_warnings() as sup:
-        # TODO: Better handling will to needed when change happens!
-        sup.filter(DeprecationWarning, ".*NAT ==")
-        sup.filter(FutureWarning, ".*NAT ==")
-        # Explicitly use __eq__ for comparison, ticket #2552
-        if not (desired == actual):
+    try:
+        # If both are NaT (and have the same dtype -- datetime or timedelta)
+        # they are considered equal.
+        if (isnat(desired) == isnat(actual) and
+                array(desired).dtype.type == array(actual).dtype.type):
+            return
+        else:
             raise AssertionError(msg)
 
+    # If TypeError or ValueError raised while using isnan and co, just handle
+    # as before
+    except (TypeError, ValueError, NotImplementedError):
+        pass
+
+    # Explicitly use __eq__ for comparison, ticket #2552
+    if not (desired == actual):
+        raise AssertionError(msg)
 
 
 def print_assert_equal(test_string, actual, desired):
@@ -688,39 +678,18 @@ def assert_approx_equal(actual,desired,significant=7,err_msg='',verbose=True):
 
 
 def assert_array_compare(comparison, x, y, err_msg='', verbose=True,
-                         header='', precision=6, equal_nan=True):
+                         header='', precision=6, equal_nan=True,
+                         equal_inf=True):
     __tracebackhide__ = True  # Hide traceback for py.test
-    from numpy.core import array, isnan, isinf, any, all, inf
+    from numpy.core import array, isnan, isinf, any, inf
     x = array(x, copy=False, subok=True)
     y = array(y, copy=False, subok=True)
 
-    def safe_comparison(*args, **kwargs):
-        # There are a number of cases where comparing two arrays hits special
-        # cases in array_richcompare, specifically around strings and void
-        # dtypes. Basically, we just can't do comparisons involving these
-        # types, unless both arrays have exactly the *same* type. So
-        # e.g. you can apply == to two string arrays, or two arrays with
-        # identical structured dtypes. But if you compare a non-string array
-        # to a string array, or two arrays with non-identical structured
-        # dtypes, or anything like that, then internally stuff blows up.
-        # Currently, when things blow up, we just return a scalar False or
-        # True. But we also emit a DeprecationWarning, b/c eventually we
-        # should raise an error here. (Ideally we might even make this work
-        # properly, but since that will require rewriting a bunch of how
-        # ufuncs work then we are not counting on that.)
-        #
-        # The point of this little function is to let the DeprecationWarning
-        # pass (or maybe eventually catch the errors and return False, I
-        # dunno, that's a little trickier and we can figure that out when the
-        # time comes).
-        # Note: Put a lock around warning filter (comment at lock definition)
-        with _assert_comparison_lock, suppress_warnings() as sup:
-            sup.filter(DeprecationWarning, ".*==")
-            sup.filter(FutureWarning, ".*==")
-            return comparison(*args, **kwargs)
-
     def isnumber(x):
         return x.dtype.char in '?bhilqpBHILQPefdgFDG'
+
+    def istime(x):
+        return x.dtype.char in "Mm"
 
     def chk_same_position(x_id, y_id, hasval='nan'):
         """Handling nan/inf: check that x and y have the nan/inf at the same
@@ -743,40 +712,53 @@ def assert_array_compare(comparison, x, y, err_msg='', verbose=True,
                                                                   y.shape),
                                 verbose=verbose, header=header,
                                 names=('x', 'y'), precision=precision)
-            if not cond:
-                raise AssertionError(msg)
+            raise AssertionError(msg)
 
         if isnumber(x) and isnumber(y):
+            has_nan = has_inf = False
             if equal_nan:
                 x_isnan, y_isnan = isnan(x), isnan(y)
                 # Validate that NaNs are in the same place
-                if any(x_isnan) or any(y_isnan):
+                has_nan = any(x_isnan) or any(y_isnan)
+                if has_nan:
                     chk_same_position(x_isnan, y_isnan, hasval='nan')
 
-            x_isinf, y_isinf = isinf(x), isinf(y)
+            if equal_inf:
+                x_isinf, y_isinf = isinf(x), isinf(y)
+                # Validate that infinite values are in the same place
+                has_inf = any(x_isinf) or any(y_isinf)
+                if has_inf:
+                    # Check +inf and -inf separately, since they are different
+                    chk_same_position(x == +inf, y == +inf, hasval='+inf')
+                    chk_same_position(x == -inf, y == -inf, hasval='-inf')
 
-            # Validate that infinite values are in the same place
-            if any(x_isinf) or any(y_isinf):
-                # Check +inf and -inf separately, since they are different
-                chk_same_position(x == +inf, y == +inf, hasval='+inf')
-                chk_same_position(x == -inf, y == -inf, hasval='-inf')
-
-            # Combine all the special values
-            x_id, y_id = x_isinf, y_isinf
-            if equal_nan:
-                x_id |= x_isnan
-                y_id |= y_isnan
+            if has_nan and has_inf:
+                x = x[~(x_isnan | x_isinf)]
+                y = y[~(y_isnan | y_isinf)]
+            elif has_nan:
+                x = x[~x_isnan]
+                y = y[~y_isnan]
+            elif has_inf:
+                x = x[~x_isinf]
+                y = y[~y_isinf]
 
             # Only do the comparison if actual values are left
-            if all(x_id):
+            if x.size == 0:
                 return
 
-            if any(x_id):
-                val = safe_comparison(x[~x_id], y[~y_id])
-            else:
-                val = safe_comparison(x, y)
-        else:
-            val = safe_comparison(x, y)
+        elif istime(x) and istime(y):
+            # If one is datetime64 and the other timedelta64 there is no point
+            if equal_nan and x.dtype.type == y.dtype.type:
+                x_isnat, y_isnat = isnat(x), isnat(y)
+
+                if any(x_isnat) or any(y_isnat):
+                    chk_same_position(x_isnat, y_isnat, hasval="NaT")
+
+                if any(x_isnat) or any(y_isnat):
+                    x = x[~x_isnat]
+                    y = y[~y_isnat]
+
+        val = comparison(x, y)
 
         if isinstance(val, bool):
             cond = val
@@ -867,6 +849,7 @@ def assert_array_equal(x, y, err_msg='', verbose=True):
     ...                            rtol=1e-10, atol=0)
 
     """
+    __tracebackhide__ = True  # Hide traceback for py.test
     assert_array_compare(operator.__eq__, x, y, err_msg=err_msg,
                          verbose=verbose, header='Arrays are not equal')
 
@@ -953,7 +936,7 @@ def assert_array_almost_equal(x, y, decimal=6, err_msg='', verbose=True):
             if npany(gisinf(x)) or npany( gisinf(y)):
                 xinfid = gisinf(x)
                 yinfid = gisinf(y)
-                if not xinfid == yinfid:
+                if not (xinfid == yinfid).all():
                     return False
                 # if one item, x and y is +- inf
                 if x.size == y.size == 1:
@@ -1048,7 +1031,8 @@ def assert_array_less(x, y, err_msg='', verbose=True):
     __tracebackhide__ = True  # Hide traceback for py.test
     assert_array_compare(operator.__lt__, x, y, err_msg=err_msg,
                          verbose=verbose,
-                         header='Arrays are not less-ordered')
+                         header='Arrays are not less-ordered',
+                         equal_inf=False)
 
 
 def runstring(astr, dict):
