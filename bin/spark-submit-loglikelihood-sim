@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Check if $SPARK_HOME is set, exit if not
+if [ -z $SPARK_HOME ]; then
+    echo '$SPARK_HOME is not set, exiting'
+    exit 1
+fi
+
+# Check if $1 is valid ( either `user_similarity` or `item_similarity` )
+SUBMIT=$1
+
+if [ -z "$SUBMIT" ]; then
+    echo "Missing argument: Use either 'item_similarity' or 'user_similarity'."
+    exit 1
+fi
+
+if ! [ "$SUBMIT" == "item_similarity" ] || [ "$SUBMIT" == "user_similarity" ]; then
+    echo "Invalid option: $SUBMIT. Use either 'item_similarity' or 'user_similarity'."
+    exit 1
+fi
+
+# Detect the platform (similar to $OSTYPE)
+OS="`uname`"
+MASTER="yarn"
+
+case $OS in
+  'Linux')
+    OS='Linux'
+    MASTER='yarn'
+    ;;
+  'Darwin')
+    OS='Mac'
+    MASTER='local'
+    ;;
+  *)
+    echo "Operating system ($OS) is not supported!"
+    exit 1
+    ;;
+esac
+
+# Build path
+PACKAGE_DIR=`python -c 'import pyspark_loglikelihood; import os; print os.path.abspath(os.path.dirname(pyspark_loglikelihood.__file__))'`
+
+if [ $? -ne 0 ]; then
+    echo "Package not found: `pyspark-loglikelihood`, exiting."
+    exit 1
+fi
+
+if [ ! -d "$PACKAGE_DIR" ]; then
+    echo "Package not found: `pyspark-loglikelihood`, exiting."
+    exit 1
+fi
+
+SCRIPT=$PACKAGE_DIR/$SUBMIT.py
+
+if [ ! -f "$SCRIPT" ]; then
+    echo "Script not found, exiting."
+    exit 1
+fi
+
+
+# Bootstap script with spark-submit command line
+$SPARK_HOME/bin/spark-submit \
+  --master $MASTER \
+  $SCRIPT "${@:2}"

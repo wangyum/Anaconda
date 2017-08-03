@@ -1,0 +1,24 @@
+Metadata-Version: 2.0
+Name: tensorflowonspark
+Version: 1.0.0
+Summary: Deep learning with TensorFlow on Apache Spark clusters
+Home-page: https://github.com/yahoo/TensorFlowOnSpark
+Author: Yahoo, Inc.
+Author-email: UNKNOWN
+License: Apache 2.0
+Keywords: tensorflowonspark,tensorflow,spark,machine learning,yahoo
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Requires-Dist: tensorflow
+
+UNKNOWN
+
+
