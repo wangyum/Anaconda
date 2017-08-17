@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -54,7 +52,7 @@ def _fixed_length_record_reader(record_bytes, header_bytes=None,
 def _fixed_length_record_reader_v2(record_bytes, header_bytes=None,
                                    footer_bytes=None, hop_bytes=None,
                                    container=None, shared_name=None,
-                                   name=None):
+                                   encoding=None, name=None):
   r"""A Reader that outputs fixed-length records from a file.
 
   Args:
@@ -72,6 +70,9 @@ def _fixed_length_record_reader_v2(record_bytes, header_bytes=None,
     shared_name: An optional `string`. Defaults to `""`.
       If non-empty, this reader is named in the given bucket
       with this shared_name. Otherwise, the node name is used instead.
+    encoding: An optional `string`. Defaults to `""`.
+      The type of encoding for the file. Currently ZLIB and GZIP
+      are supported. Defaults to none.
     name: A name for the operation (optional).
 
   Returns:
@@ -82,7 +83,8 @@ def _fixed_length_record_reader_v2(record_bytes, header_bytes=None,
                                 header_bytes=header_bytes,
                                 footer_bytes=footer_bytes,
                                 hop_bytes=hop_bytes, container=container,
-                                shared_name=shared_name, name=name)
+                                shared_name=shared_name, encoding=encoding,
+                                name=name)
   return result
 
 
@@ -130,6 +132,27 @@ def _identity_reader_v2(container=None, shared_name=None, name=None):
     A `Tensor` of type `resource`. The handle to reference the Reader.
   """
   result = _op_def_lib.apply_op("IdentityReaderV2", container=container,
+                                shared_name=shared_name, name=name)
+  return result
+
+
+
+def _lmdb_reader(container=None, shared_name=None, name=None):
+  r"""A Reader that outputs the records from a LMDB file.
+
+  Args:
+    container: An optional `string`. Defaults to `""`.
+      If non-empty, this reader is placed in the given container.
+      Otherwise, a default container is used.
+    shared_name: An optional `string`. Defaults to `""`.
+      If non-empty, this reader is named in the given bucket
+      with this shared_name. Otherwise, the node name is used instead.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type mutable `string`. The handle to reference the Reader.
+  """
+  result = _op_def_lib.apply_op("LMDBReader", container=container,
                                 shared_name=shared_name, name=name)
   return result
 
@@ -933,7 +956,9 @@ def _whole_file_reader_v2(container=None, shared_name=None, name=None):
 
 
 def write_file(filename, contents, name=None):
-  r"""Writes contents to the file at input filename. Creates file if not existing.
+  r"""Writes contents to the file at input filename. Creates file and recursively
+
+  creates directory if not existing.
 
   Args:
     filename: A `Tensor` of type `string`.
@@ -950,758 +975,792 @@ def write_file(filename, contents, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "FixedLengthRecordReader"
-  output_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "header_bytes"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "record_bytes"
-    type: "int"
-  }
-  attr {
-    name: "footer_bytes"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "hop_bytes"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "FixedLengthRecordReaderV2"
-  output_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "header_bytes"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "record_bytes"
-    type: "int"
-  }
-  attr {
-    name: "footer_bytes"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "hop_bytes"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "IdentityReader"
-  output_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "IdentityReaderV2"
-  output_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "MatchingFiles"
-  input_arg {
-    name: "pattern"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "filenames"
-    type: DT_STRING
-  }
-}
-op {
-  name: "MergeV2Checkpoints"
-  input_arg {
-    name: "checkpoint_prefixes"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "destination_prefix"
-    type: DT_STRING
-  }
-  attr {
-    name: "delete_old_dirs"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "ReadFile"
-  input_arg {
-    name: "filename"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "contents"
-    type: DT_STRING
-  }
-}
-op {
-  name: "ReaderNumRecordsProduced"
-  input_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "records_produced"
-    type: DT_INT64
-  }
-}
-op {
-  name: "ReaderNumRecordsProducedV2"
-  input_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "records_produced"
-    type: DT_INT64
-  }
-  is_stateful: true
-}
-op {
-  name: "ReaderNumWorkUnitsCompleted"
-  input_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "units_completed"
-    type: DT_INT64
-  }
-}
-op {
-  name: "ReaderNumWorkUnitsCompletedV2"
-  input_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "units_completed"
-    type: DT_INT64
-  }
-  is_stateful: true
-}
-op {
-  name: "ReaderRead"
-  input_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "queue_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "key"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "value"
-    type: DT_STRING
-  }
-}
-op {
-  name: "ReaderReadUpTo"
-  input_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "queue_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "num_records"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "keys"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "values"
-    type: DT_STRING
-  }
-}
-op {
-  name: "ReaderReadUpToV2"
-  input_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "queue_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "num_records"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "keys"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "values"
-    type: DT_STRING
-  }
-  is_stateful: true
-}
-op {
-  name: "ReaderReadV2"
-  input_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "queue_handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "key"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "value"
-    type: DT_STRING
-  }
-  is_stateful: true
-}
-op {
-  name: "ReaderReset"
-  input_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-}
-op {
-  name: "ReaderResetV2"
-  input_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  is_stateful: true
-}
-op {
-  name: "ReaderRestoreState"
-  input_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "state"
-    type: DT_STRING
-  }
-}
-op {
-  name: "ReaderRestoreStateV2"
-  input_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "state"
-    type: DT_STRING
-  }
-  is_stateful: true
-}
-op {
-  name: "ReaderSerializeState"
-  input_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "state"
-    type: DT_STRING
-  }
-}
-op {
-  name: "ReaderSerializeStateV2"
-  input_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "state"
-    type: DT_STRING
-  }
-  is_stateful: true
-}
-op {
-  name: "Restore"
-  input_arg {
-    name: "file_pattern"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "tensor_name"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "tensor"
-    type_attr: "dt"
-  }
-  attr {
-    name: "dt"
-    type: "type"
-  }
-  attr {
-    name: "preferred_shard"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-}
-op {
-  name: "RestoreSlice"
-  input_arg {
-    name: "file_pattern"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "tensor_name"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "shape_and_slice"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "tensor"
-    type_attr: "dt"
-  }
-  attr {
-    name: "dt"
-    type: "type"
-  }
-  attr {
-    name: "preferred_shard"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-}
-op {
-  name: "RestoreV2"
-  input_arg {
-    name: "prefix"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "tensor_names"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "shape_and_slices"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "tensors"
-    type_list_attr: "dtypes"
-  }
-  attr {
-    name: "dtypes"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "Save"
-  input_arg {
-    name: "filename"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "tensor_names"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "data"
-    type_list_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "SaveSlices"
-  input_arg {
-    name: "filename"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "tensor_names"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "shapes_and_slices"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "data"
-    type_list_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "SaveV2"
-  input_arg {
-    name: "prefix"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "tensor_names"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "shape_and_slices"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "tensors"
-    type_list_attr: "dtypes"
-  }
-  attr {
-    name: "dtypes"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "ShardedFilename"
-  input_arg {
-    name: "basename"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "shard"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "num_shards"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "filename"
-    type: DT_STRING
-  }
-}
-op {
-  name: "ShardedFilespec"
-  input_arg {
-    name: "basename"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "num_shards"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "filename"
-    type: DT_STRING
-  }
-}
-op {
-  name: "TFRecordReader"
-  output_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "compression_type"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TFRecordReaderV2"
-  output_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "compression_type"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TextLineReader"
-  output_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "skip_header_lines"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TextLineReaderV2"
-  output_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "skip_header_lines"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "WholeFileReader"
-  output_arg {
-    name: "reader_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "WholeFileReaderV2"
-  output_arg {
-    name: "reader_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "WriteFile"
-  input_arg {
-    name: "filename"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "contents"
-    type: DT_STRING
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "FixedLengthRecordReader"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "header_bytes"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "record_bytes"
+#     type: "int"
+#   }
+#   attr {
+#     name: "footer_bytes"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "hop_bytes"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "FixedLengthRecordReaderV2"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "header_bytes"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "record_bytes"
+#     type: "int"
+#   }
+#   attr {
+#     name: "footer_bytes"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "hop_bytes"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "encoding"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "IdentityReader"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "IdentityReaderV2"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "LMDBReader"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MatchingFiles"
+#   input_arg {
+#     name: "pattern"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "filenames"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "MergeV2Checkpoints"
+#   input_arg {
+#     name: "checkpoint_prefixes"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "destination_prefix"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "delete_old_dirs"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ReadFile"
+#   input_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "contents"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "ReaderNumRecordsProduced"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "records_produced"
+#     type: DT_INT64
+#   }
+# }
+# op {
+#   name: "ReaderNumRecordsProducedV2"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "records_produced"
+#     type: DT_INT64
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ReaderNumWorkUnitsCompleted"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "units_completed"
+#     type: DT_INT64
+#   }
+# }
+# op {
+#   name: "ReaderNumWorkUnitsCompletedV2"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "units_completed"
+#     type: DT_INT64
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ReaderRead"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "queue_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "key"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "value"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "ReaderReadUpTo"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "queue_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "num_records"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "keys"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "values"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "ReaderReadUpToV2"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "queue_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "num_records"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "keys"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "values"
+#     type: DT_STRING
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ReaderReadV2"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "queue_handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "key"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "value"
+#     type: DT_STRING
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ReaderReset"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+# }
+# op {
+#   name: "ReaderResetV2"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ReaderRestoreState"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "state"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "ReaderRestoreStateV2"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "state"
+#     type: DT_STRING
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ReaderSerializeState"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "state"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "ReaderSerializeStateV2"
+#   input_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "state"
+#     type: DT_STRING
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "Restore"
+#   input_arg {
+#     name: "file_pattern"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "tensor_name"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "tensor"
+#     type_attr: "dt"
+#   }
+#   attr {
+#     name: "dt"
+#     type: "type"
+#   }
+#   attr {
+#     name: "preferred_shard"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RestoreSlice"
+#   input_arg {
+#     name: "file_pattern"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "tensor_name"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "shape_and_slice"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "tensor"
+#     type_attr: "dt"
+#   }
+#   attr {
+#     name: "dt"
+#     type: "type"
+#   }
+#   attr {
+#     name: "preferred_shard"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RestoreV2"
+#   input_arg {
+#     name: "prefix"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "tensor_names"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "shape_and_slices"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "tensors"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "Save"
+#   input_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "tensor_names"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "data"
+#     type_list_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "SaveSlices"
+#   input_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "tensor_names"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "shapes_and_slices"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "data"
+#     type_list_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "SaveV2"
+#   input_arg {
+#     name: "prefix"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "tensor_names"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "shape_and_slices"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "tensors"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ShardedFilename"
+#   input_arg {
+#     name: "basename"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "shard"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "num_shards"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "ShardedFilespec"
+#   input_arg {
+#     name: "basename"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "num_shards"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "TFRecordReader"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "compression_type"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TFRecordReaderV2"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "compression_type"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TextLineReader"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "skip_header_lines"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TextLineReaderV2"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "skip_header_lines"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "WholeFileReader"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "WholeFileReaderV2"
+#   output_arg {
+#     name: "reader_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "WriteFile"
+#   input_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "contents"
+#     type: DT_STRING
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\303\001\n\027FixedLengthRecordReader\032\024\n\rreader_handle\030\007\200\001\001\"\027\n\014header_bytes\022\003int\032\002\030\000\"\023\n\014record_bytes\022\003int\"\027\n\014footer_bytes\022\003int\032\002\030\000\"\024\n\thop_bytes\022\003int\032\002\030\000\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\332\001\n\031FixedLengthRecordReaderV2\032\021\n\rreader_handle\030\024\"\027\n\014header_bytes\022\003int\032\002\030\000\"\023\n\014record_bytes\022\003int\"\027\n\014footer_bytes\022\003int\032\002\030\000\"\024\n\thop_bytes\022\003int\032\002\030\000\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"\026\n\010encoding\022\006string\032\002\022\000\210\001\001\n]\n\016IdentityReader\032\024\n\rreader_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\\\n\020IdentityReaderV2\032\021\n\rreader_handle\030\024\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\nY\n\nLMDBReader\032\024\n\rreader_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n+\n\rMatchingFiles\022\013\n\007pattern\030\007\032\r\n\tfilenames\030\007\ne\n\022MergeV2Checkpoints\022\027\n\023checkpoint_prefixes\030\007\022\026\n\022destination_prefix\030\007\"\033\n\017delete_old_dirs\022\004bool\032\002(\001\210\001\001\n&\n\010ReadFile\022\014\n\010filename\030\007\032\014\n\010contents\030\007\nF\n\030ReaderNumRecordsProduced\022\024\n\rreader_handle\030\007\200\001\001\032\024\n\020records_produced\030\t\nH\n\032ReaderNumRecordsProducedV2\022\021\n\rreader_handle\030\024\032\024\n\020records_produced\030\t\210\001\001\nH\n\033ReaderNumWorkUnitsCompleted\022\024\n\rreader_handle\030\007\200\001\001\032\023\n\017units_completed\030\t\nJ\n\035ReaderNumWorkUnitsCompletedV2\022\021\n\rreader_handle\030\024\032\023\n\017units_completed\030\t\210\001\001\nK\n\nReaderRead\022\024\n\rreader_handle\030\007\200\001\001\022\023\n\014queue_handle\030\007\200\001\001\032\007\n\003key\030\007\032\t\n\005value\030\007\nb\n\016ReaderReadUpTo\022\024\n\rreader_handle\030\007\200\001\001\022\023\n\014queue_handle\030\007\200\001\001\022\017\n\013num_records\030\t\032\010\n\004keys\030\007\032\n\n\006values\030\007\na\n\020ReaderReadUpToV2\022\021\n\rreader_handle\030\024\022\020\n\014queue_handle\030\024\022\017\n\013num_records\030\t\032\010\n\004keys\030\007\032\n\n\006values\030\007\210\001\001\nJ\n\014ReaderReadV2\022\021\n\rreader_handle\030\024\022\020\n\014queue_handle\030\024\032\007\n\003key\030\007\032\t\n\005value\030\007\210\001\001\n#\n\013ReaderReset\022\024\n\rreader_handle\030\007\200\001\001\n%\n\rReaderResetV2\022\021\n\rreader_handle\030\024\210\001\001\n5\n\022ReaderRestoreState\022\024\n\rreader_handle\030\007\200\001\001\022\t\n\005state\030\007\n7\n\024ReaderRestoreStateV2\022\021\n\rreader_handle\030\024\022\t\n\005state\030\007\210\001\001\n7\n\024ReaderSerializeState\022\024\n\rreader_handle\030\007\200\001\001\032\t\n\005state\030\007\n9\n\026ReaderSerializeStateV2\022\021\n\rreader_handle\030\024\032\t\n\005state\030\007\210\001\001\nn\n\007Restore\022\020\n\014file_pattern\030\007\022\017\n\013tensor_name\030\007\032\014\n\006tensor\"\002dt\"\n\n\002dt\022\004type\"#\n\017preferred_shard\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\210\001\001\n\210\001\n\014RestoreSlice\022\020\n\014file_pattern\030\007\022\017\n\013tensor_name\030\007\022\023\n\017shape_and_slice\030\007\032\014\n\006tensor\"\002dt\"\n\n\002dt\022\004type\"#\n\017preferred_shard\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\210\001\001\no\n\tRestoreV2\022\n\n\006prefix\030\007\022\020\n\014tensor_names\030\007\022\024\n\020shape_and_slices\030\007\032\021\n\007tensors2\006dtypes\"\030\n\006dtypes\022\nlist(type)(\0010\001\210\001\001\nI\n\004Save\022\014\n\010filename\030\007\022\020\n\014tensor_names\030\007\022\t\n\004data2\001T\"\023\n\001T\022\nlist(type)(\0010\001\210\001\001\nf\n\nSaveSlices\022\014\n\010filename\030\007\022\020\n\014tensor_names\030\007\022\025\n\021shapes_and_slices\030\007\022\t\n\004data2\001T\"\023\n\001T\022\nlist(type)(\0010\001\210\001\001\nl\n\006SaveV2\022\n\n\006prefix\030\007\022\020\n\014tensor_names\030\007\022\024\n\020shape_and_slices\030\007\022\021\n\007tensors2\006dtypes\"\030\n\006dtypes\022\nlist(type)(\0010\001\210\001\001\nH\n\017ShardedFilename\022\014\n\010basename\030\007\022\t\n\005shard\030\003\022\016\n\nnum_shards\030\003\032\014\n\010filename\030\007\n=\n\017ShardedFilespec\022\014\n\010basename\030\007\022\016\n\nnum_shards\030\003\032\014\n\010filename\030\007\n}\n\016TFRecordReader\032\024\n\rreader_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"\036\n\020compression_type\022\006string\032\002\022\000\210\001\001\n|\n\020TFRecordReaderV2\032\021\n\rreader_handle\030\024\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"\036\n\020compression_type\022\006string\032\002\022\000\210\001\001\n{\n\016TextLineReader\032\024\n\rreader_handle\030\007\200\001\001\"\034\n\021skip_header_lines\022\003int\032\002\030\000\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\nz\n\020TextLineReaderV2\032\021\n\rreader_handle\030\024\"\034\n\021skip_header_lines\022\003int\032\002\030\000\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n^\n\017WholeFileReader\032\024\n\rreader_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n]\n\021WholeFileReaderV2\032\021\n\rreader_handle\030\024\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\'\n\tWriteFile\022\014\n\010filename\030\007\022\014\n\010contents\030\007")

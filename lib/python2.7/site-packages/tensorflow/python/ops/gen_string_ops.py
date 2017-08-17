@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -394,267 +392,264 @@ def substr(input, pos, len, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "AsString"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type: DT_STRING
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_COMPLEX64
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_BOOL
-        type: DT_INT8
-      }
-    }
-  }
-  attr {
-    name: "precision"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "scientific"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "shortest"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "width"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "fill"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-}
-op {
-  name: "DecodeBase64"
-  input_arg {
-    name: "input"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type: DT_STRING
-  }
-}
-op {
-  name: "EncodeBase64"
-  input_arg {
-    name: "input"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type: DT_STRING
-  }
-  attr {
-    name: "pad"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ReduceJoin"
-  input_arg {
-    name: "inputs"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "reduction_indices"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_STRING
-  }
-  attr {
-    name: "keep_dims"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "separator"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-}
-op {
-  name: "StringJoin"
-  input_arg {
-    name: "inputs"
-    type: DT_STRING
-    number_attr: "N"
-  }
-  output_arg {
-    name: "output"
-    type: DT_STRING
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "separator"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-}
-op {
-  name: "StringSplit"
-  input_arg {
-    name: "input"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "delimiter"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "indices"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "values"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "shape"
-    type: DT_INT64
-  }
-}
-op {
-  name: "StringToHashBucket"
-  input_arg {
-    name: "string_tensor"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type: DT_INT64
-  }
-  attr {
-    name: "num_buckets"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "StringToHashBucketFast"
-  input_arg {
-    name: "input"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type: DT_INT64
-  }
-  attr {
-    name: "num_buckets"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "StringToHashBucketStrong"
-  input_arg {
-    name: "input"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type: DT_INT64
-  }
-  attr {
-    name: "num_buckets"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "key"
-    type: "list(int)"
-  }
-}
-op {
-  name: "Substr"
-  input_arg {
-    name: "input"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "pos"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "len"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type: DT_STRING
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "AsString"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_COMPLEX64
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_BOOL
+#         type: DT_INT8
+#       }
+#     }
+#   }
+#   attr {
+#     name: "precision"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "scientific"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "shortest"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "width"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "fill"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+# }
+# op {
+#   name: "DecodeBase64"
+#   input_arg {
+#     name: "input"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "EncodeBase64"
+#   input_arg {
+#     name: "input"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "pad"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ReduceJoin"
+#   input_arg {
+#     name: "inputs"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "reduction_indices"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "keep_dims"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "separator"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+# }
+# op {
+#   name: "StringJoin"
+#   input_arg {
+#     name: "inputs"
+#     type: DT_STRING
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "separator"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+# }
+# op {
+#   name: "StringSplit"
+#   input_arg {
+#     name: "input"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "delimiter"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "indices"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "values"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "shape"
+#     type: DT_INT64
+#   }
+# }
+# op {
+#   name: "StringToHashBucket"
+#   input_arg {
+#     name: "string_tensor"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "num_buckets"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+# }
+# op {
+#   name: "StringToHashBucketFast"
+#   input_arg {
+#     name: "input"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "num_buckets"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+# }
+# op {
+#   name: "StringToHashBucketStrong"
+#   input_arg {
+#     name: "input"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "num_buckets"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "key"
+#     type: "list(int)"
+#   }
+# }
+# op {
+#   name: "Substr"
+#   input_arg {
+#     name: "input"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "pos"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "len"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\266\001\n\010AsString\022\n\n\005input\"\001T\032\n\n\006output\030\007\"\026\n\001T\022\004type:\013\n\t2\007\003\t\010\001\002\n\006\"\035\n\tprecision\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\026\n\nscientific\022\004bool\032\002(\000\"\024\n\010shortest\022\004bool\032\002(\000\"\031\n\005width\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\022\n\004fill\022\006string\032\002\022\000\n%\n\014DecodeBase64\022\t\n\005input\030\007\032\n\n\006output\030\007\n6\n\014EncodeBase64\022\t\n\005input\030\007\032\n\n\006output\030\007\"\017\n\003pad\022\004bool\032\002(\000\nk\n\nReduceJoin\022\n\n\006inputs\030\007\022\025\n\021reduction_indices\030\003\032\n\n\006output\030\007\"\025\n\tkeep_dims\022\004bool\032\002(\000\"\027\n\tseparator\022\006string\032\002\022\000\nN\n\nStringJoin\022\r\n\006inputs\030\007*\001N\032\n\n\006output\030\007\"\014\n\001N\022\003int(\0010\001\"\027\n\tseparator\022\006string\032\002\022\000\nK\n\013StringSplit\022\t\n\005input\030\007\022\r\n\tdelimiter\030\007\032\013\n\007indices\030\t\032\n\n\006values\030\007\032\t\n\005shape\030\t\nK\n\022StringToHashBucket\022\021\n\rstring_tensor\030\007\032\n\n\006output\030\t\"\026\n\013num_buckets\022\003int(\0010\001\nG\n\026StringToHashBucketFast\022\t\n\005input\030\007\032\n\n\006output\030\t\"\026\n\013num_buckets\022\003int(\0010\001\n[\n\030StringToHashBucketStrong\022\t\n\005input\030\007\032\n\n\006output\030\t\"\026\n\013num_buckets\022\003int(\0010\001\"\020\n\003key\022\tlist(int)\nF\n\006Substr\022\t\n\005input\030\007\022\010\n\003pos\"\001T\022\010\n\003len\"\001T\032\n\n\006output\030\007\"\021\n\001T\022\004type:\006\n\0042\002\003\t")

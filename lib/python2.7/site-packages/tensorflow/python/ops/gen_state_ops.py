@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -342,7 +340,7 @@ def scatter_nd_add(ref, indices, updates, use_locking=None, name=None):
 
       [1, 13, 3, 14, 14, 6, 7, 20]
 
-  See [tf.scatter_nd](#scatter_nd) for more details about how to make updates to
+  See @{tf.scatter_nd} for more details about how to make updates to
   slices.
 
   Args:
@@ -406,7 +404,7 @@ def scatter_nd_sub(ref, indices, updates, use_locking=None, name=None):
 
       [1, -9, 3, -6, -4, 6, 7, -4]
 
-  See [tf.scatter_nd](#scatter_nd) for more details about how to make updates to
+  See @{tf.scatter_nd} for more details about how to make updates to
   slices.
 
   Args:
@@ -472,7 +470,7 @@ def scatter_nd_update(ref, indices, updates, use_locking=None, name=None):
 
       [1, 11, 3, 10, 9, 6, 7, 12]
 
-  See [tf.scatter_nd](#scatter_nd) for more details about how to make updates to
+  See @{tf.scatter_nd} for more details about how to make updates to
   slices.
 
   Args:
@@ -685,737 +683,734 @@ def _variable_v2(shape, dtype, container=None, shared_name=None, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "Assign"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "validate_shape"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  allows_uninitialized_input: true
-}
-op {
-  name: "AssignAdd"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "AssignSub"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "CountUpTo"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "limit"
-    type: "int"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "DestroyTemporaryVariable"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  output_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "var_name"
-    type: "string"
-  }
-}
-op {
-  name: "IsVariableInitialized"
-  input_arg {
-    name: "ref"
-    type_attr: "dtype"
-    is_ref: true
-  }
-  output_arg {
-    name: "is_initialized"
-    type: DT_BOOL
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  allows_uninitialized_input: true
-}
-op {
-  name: "ScatterAdd"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ScatterDiv"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ScatterMul"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ScatterNdAdd"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ScatterNdSub"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ScatterNdUpdate"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "ScatterSub"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ScatterUpdate"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "use_locking"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "TemporaryVariable"
-  output_arg {
-    name: "ref"
-    type_attr: "dtype"
-    is_ref: true
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "var_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "Variable"
-  output_arg {
-    name: "ref"
-    type_attr: "dtype"
-    is_ref: true
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "VariableV2"
-  output_arg {
-    name: "ref"
-    type_attr: "dtype"
-    is_ref: true
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "Assign"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "validate_shape"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   allows_uninitialized_input: true
+# }
+# op {
+#   name: "AssignAdd"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "AssignSub"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "CountUpTo"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "limit"
+#     type: "int"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "DestroyTemporaryVariable"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "var_name"
+#     type: "string"
+#   }
+# }
+# op {
+#   name: "IsVariableInitialized"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "dtype"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "is_initialized"
+#     type: DT_BOOL
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   allows_uninitialized_input: true
+# }
+# op {
+#   name: "ScatterAdd"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterDiv"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterMul"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterNdAdd"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterNdSub"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterNdUpdate"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterSub"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterUpdate"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "use_locking"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "TemporaryVariable"
+#   output_arg {
+#     name: "ref"
+#     type_attr: "dtype"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "var_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "Variable"
+#   output_arg {
+#     name: "ref"
+#     type_attr: "dtype"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "VariableV2"
+#   output_arg {
+#     name: "ref"
+#     type_attr: "dtype"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+_op_def_lib = _InitOpDefLibrary(b"\nx\n\006Assign\022\013\n\003ref\"\001T\200\001\001\022\n\n\005value\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\t\n\001T\022\004type\"\032\n\016validate_shape\022\004bool\032\002(\001\"\027\n\013use_locking\022\004bool\032\002(\001\230\001\001\np\n\tAssignAdd\022\013\n\003ref\"\001T\200\001\001\022\n\n\005value\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\027\n\013use_locking\022\004bool\032\002(\000\np\n\tAssignSub\022\013\n\003ref\"\001T\200\001\001\022\n\n\005value\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\027\n\013use_locking\022\004bool\032\002(\000\nF\n\tCountUpTo\022\013\n\003ref\"\001T\200\001\001\032\013\n\006output\"\001T\"\014\n\005limit\022\003int\"\021\n\001T\022\004type:\006\n\0042\002\003\t\nR\n\030DestroyTemporaryVariable\022\013\n\003ref\"\001T\200\001\001\032\n\n\005value\"\001T\"\t\n\001T\022\004type\"\022\n\010var_name\022\006string\nN\n\025IsVariableInitialized\022\017\n\003ref\"\005dtype\200\001\001\032\022\n\016is_initialized\030\n\"\r\n\005dtype\022\004type\230\001\001\n\242\001\n\nScatterAdd\022\013\n\003ref\"\001T\200\001\001\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\027\n\013use_locking\022\004bool\032\002(\000\n\242\001\n\nScatterDiv\022\013\n\003ref\"\001T\200\001\001\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\027\n\013use_locking\022\004bool\032\002(\000\n\242\001\n\nScatterMul\022\013\n\003ref\"\001T\200\001\001\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\027\n\013use_locking\022\004bool\032\002(\000\n\244\001\n\014ScatterNdAdd\022\013\n\003ref\"\001T\200\001\001\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\027\n\013use_locking\022\004bool\032\002(\000\n\244\001\n\014ScatterNdSub\022\013\n\003ref\"\001T\200\001\001\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\027\n\013use_locking\022\004bool\032\002(\000\n\223\001\n\017ScatterNdUpdate\022\013\n\003ref\"\001T\200\001\001\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\t\n\001T\022\004type\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\027\n\013use_locking\022\004bool\032\002(\001\n\242\001\n\nScatterSub\022\013\n\003ref\"\001T\200\001\001\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\027\n\013use_locking\022\004bool\032\002(\000\n\221\001\n\rScatterUpdate\022\013\n\003ref\"\001T\200\001\001\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\t\n\001T\022\004type\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\027\n\013use_locking\022\004bool\032\002(\001\n^\n\021TemporaryVariable\032\017\n\003ref\"\005dtype\200\001\001\"\016\n\005shape\022\005shape\"\r\n\005dtype\022\004type\"\026\n\010var_name\022\006string\032\002\022\000\210\001\001\nq\n\010Variable\032\017\n\003ref\"\005dtype\200\001\001\"\016\n\005shape\022\005shape\"\r\n\005dtype\022\004type\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\ns\n\nVariableV2\032\017\n\003ref\"\005dtype\200\001\001\"\016\n\005shape\022\005shape\"\r\n\005dtype\022\004type\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001")

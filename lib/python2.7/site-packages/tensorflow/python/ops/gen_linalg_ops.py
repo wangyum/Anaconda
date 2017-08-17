@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -52,7 +50,7 @@ def _batch_matrix_determinant(input, name=None):
   r"""TODO: add doc.
 
   Args:
-    input: A `Tensor`. Must be one of the following types: `float32`, `float64`.
+    input: A `Tensor`. Must be one of the following types: `float32`, `float64`, `complex64`, `complex128`.
     name: A name for the operation (optional).
 
   Returns:
@@ -212,12 +210,21 @@ def cholesky(input, name=None):
   r"""Computes the Cholesky decomposition of one or more square matrices.
 
   The input is a tensor of shape `[..., M, M]` whose inner-most 2 dimensions
-  form square matrices, with the same constraints as the single matrix Cholesky
-  decomposition above. The output is a tensor of the same shape as the input
+  form square matrices.
+
+  The input has to be symmetric and positive definite. Only the lower-triangular
+  part of the input will be used for this operation. The upper-triangular part
+  will not be read.
+
+  The output is a tensor of the same shape as the input
   containing the Cholesky decompositions for all input submatrices `[..., :, :]`.
 
+  **Note**: The gradient computation on GPU is faster for large matrices but
+  not for large batch dimensions when the submatrices are small. In this
+  case it might be faster to use the CPU.
+
   Args:
-    input: A `Tensor`. Must be one of the following types: `float64`, `float32`.
+    input: A `Tensor`. Must be one of the following types: `float64`, `float32`, `complex64`, `complex128`.
       Shape is `[..., M, M]`.
     name: A name for the operation (optional).
 
@@ -263,7 +270,7 @@ def matrix_determinant(input, name=None):
   for all input submatrices `[..., :, :]`.
 
   Args:
-    input: A `Tensor`. Must be one of the following types: `float32`, `float64`.
+    input: A `Tensor`. Must be one of the following types: `float32`, `float64`, `complex64`, `complex128`.
       Shape is `[..., M, M]`.
     name: A name for the operation (optional).
 
@@ -291,7 +298,7 @@ def matrix_inverse(input, adjoint=None, name=None):
   garbage result.
 
   Args:
-    input: A `Tensor`. Must be one of the following types: `float64`, `float32`.
+    input: A `Tensor`. Must be one of the following types: `float64`, `float32`, `complex64`, `complex128`.
       Shape is `[..., M, M]`.
     adjoint: An optional `bool`. Defaults to `False`.
     name: A name for the operation (optional).
@@ -416,7 +423,7 @@ def matrix_triangular_solve(matrix, rhs, lower=None, adjoint=None, name=None):
   `adjoint(matrix[..., i, k]) * output[..., k, j] = rhs[..., i, j]`.
 
   Args:
-    matrix: A `Tensor`. Must be one of the following types: `float64`, `float32`.
+    matrix: A `Tensor`. Must be one of the following types: `float64`, `float32`, `complex64`, `complex128`.
       Shape is `[..., M, M]`.
     rhs: A `Tensor`. Must have the same type as `matrix`.
       Shape is `[..., M, K]`.
@@ -453,7 +460,7 @@ def qr(input, full_matrices=None, name=None):
   Computes the QR decomposition of each inner matrix in `tensor` such that
   `tensor[..., :, :] = q[..., :, :] * r[..., :,:])`
 
-  ```prettyprint
+  ```python
   # a is a tensor.
   # q is a tensor of orthonormal matrices.
   # r is a tensor of upper triangular matrices.
@@ -519,7 +526,7 @@ def _self_adjoint_eig_v2(input, compute_v=None, name=None):
   Computes the eigenvalues and (optionally) eigenvectors of each inner matrix in
   `input` such that `input[..., :, :] = v[..., :, :] * diag(e[..., :])`.
 
-  ```prettyprint
+  ```python
   # a is a tensor.
   # e is a tensor of eigenvalues.
   # v is a tensor of eigenvectors.
@@ -558,7 +565,7 @@ def _svd(input, compute_uv=None, full_matrices=None, name=None):
   Computes the SVD of each inner matrix in `input` such that
   `input[..., :, :] = u[..., :, :] * diag(s[..., :, :]) * transpose(v[..., :, :])`
 
-  ```prettyprint
+  ```python
   # a is a tensor containing a batch of matrices.
   # s is a tensor of singular values for each matrix.
   # u is the tensor containing of left singular vectors for each matrix.
@@ -597,698 +604,705 @@ def _svd(input, compute_uv=None, full_matrices=None, name=None):
   return _SvdOutput._make(result)
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "BatchCholesky"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use Cholesky instead."
-  }
-}
-op {
-  name: "BatchCholeskyGrad"
-  input_arg {
-    name: "l"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use CholeskyGrad instead."
-  }
-}
-op {
-  name: "BatchMatrixDeterminant"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use MatrixDeterminant instead."
-  }
-}
-op {
-  name: "BatchMatrixInverse"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "adjoint"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use MatrixInverse instead."
-  }
-}
-op {
-  name: "BatchMatrixSolve"
-  input_arg {
-    name: "matrix"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "rhs"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "adjoint"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use MatrixSolve instead."
-  }
-}
-op {
-  name: "BatchMatrixSolveLs"
-  input_arg {
-    name: "matrix"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "rhs"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "l2_regularizer"
-    type: DT_DOUBLE
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "fast"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use MatrixSolveLs instead."
-  }
-}
-op {
-  name: "BatchMatrixTriangularSolve"
-  input_arg {
-    name: "matrix"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "rhs"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "lower"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "adjoint"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use MatrixTriangularSolve instead."
-  }
-}
-op {
-  name: "BatchSelfAdjointEig"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  deprecation {
-    version: 11
-    explanation: "Use SelfAdjointEigV2 instead."
-  }
-}
-op {
-  name: "BatchSelfAdjointEigV2"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "e"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "v"
-    type_attr: "T"
-  }
-  attr {
-    name: "compute_v"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use SelfAdjointEigV2 instead."
-  }
-}
-op {
-  name: "BatchSvd"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "s"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "u"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "v"
-    type_attr: "T"
-  }
-  attr {
-    name: "compute_uv"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "full_matrices"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-      }
-    }
-  }
-  deprecation {
-    version: 13
-    explanation: "Use Svd instead."
-  }
-}
-op {
-  name: "Cholesky"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-}
-op {
-  name: "CholeskyGrad"
-  input_arg {
-    name: "l"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "MatrixDeterminant"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "MatrixInverse"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "adjoint"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-}
-op {
-  name: "MatrixSolve"
-  input_arg {
-    name: "matrix"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "rhs"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "adjoint"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-      }
-    }
-  }
-}
-op {
-  name: "MatrixSolveLs"
-  input_arg {
-    name: "matrix"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "rhs"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "l2_regularizer"
-    type: DT_DOUBLE
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "fast"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "MatrixTriangularSolve"
-  input_arg {
-    name: "matrix"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "rhs"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "lower"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "adjoint"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-}
-op {
-  name: "Qr"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "q"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "r"
-    type_attr: "T"
-  }
-  attr {
-    name: "full_matrices"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-      }
-    }
-  }
-}
-op {
-  name: "SelfAdjointEig"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-      }
-    }
-  }
-  deprecation {
-    version: 11
-    explanation: "Use SelfAdjointEigV2 instead."
-  }
-}
-op {
-  name: "SelfAdjointEigV2"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "e"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "v"
-    type_attr: "T"
-  }
-  attr {
-    name: "compute_v"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-      }
-    }
-  }
-}
-op {
-  name: "Svd"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "s"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "u"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "v"
-    type_attr: "T"
-  }
-  attr {
-    name: "compute_uv"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "full_matrices"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_DOUBLE
-        type: DT_FLOAT
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-      }
-    }
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "BatchCholesky"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use Cholesky instead."
+#   }
+# }
+# op {
+#   name: "BatchCholeskyGrad"
+#   input_arg {
+#     name: "l"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use CholeskyGrad instead."
+#   }
+# }
+# op {
+#   name: "BatchMatrixDeterminant"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use MatrixDeterminant instead."
+#   }
+# }
+# op {
+#   name: "BatchMatrixInverse"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "adjoint"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use MatrixInverse instead."
+#   }
+# }
+# op {
+#   name: "BatchMatrixSolve"
+#   input_arg {
+#     name: "matrix"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "rhs"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "adjoint"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use MatrixSolve instead."
+#   }
+# }
+# op {
+#   name: "BatchMatrixSolveLs"
+#   input_arg {
+#     name: "matrix"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "rhs"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "l2_regularizer"
+#     type: DT_DOUBLE
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "fast"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use MatrixSolveLs instead."
+#   }
+# }
+# op {
+#   name: "BatchMatrixTriangularSolve"
+#   input_arg {
+#     name: "matrix"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "rhs"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "lower"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "adjoint"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use MatrixTriangularSolve instead."
+#   }
+# }
+# op {
+#   name: "BatchSelfAdjointEig"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 11
+#     explanation: "Use SelfAdjointEigV2 instead."
+#   }
+# }
+# op {
+#   name: "BatchSelfAdjointEigV2"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "e"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "v"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "compute_v"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use SelfAdjointEigV2 instead."
+#   }
+# }
+# op {
+#   name: "BatchSvd"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "s"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "u"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "v"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "compute_uv"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "full_matrices"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 13
+#     explanation: "Use Svd instead."
+#   }
+# }
+# op {
+#   name: "Cholesky"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "CholeskyGrad"
+#   input_arg {
+#     name: "l"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MatrixDeterminant"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MatrixInverse"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "adjoint"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MatrixSolve"
+#   input_arg {
+#     name: "matrix"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "rhs"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "adjoint"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MatrixSolveLs"
+#   input_arg {
+#     name: "matrix"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "rhs"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "l2_regularizer"
+#     type: DT_DOUBLE
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "fast"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "MatrixTriangularSolve"
+#   input_arg {
+#     name: "matrix"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "rhs"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "lower"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "adjoint"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Qr"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "q"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "r"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "full_matrices"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SelfAdjointEig"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 11
+#     explanation: "Use SelfAdjointEigV2 instead."
+#   }
+# }
+# op {
+#   name: "SelfAdjointEigV2"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "e"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "v"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "compute_v"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Svd"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "s"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "u"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "v"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "compute_uv"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "full_matrices"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_DOUBLE
+#         type: DT_FLOAT
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\nV\n\rBatchCholesky\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\002\001B\031\010\r\022\025Use Cholesky instead.\ne\n\021BatchCholeskyGrad\022\006\n\001l\"\001T\022\t\n\004grad\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002B\035\010\r\022\031Use CholeskyGrad instead.\nj\n\026BatchMatrixDeterminant\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\023\n\001T\022\004type:\010\n\0062\004\001\002\010\022B\"\010\r\022\036Use MatrixDeterminant instead.\nu\n\022BatchMatrixInverse\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\023\n\007adjoint\022\004bool\032\002(\000\"\021\n\001T\022\004type:\006\n\0042\002\002\001B\036\010\r\022\032Use MatrixInverse instead.\n|\n\020BatchMatrixSolve\022\013\n\006matrix\"\001T\022\010\n\003rhs\"\001T\032\013\n\006output\"\001T\"\023\n\007adjoint\022\004bool\032\002(\000\"\021\n\001T\022\004type:\006\n\0042\002\002\001B\034\010\r\022\030Use MatrixSolve instead.\n\221\001\n\022BatchMatrixSolveLs\022\013\n\006matrix\"\001T\022\010\n\003rhs\"\001T\022\022\n\016l2_regularizer\030\002\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\002\001\"\020\n\004fast\022\004bool\032\002(\001B\036\010\r\022\032Use MatrixSolveLs instead.\n\243\001\n\032BatchMatrixTriangularSolve\022\013\n\006matrix\"\001T\022\010\n\003rhs\"\001T\032\013\n\006output\"\001T\"\021\n\005lower\022\004bool\032\002(\001\"\023\n\007adjoint\022\004bool\032\002(\000\"\021\n\001T\022\004type:\006\n\0042\002\002\001B&\010\r\022\"Use MatrixTriangularSolve instead.\nd\n\023BatchSelfAdjointEig\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\002\001B!\010\013\022\035Use SelfAdjointEigV2 instead.\n\200\001\n\025BatchSelfAdjointEigV2\022\n\n\005input\"\001T\032\006\n\001e\"\001T\032\006\n\001v\"\001T\"\025\n\tcompute_v\022\004bool\032\002(\001\"\021\n\001T\022\004type:\006\n\0042\002\002\001B!\010\r\022\035Use SelfAdjointEigV2 instead.\n\214\001\n\010BatchSvd\022\n\n\005input\"\001T\032\006\n\001s\"\001T\032\006\n\001u\"\001T\032\006\n\001v\"\001T\"\026\n\ncompute_uv\022\004bool\032\002(\001\"\031\n\rfull_matrices\022\004bool\032\002(\000\"\023\n\001T\022\004type:\010\n\0062\004\002\001\010\022B\024\010\r\022\020Use Svd instead.\n8\n\010Cholesky\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\023\n\001T\022\004type:\010\n\0062\004\002\001\010\022\nA\n\014CholeskyGrad\022\006\n\001l\"\001T\022\t\n\004grad\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\nA\n\021MatrixDeterminant\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\023\n\001T\022\004type:\010\n\0062\004\001\002\010\022\nR\n\rMatrixInverse\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\023\n\007adjoint\022\004bool\032\002(\000\"\023\n\001T\022\004type:\010\n\0062\004\002\001\010\022\n[\n\013MatrixSolve\022\013\n\006matrix\"\001T\022\010\n\003rhs\"\001T\032\013\n\006output\"\001T\"\023\n\007adjoint\022\004bool\032\002(\000\"\023\n\001T\022\004type:\010\n\0062\004\002\001\010\022\nl\n\rMatrixSolveLs\022\013\n\006matrix\"\001T\022\010\n\003rhs\"\001T\022\022\n\016l2_regularizer\030\002\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\002\001\"\020\n\004fast\022\004bool\032\002(\001\nx\n\025MatrixTriangularSolve\022\013\n\006matrix\"\001T\022\010\n\003rhs\"\001T\032\013\n\006output\"\001T\"\021\n\005lower\022\004bool\032\002(\001\"\023\n\007adjoint\022\004bool\032\002(\000\"\023\n\001T\022\004type:\010\n\0062\004\002\001\010\022\nP\n\002Qr\022\n\n\005input\"\001T\032\006\n\001q\"\001T\032\006\n\001r\"\001T\"\031\n\rfull_matrices\022\004bool\032\002(\000\"\023\n\001T\022\004type:\010\n\0062\004\002\001\010\022\n_\n\016SelfAdjointEig\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\002\001B!\010\013\022\035Use SelfAdjointEigV2 instead.\nZ\n\020SelfAdjointEigV2\022\n\n\005input\"\001T\032\006\n\001e\"\001T\032\006\n\001v\"\001T\"\025\n\tcompute_v\022\004bool\032\002(\001\"\023\n\001T\022\004type:\010\n\0062\004\002\001\010\022\nq\n\003Svd\022\n\n\005input\"\001T\032\006\n\001s\"\001T\032\006\n\001u\"\001T\032\006\n\001v\"\001T\"\026\n\ncompute_uv\022\004bool\032\002(\001\"\031\n\rfull_matrices\022\004bool\032\002(\000\"\023\n\001T\022\004type:\010\n\0062\004\002\001\010\022")

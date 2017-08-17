@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -263,6 +261,10 @@ def irfft(input, fft_length, name=None):
   compute `input` is odd, it should be provided since it cannot be inferred
   properly.
 
+  Along the axis `IRFFT` is computed on, if `fft_length / 2 + 1` is smaller
+  than the corresponding dimension of `input`, the dimension is cropped. If it is
+  larger, the dimension is padded with zeros.
+
   Args:
     input: A `Tensor` of type `complex64`. A complex64 tensor.
     fft_length: A `Tensor` of type `int32`.
@@ -297,6 +299,11 @@ def irfft2d(input, fft_length, name=None):
   from the size of the inner-most 2 dimensions of `input`. If the FFT length used
   to compute `input` is odd, it should be provided since it cannot be inferred
   properly.
+
+  Along each axis `IRFFT2D` is computed on, if `fft_length` (or
+  `fft_length / 2 + 1` for the inner-most dimension) is smaller than the
+  corresponding dimension of `input`, the dimension is cropped. If it is larger,
+  the dimension is padded with zeros.
 
   Args:
     input: A `Tensor` of type `complex64`. A complex64 tensor.
@@ -333,6 +340,11 @@ def irfft3d(input, fft_length, name=None):
   to compute `input` is odd, it should be provided since it cannot be inferred
   properly.
 
+  Along each axis `IRFFT3D` is computed on, if `fft_length` (or
+  `fft_length / 2 + 1` for the inner-most dimension) is smaller than the
+  corresponding dimension of `input`, the dimension is cropped. If it is larger,
+  the dimension is padded with zeros.
+
   Args:
     input: A `Tensor` of type `complex64`. A complex64 tensor.
     fft_length: A `Tensor` of type `int32`.
@@ -364,6 +376,10 @@ def rfft(input, fft_length, name=None):
   Since the DFT of a real signal is Hermitian-symmetric, `RFFT` only returns the
   `fft_length / 2 + 1` unique components of the FFT: the zero-frequency term,
   followed by the `fft_length / 2` positive-frequency terms.
+
+  Along the axis `RFFT` is computed on, if `fft_length` is smaller than the
+  corresponding dimension of `input`, the dimension is cropped. If it is larger,
+  the dimension is padded with zeros.
 
   Args:
     input: A `Tensor` of type `float32`. A float32 tensor.
@@ -397,6 +413,10 @@ def rfft2d(input, fft_length, name=None):
   `fft_length / 2 + 1` unique components of the FFT for the inner-most dimension
   of `output`: the zero-frequency term, followed by the `fft_length / 2`
   positive-frequency terms.
+
+  Along each axis `RFFT2D` is computed on, if `fft_length` is smaller than the
+  corresponding dimension of `input`, the dimension is cropped. If it is larger,
+  the dimension is padded with zeros.
 
   Args:
     input: A `Tensor` of type `float32`. A float32 tensor.
@@ -432,6 +452,10 @@ def rfft3d(input, fft_length, name=None):
   of `output`: the zero-frequency term, followed by the `fft_length / 2`
   positive-frequency terms.
 
+  Along each axis `RFFT3D` is computed on, if `fft_length` is smaller than the
+  corresponding dimension of `input`, the dimension is cropped. If it is larger,
+  the dimension is padded with zeros.
+
   Args:
     input: A `Tensor` of type `float32`. A float32 tensor.
     fft_length: A `Tensor` of type `int32`.
@@ -454,262 +478,259 @@ def rfft3d(input, fft_length, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "BatchFFT"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-  deprecation {
-    version: 15
-    explanation: "Use FFT"
-  }
-}
-op {
-  name: "BatchFFT2D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-  deprecation {
-    version: 15
-    explanation: "Use FFT2D"
-  }
-}
-op {
-  name: "BatchFFT3D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-  deprecation {
-    version: 15
-    explanation: "Use FFT3D"
-  }
-}
-op {
-  name: "BatchIFFT"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-  deprecation {
-    version: 15
-    explanation: "Use IFFT"
-  }
-}
-op {
-  name: "BatchIFFT2D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-  deprecation {
-    version: 15
-    explanation: "Use IFFT2D"
-  }
-}
-op {
-  name: "BatchIFFT3D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-  deprecation {
-    version: 15
-    explanation: "Use IFFT3D"
-  }
-}
-op {
-  name: "FFT"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-op {
-  name: "FFT2D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-op {
-  name: "FFT3D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-op {
-  name: "IFFT"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-op {
-  name: "IFFT2D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-op {
-  name: "IFFT3D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-op {
-  name: "IRFFT"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  input_arg {
-    name: "fft_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-}
-op {
-  name: "IRFFT2D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  input_arg {
-    name: "fft_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-}
-op {
-  name: "IRFFT3D"
-  input_arg {
-    name: "input"
-    type: DT_COMPLEX64
-  }
-  input_arg {
-    name: "fft_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-}
-op {
-  name: "RFFT"
-  input_arg {
-    name: "input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "fft_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-op {
-  name: "RFFT2D"
-  input_arg {
-    name: "input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "fft_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-op {
-  name: "RFFT3D"
-  input_arg {
-    name: "input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "fft_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_COMPLEX64
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "BatchFFT"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+#   deprecation {
+#     version: 15
+#     explanation: "Use FFT"
+#   }
+# }
+# op {
+#   name: "BatchFFT2D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+#   deprecation {
+#     version: 15
+#     explanation: "Use FFT2D"
+#   }
+# }
+# op {
+#   name: "BatchFFT3D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+#   deprecation {
+#     version: 15
+#     explanation: "Use FFT3D"
+#   }
+# }
+# op {
+#   name: "BatchIFFT"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+#   deprecation {
+#     version: 15
+#     explanation: "Use IFFT"
+#   }
+# }
+# op {
+#   name: "BatchIFFT2D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+#   deprecation {
+#     version: 15
+#     explanation: "Use IFFT2D"
+#   }
+# }
+# op {
+#   name: "BatchIFFT3D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+#   deprecation {
+#     version: 15
+#     explanation: "Use IFFT3D"
+#   }
+# }
+# op {
+#   name: "FFT"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+# op {
+#   name: "FFT2D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+# op {
+#   name: "FFT3D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+# op {
+#   name: "IFFT"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+# op {
+#   name: "IFFT2D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+# op {
+#   name: "IFFT3D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+# op {
+#   name: "IRFFT"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   input_arg {
+#     name: "fft_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+# }
+# op {
+#   name: "IRFFT2D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   input_arg {
+#     name: "fft_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+# }
+# op {
+#   name: "IRFFT3D"
+#   input_arg {
+#     name: "input"
+#     type: DT_COMPLEX64
+#   }
+#   input_arg {
+#     name: "fft_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+# }
+# op {
+#   name: "RFFT"
+#   input_arg {
+#     name: "input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "fft_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+# op {
+#   name: "RFFT2D"
+#   input_arg {
+#     name: "input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "fft_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+# op {
+#   name: "RFFT3D"
+#   input_arg {
+#     name: "input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "fft_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_COMPLEX64
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n.\n\010BatchFFT\022\t\n\005input\030\010\032\n\n\006output\030\010B\013\010\017\022\007Use FFT\n2\n\nBatchFFT2D\022\t\n\005input\030\010\032\n\n\006output\030\010B\r\010\017\022\tUse FFT2D\n2\n\nBatchFFT3D\022\t\n\005input\030\010\032\n\n\006output\030\010B\r\010\017\022\tUse FFT3D\n0\n\tBatchIFFT\022\t\n\005input\030\010\032\n\n\006output\030\010B\014\010\017\022\010Use IFFT\n4\n\013BatchIFFT2D\022\t\n\005input\030\010\032\n\n\006output\030\010B\016\010\017\022\nUse IFFT2D\n4\n\013BatchIFFT3D\022\t\n\005input\030\010\032\n\n\006output\030\010B\016\010\017\022\nUse IFFT3D\n\034\n\003FFT\022\t\n\005input\030\010\032\n\n\006output\030\010\n\036\n\005FFT2D\022\t\n\005input\030\010\032\n\n\006output\030\010\n\036\n\005FFT3D\022\t\n\005input\030\010\032\n\n\006output\030\010\n\035\n\004IFFT\022\t\n\005input\030\010\032\n\n\006output\030\010\n\037\n\006IFFT2D\022\t\n\005input\030\010\032\n\n\006output\030\010\n\037\n\006IFFT3D\022\t\n\005input\030\010\032\n\n\006output\030\010\n.\n\005IRFFT\022\t\n\005input\030\010\022\016\n\nfft_length\030\003\032\n\n\006output\030\001\n0\n\007IRFFT2D\022\t\n\005input\030\010\022\016\n\nfft_length\030\003\032\n\n\006output\030\001\n0\n\007IRFFT3D\022\t\n\005input\030\010\022\016\n\nfft_length\030\003\032\n\n\006output\030\001\n-\n\004RFFT\022\t\n\005input\030\001\022\016\n\nfft_length\030\003\032\n\n\006output\030\010\n/\n\006RFFT2D\022\t\n\005input\030\001\022\016\n\nfft_length\030\003\032\n\n\006output\030\010\n/\n\006RFFT3D\022\t\n\005input\030\001\022\016\n\nfft_length\030\003\032\n\n\006output\030\010")

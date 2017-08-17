@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -57,67 +55,64 @@ def _py_func_stateless(input, token, Tout, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "PyFunc"
-  input_arg {
-    name: "input"
-    type_list_attr: "Tin"
-  }
-  output_arg {
-    name: "output"
-    type_list_attr: "Tout"
-  }
-  attr {
-    name: "token"
-    type: "string"
-  }
-  attr {
-    name: "Tin"
-    type: "list(type)"
-    has_minimum: true
-  }
-  attr {
-    name: "Tout"
-    type: "list(type)"
-    has_minimum: true
-  }
-  is_stateful: true
-}
-op {
-  name: "PyFuncStateless"
-  input_arg {
-    name: "input"
-    type_list_attr: "Tin"
-  }
-  output_arg {
-    name: "output"
-    type_list_attr: "Tout"
-  }
-  attr {
-    name: "token"
-    type: "string"
-  }
-  attr {
-    name: "Tin"
-    type: "list(type)"
-    has_minimum: true
-  }
-  attr {
-    name: "Tout"
-    type: "list(type)"
-    has_minimum: true
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "PyFunc"
+#   input_arg {
+#     name: "input"
+#     type_list_attr: "Tin"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_list_attr: "Tout"
+#   }
+#   attr {
+#     name: "token"
+#     type: "string"
+#   }
+#   attr {
+#     name: "Tin"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "PyFuncStateless"
+#   input_arg {
+#     name: "input"
+#     type_list_attr: "Tin"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_list_attr: "Tout"
+#   }
+#   attr {
+#     name: "token"
+#     type: "string"
+#   }
+#   attr {
+#     name: "Tin"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\ne\n\006PyFunc\022\014\n\005input2\003Tin\032\016\n\006output2\004Tout\"\017\n\005token\022\006string\"\023\n\003Tin\022\nlist(type)(\001\"\024\n\004Tout\022\nlist(type)(\001\210\001\001\nk\n\017PyFuncStateless\022\014\n\005input2\003Tin\032\016\n\006output2\004Tout\"\017\n\005token\022\006string\"\023\n\003Tin\022\nlist(type)(\001\"\024\n\004Tout\022\nlist(type)(\001")

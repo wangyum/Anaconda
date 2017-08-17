@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -249,222 +247,219 @@ def var_is_initialized_op(resource, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "AssignAddVariableOp"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "AssignSubVariableOp"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "AssignVariableOp"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "DestroyResourceOp"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "ignore_lookup_error"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "ReadVariableOp"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "ResourceGather"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "validate_indices"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "ResourceScatterAdd"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "VarHandleOp"
-  output_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-  is_stateful: true
-}
-op {
-  name: "VarIsInitializedOp"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "is_initialized"
-    type: DT_BOOL
-  }
-  is_stateful: true
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "AssignAddVariableOp"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "AssignSubVariableOp"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "AssignVariableOp"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "DestroyResourceOp"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "ignore_lookup_error"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ReadVariableOp"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ResourceGather"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "validate_indices"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ResourceScatterAdd"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "VarHandleOp"
+#   output_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "VarIsInitializedOp"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "is_initialized"
+#     type: DT_BOOL
+#   }
+#   is_stateful: true
+# }
+_op_def_lib = _InitOpDefLibrary(b"\nE\n\023AssignAddVariableOp\022\014\n\010resource\030\024\022\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\210\001\001\nE\n\023AssignSubVariableOp\022\014\n\010resource\030\024\022\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\210\001\001\nB\n\020AssignVariableOp\022\014\n\010resource\030\024\022\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\210\001\001\nE\n\021DestroyResourceOp\022\014\n\010resource\030\024\"\037\n\023ignore_lookup_error\022\004bool\032\002(\001\210\001\001\n@\n\016ReadVariableOp\022\014\n\010resource\030\024\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\210\001\001\n\216\001\n\016ResourceGather\022\014\n\010resource\030\024\022\023\n\007indices\"\010Tindices\032\017\n\006output\"\005dtype\"\034\n\020validate_indices\022\004bool\032\002(\001\"\r\n\005dtype\022\004type\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\210\001\001\n\211\001\n\022ResourceScatterAdd\022\014\n\010resource\030\024\022\023\n\007indices\"\010Tindices\022\020\n\007updates\"\005dtype\"!\n\005dtype\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\210\001\001\nq\n\013VarHandleOp\032\014\n\010resource\030\024\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"\r\n\005dtype\022\004type\"\016\n\005shape\022\005shape\210\001\001\n9\n\022VarIsInitializedOp\022\014\n\010resource\030\024\032\022\n\016is_initialized\030\n\210\001\001")

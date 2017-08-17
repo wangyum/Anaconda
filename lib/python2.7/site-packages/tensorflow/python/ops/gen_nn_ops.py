@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -680,11 +678,13 @@ def depthwise_conv2d_native(input, filter, strides, padding, data_format=None,
   `channel_multiplier` channels for each), then concatenates the results
   together. Thus, the output has `in_channels * channel_multiplier` channels.
 
+  ```
   for k in 0..in_channels-1
     for q in 0..channel_multiplier-1
       output[b, i, j, k * channel_multiplier + q] =
         sum_{di, dj} input[b, strides[1] * i + di, strides[2] * j + dj, k] *
                           filter[di, dj, k, q]
+  ```
 
   Must have `strides[0] = strides[3] = 1`.  For the most common case of the same
   horizontal and vertices strides, `strides = [1, stride, stride, 1]`.
@@ -1869,6 +1869,11 @@ def max_pool_with_argmax(input, ksize, strides, padding, Targmax=None,
   `[b, y, x, c]` becomes flattened index
   `((b * height + y) * width + x) * channels + c`.
 
+  The indices returned are always in `[0, height) x [0, width)` before flattening,
+  even if padding is involved and the mathematically correct answer is outside
+  (either negative or too large).  This is a bug, but fixing it is difficult to do
+  in a safe backwards compatible way, especially due to flattening.
+
   Args:
     input: A `Tensor`. Must be one of the following types: `float32`, `float64`, `int32`, `int64`, `uint8`, `int16`, `int8`, `uint16`, `half`.
       4-D with shape `[batch, height, width, channels]`.  Input to pool over.
@@ -2573,3643 +2578,3640 @@ def _top_kv2(input, k, sorted=None, name=None):
   return _TopKV2Output._make(result)
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "AvgPool"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "AvgPool3D"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NDHWC"
-    }
-    allowed_values {
-      list {
-        s: "NDHWC"
-        s: "NCDHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "AvgPool3DGrad"
-  input_arg {
-    name: "orig_input_shape"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NDHWC"
-    }
-    allowed_values {
-      list {
-        s: "NDHWC"
-        s: "NCDHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "AvgPoolGrad"
-  input_arg {
-    name: "orig_input_shape"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "BatchNormWithGlobalNormalization"
-  input_arg {
-    name: "t"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "m"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "v"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "beta"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "gamma"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "result"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "variance_epsilon"
-    type: "float"
-  }
-  attr {
-    name: "scale_after_normalization"
-    type: "bool"
-  }
-  deprecation {
-    version: 9
-    explanation: "Use tf.nn.batch_normalization()"
-  }
-}
-op {
-  name: "BatchNormWithGlobalNormalizationGrad"
-  input_arg {
-    name: "t"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "m"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "v"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "gamma"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "dx"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "dm"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "dv"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "db"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "dg"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "variance_epsilon"
-    type: "float"
-  }
-  attr {
-    name: "scale_after_normalization"
-    type: "bool"
-  }
-  deprecation {
-    version: 9
-    explanation: "Use tf.nn.batch_normalization()"
-  }
-}
-op {
-  name: "BiasAdd"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "bias"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "BiasAddGrad"
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "BiasAddV1"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "bias"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "Conv2D"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "use_cudnn_on_gpu"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "Conv2DBackpropFilter"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter_sizes"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "use_cudnn_on_gpu"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "Conv2DBackpropInput"
-  input_arg {
-    name: "input_sizes"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "use_cudnn_on_gpu"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "Conv3D"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NDHWC"
-    }
-    allowed_values {
-      list {
-        s: "NDHWC"
-        s: "NCDHW"
-      }
-    }
-  }
-}
-op {
-  name: "Conv3DBackpropFilter"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  deprecation {
-    version: 10
-    explanation: "Use Conv3DBackpropFilterV2"
-  }
-}
-op {
-  name: "Conv3DBackpropFilterV2"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter_sizes"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NDHWC"
-    }
-    allowed_values {
-      list {
-        s: "NDHWC"
-        s: "NCDHW"
-      }
-    }
-  }
-}
-op {
-  name: "Conv3DBackpropInput"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  deprecation {
-    version: 10
-    explanation: "Use Conv3DBackpropInputV2"
-  }
-}
-op {
-  name: "Conv3DBackpropInputV2"
-  input_arg {
-    name: "input_sizes"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NDHWC"
-    }
-    allowed_values {
-      list {
-        s: "NDHWC"
-        s: "NCDHW"
-      }
-    }
-  }
-}
-op {
-  name: "DepthwiseConv2dNative"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "DepthwiseConv2dNativeBackpropFilter"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter_sizes"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "DepthwiseConv2dNativeBackpropInput"
-  input_arg {
-    name: "input_sizes"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "Dilation2D"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "rates"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "Dilation2DBackpropFilter"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "filter_backprop"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "rates"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "Dilation2DBackpropInput"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "in_backprop"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "rates"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "Elu"
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "activations"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "EluGrad"
-  input_arg {
-    name: "gradients"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "outputs"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "backprops"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "FractionalAvgPool"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "row_pooling_sequence"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "col_pooling_sequence"
-    type: DT_INT64
-  }
-  attr {
-    name: "pooling_ratio"
-    type: "list(float)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "pseudo_random"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "overlapping"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "deterministic"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "FractionalAvgPoolGrad"
-  input_arg {
-    name: "orig_input_tensor_shape"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "row_pooling_sequence"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "col_pooling_sequence"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "overlapping"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "FractionalMaxPool"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "row_pooling_sequence"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "col_pooling_sequence"
-    type: DT_INT64
-  }
-  attr {
-    name: "pooling_ratio"
-    type: "list(float)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "pseudo_random"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "overlapping"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "deterministic"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "FractionalMaxPoolGrad"
-  input_arg {
-    name: "orig_input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "orig_output"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "out_backprop"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "row_pooling_sequence"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "col_pooling_sequence"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "overlapping"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "FusedBatchNorm"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "scale"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "offset"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "mean"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "variance"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "batch_mean"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "batch_variance"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "reserve_space_1"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "reserve_space_2"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "epsilon"
-    type: "float"
-    default_value {
-      f: 0.0001
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-  }
-  attr {
-    name: "is_training"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "FusedBatchNormGrad"
-  input_arg {
-    name: "y_backprop"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "scale"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "reserve_space_1"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "reserve_space_2"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "x_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "scale_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "offset_backprop"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "reserve_space_3"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "reserve_space_4"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "epsilon"
-    type: "float"
-    default_value {
-      f: 0.0001
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-  }
-  attr {
-    name: "is_training"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "FusedPadConv2D"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "paddings"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "mode"
-    type: "string"
-    allowed_values {
-      list {
-        s: "REFLECT"
-        s: "SYMMETRIC"
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "FusedResizeAndPadConv2D"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "paddings"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "resize_align_corners"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "mode"
-    type: "string"
-    allowed_values {
-      list {
-        s: "REFLECT"
-        s: "SYMMETRIC"
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "InTopK"
-  input_arg {
-    name: "predictions"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "targets"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "precision"
-    type: DT_BOOL
-  }
-  attr {
-    name: "k"
-    type: "int"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "L2Loss"
-  input_arg {
-    name: "t"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "LRN"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "depth_radius"
-    type: "int"
-    default_value {
-      i: 5
-    }
-  }
-  attr {
-    name: "bias"
-    type: "float"
-    default_value {
-      f: 1
-    }
-  }
-  attr {
-    name: "alpha"
-    type: "float"
-    default_value {
-      f: 1
-    }
-  }
-  attr {
-    name: "beta"
-    type: "float"
-    default_value {
-      f: 0.5
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "LRNGrad"
-  input_arg {
-    name: "input_grads"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "input_image"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "output_image"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "depth_radius"
-    type: "int"
-    default_value {
-      i: 5
-    }
-  }
-  attr {
-    name: "bias"
-    type: "float"
-    default_value {
-      f: 1
-    }
-  }
-  attr {
-    name: "alpha"
-    type: "float"
-    default_value {
-      f: 1
-    }
-  }
-  attr {
-    name: "beta"
-    type: "float"
-    default_value {
-      f: 0.5
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "LogSoftmax"
-  input_arg {
-    name: "logits"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "logsoftmax"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "MaxPool"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-}
-op {
-  name: "MaxPool3D"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NDHWC"
-    }
-    allowed_values {
-      list {
-        s: "NDHWC"
-        s: "NCDHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-      }
-    }
-  }
-}
-op {
-  name: "MaxPool3DGrad"
-  input_arg {
-    name: "orig_input"
-    type_attr: "TInput"
-  }
-  input_arg {
-    name: "orig_output"
-    type_attr: "TInput"
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NDHWC"
-    }
-    allowed_values {
-      list {
-        s: "NDHWC"
-        s: "NCDHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-      }
-    }
-  }
-  attr {
-    name: "TInput"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-      }
-    }
-  }
-}
-op {
-  name: "MaxPool3DGradGrad"
-  input_arg {
-    name: "orig_input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "orig_output"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 5
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NDHWC"
-    }
-    allowed_values {
-      list {
-        s: "NDHWC"
-        s: "NCDHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-      }
-    }
-  }
-}
-op {
-  name: "MaxPoolGrad"
-  input_arg {
-    name: "orig_input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "orig_output"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "MaxPoolGradGrad"
-  input_arg {
-    name: "orig_input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "orig_output"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "data_format"
-    type: "string"
-    default_value {
-      s: "NHWC"
-    }
-    allowed_values {
-      list {
-        s: "NHWC"
-        s: "NCHW"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "MaxPoolGradGradWithArgmax"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "argmax"
-    type_attr: "Targmax"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "Targmax"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "MaxPoolGradWithArgmax"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "grad"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "argmax"
-    type_attr: "Targmax"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "Targmax"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "MaxPoolWithArgmax"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "argmax"
-    type_attr: "Targmax"
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "Targmax"
-    type: "type"
-    default_value {
-      type: DT_INT64
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "QuantizedAvgPool"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "min_input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_input"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "min_output"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "max_output"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "QuantizedBatchNormWithGlobalNormalization"
-  input_arg {
-    name: "t"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "t_min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "t_max"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "m"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "m_min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "m_max"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "v"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "v_min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "v_max"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "beta"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "beta_min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "beta_max"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "gamma"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "gamma_min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "gamma_max"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "result"
-    type_attr: "out_type"
-  }
-  output_arg {
-    name: "result_min"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "result_max"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "Tinput"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "variance_epsilon"
-    type: "float"
-  }
-  attr {
-    name: "scale_after_normalization"
-    type: "bool"
-  }
-}
-op {
-  name: "QuantizedBiasAdd"
-  input_arg {
-    name: "input"
-    type_attr: "T1"
-  }
-  input_arg {
-    name: "bias"
-    type_attr: "T2"
-  }
-  input_arg {
-    name: "min_input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min_bias"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_bias"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type_attr: "out_type"
-  }
-  output_arg {
-    name: "min_out"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "max_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T1"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "T2"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-}
-op {
-  name: "QuantizedConv2D"
-  input_arg {
-    name: "input"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "filter"
-    type_attr: "Tfilter"
-  }
-  input_arg {
-    name: "min_input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min_filter"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_filter"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type_attr: "out_type"
-  }
-  output_arg {
-    name: "min_output"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "max_output"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "Tinput"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "Tfilter"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    default_value {
-      type: DT_QINT32
-    }
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "QuantizedMaxPool"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "min_input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_input"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "min_output"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "max_output"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "ksize"
-    type: "list(int)"
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "QuantizedRelu"
-  input_arg {
-    name: "features"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "min_features"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_features"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "activations"
-    type_attr: "out_type"
-  }
-  output_arg {
-    name: "min_activations"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "max_activations"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "Tinput"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    default_value {
-      type: DT_QUINT8
-    }
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-}
-op {
-  name: "QuantizedRelu6"
-  input_arg {
-    name: "features"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "min_features"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_features"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "activations"
-    type_attr: "out_type"
-  }
-  output_arg {
-    name: "min_activations"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "max_activations"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "Tinput"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    default_value {
-      type: DT_QUINT8
-    }
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-}
-op {
-  name: "QuantizedReluX"
-  input_arg {
-    name: "features"
-    type_attr: "Tinput"
-  }
-  input_arg {
-    name: "max_value"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min_features"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_features"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "activations"
-    type_attr: "out_type"
-  }
-  output_arg {
-    name: "min_activations"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "max_activations"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "Tinput"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    default_value {
-      type: DT_QUINT8
-    }
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-}
-op {
-  name: "Relu"
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "activations"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "Relu6"
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "activations"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "Relu6Grad"
-  input_arg {
-    name: "gradients"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "backprops"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "ReluGrad"
-  input_arg {
-    name: "gradients"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "backprops"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "Softmax"
-  input_arg {
-    name: "logits"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "softmax"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "SoftmaxCrossEntropyWithLogits"
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "labels"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "loss"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "backprop"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "Softplus"
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "activations"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "SoftplusGrad"
-  input_arg {
-    name: "gradients"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "backprops"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "Softsign"
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "activations"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "SoftsignGrad"
-  input_arg {
-    name: "gradients"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "backprops"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "SparseSoftmaxCrossEntropyWithLogits"
-  input_arg {
-    name: "features"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "labels"
-    type_attr: "Tlabels"
-  }
-  output_arg {
-    name: "loss"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "backprop"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "Tlabels"
-    type: "type"
-    default_value {
-      type: DT_INT64
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "TopK"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "values"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  attr {
-    name: "k"
-    type: "int"
-    has_minimum: true
-  }
-  attr {
-    name: "sorted"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-  deprecation {
-    version: 7
-    explanation: "Use TopKV2 instead"
-  }
-}
-op {
-  name: "TopKV2"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "k"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "values"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  attr {
-    name: "sorted"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "AvgPool"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "AvgPool3D"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NDHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NDHWC"
+#         s: "NCDHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "AvgPool3DGrad"
+#   input_arg {
+#     name: "orig_input_shape"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NDHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NDHWC"
+#         s: "NCDHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "AvgPoolGrad"
+#   input_arg {
+#     name: "orig_input_shape"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "BatchNormWithGlobalNormalization"
+#   input_arg {
+#     name: "t"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "m"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "v"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "beta"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "gamma"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "result"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "variance_epsilon"
+#     type: "float"
+#   }
+#   attr {
+#     name: "scale_after_normalization"
+#     type: "bool"
+#   }
+#   deprecation {
+#     version: 9
+#     explanation: "Use tf.nn.batch_normalization()"
+#   }
+# }
+# op {
+#   name: "BatchNormWithGlobalNormalizationGrad"
+#   input_arg {
+#     name: "t"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "m"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "v"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "gamma"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "dx"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "dm"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "dv"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "db"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "dg"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "variance_epsilon"
+#     type: "float"
+#   }
+#   attr {
+#     name: "scale_after_normalization"
+#     type: "bool"
+#   }
+#   deprecation {
+#     version: 9
+#     explanation: "Use tf.nn.batch_normalization()"
+#   }
+# }
+# op {
+#   name: "BiasAdd"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "bias"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "BiasAddGrad"
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "BiasAddV1"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "bias"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Conv2D"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "use_cudnn_on_gpu"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Conv2DBackpropFilter"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter_sizes"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "use_cudnn_on_gpu"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Conv2DBackpropInput"
+#   input_arg {
+#     name: "input_sizes"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "use_cudnn_on_gpu"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Conv3D"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NDHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NDHWC"
+#         s: "NCDHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Conv3DBackpropFilter"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 10
+#     explanation: "Use Conv3DBackpropFilterV2"
+#   }
+# }
+# op {
+#   name: "Conv3DBackpropFilterV2"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter_sizes"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NDHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NDHWC"
+#         s: "NCDHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Conv3DBackpropInput"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 10
+#     explanation: "Use Conv3DBackpropInputV2"
+#   }
+# }
+# op {
+#   name: "Conv3DBackpropInputV2"
+#   input_arg {
+#     name: "input_sizes"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NDHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NDHWC"
+#         s: "NCDHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "DepthwiseConv2dNative"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "DepthwiseConv2dNativeBackpropFilter"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter_sizes"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "DepthwiseConv2dNativeBackpropInput"
+#   input_arg {
+#     name: "input_sizes"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Dilation2D"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "rates"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Dilation2DBackpropFilter"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "filter_backprop"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "rates"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Dilation2DBackpropInput"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "in_backprop"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "rates"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Elu"
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "activations"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "EluGrad"
+#   input_arg {
+#     name: "gradients"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "outputs"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "backprops"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "FractionalAvgPool"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "row_pooling_sequence"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "col_pooling_sequence"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "pooling_ratio"
+#     type: "list(float)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "pseudo_random"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "overlapping"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "deterministic"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "FractionalAvgPoolGrad"
+#   input_arg {
+#     name: "orig_input_tensor_shape"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "row_pooling_sequence"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "col_pooling_sequence"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "overlapping"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "FractionalMaxPool"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "row_pooling_sequence"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "col_pooling_sequence"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "pooling_ratio"
+#     type: "list(float)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "pseudo_random"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "overlapping"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "deterministic"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "FractionalMaxPoolGrad"
+#   input_arg {
+#     name: "orig_input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "orig_output"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "out_backprop"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "row_pooling_sequence"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "col_pooling_sequence"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "overlapping"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "FusedBatchNorm"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "scale"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "offset"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "mean"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "variance"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "batch_mean"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "batch_variance"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "reserve_space_1"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "reserve_space_2"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "epsilon"
+#     type: "float"
+#     default_value {
+#       f: 0.0001
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#   }
+#   attr {
+#     name: "is_training"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "FusedBatchNormGrad"
+#   input_arg {
+#     name: "y_backprop"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "scale"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "reserve_space_1"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "reserve_space_2"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "x_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "scale_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "offset_backprop"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "reserve_space_3"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "reserve_space_4"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "epsilon"
+#     type: "float"
+#     default_value {
+#       f: 0.0001
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#   }
+#   attr {
+#     name: "is_training"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "FusedPadConv2D"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "paddings"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "mode"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "REFLECT"
+#         s: "SYMMETRIC"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "FusedResizeAndPadConv2D"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "paddings"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "resize_align_corners"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "mode"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "REFLECT"
+#         s: "SYMMETRIC"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "InTopK"
+#   input_arg {
+#     name: "predictions"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "targets"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "precision"
+#     type: DT_BOOL
+#   }
+#   attr {
+#     name: "k"
+#     type: "int"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "L2Loss"
+#   input_arg {
+#     name: "t"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "LRN"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "depth_radius"
+#     type: "int"
+#     default_value {
+#       i: 5
+#     }
+#   }
+#   attr {
+#     name: "bias"
+#     type: "float"
+#     default_value {
+#       f: 1
+#     }
+#   }
+#   attr {
+#     name: "alpha"
+#     type: "float"
+#     default_value {
+#       f: 1
+#     }
+#   }
+#   attr {
+#     name: "beta"
+#     type: "float"
+#     default_value {
+#       f: 0.5
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "LRNGrad"
+#   input_arg {
+#     name: "input_grads"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "input_image"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "output_image"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "depth_radius"
+#     type: "int"
+#     default_value {
+#       i: 5
+#     }
+#   }
+#   attr {
+#     name: "bias"
+#     type: "float"
+#     default_value {
+#       f: 1
+#     }
+#   }
+#   attr {
+#     name: "alpha"
+#     type: "float"
+#     default_value {
+#       f: 1
+#     }
+#   }
+#   attr {
+#     name: "beta"
+#     type: "float"
+#     default_value {
+#       f: 0.5
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "LogSoftmax"
+#   input_arg {
+#     name: "logits"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "logsoftmax"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPool"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPool3D"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NDHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NDHWC"
+#         s: "NCDHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPool3DGrad"
+#   input_arg {
+#     name: "orig_input"
+#     type_attr: "TInput"
+#   }
+#   input_arg {
+#     name: "orig_output"
+#     type_attr: "TInput"
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NDHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NDHWC"
+#         s: "NCDHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "TInput"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPool3DGradGrad"
+#   input_arg {
+#     name: "orig_input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "orig_output"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 5
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NDHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NDHWC"
+#         s: "NCDHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPoolGrad"
+#   input_arg {
+#     name: "orig_input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "orig_output"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPoolGradGrad"
+#   input_arg {
+#     name: "orig_input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "orig_output"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "data_format"
+#     type: "string"
+#     default_value {
+#       s: "NHWC"
+#     }
+#     allowed_values {
+#       list {
+#         s: "NHWC"
+#         s: "NCHW"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPoolGradGradWithArgmax"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "argmax"
+#     type_attr: "Targmax"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Targmax"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPoolGradWithArgmax"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "grad"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "argmax"
+#     type_attr: "Targmax"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Targmax"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MaxPoolWithArgmax"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "argmax"
+#     type_attr: "Targmax"
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "Targmax"
+#     type: "type"
+#     default_value {
+#       type: DT_INT64
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedAvgPool"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "min_input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_input"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "min_output"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "max_output"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedBatchNormWithGlobalNormalization"
+#   input_arg {
+#     name: "t"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "t_min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "t_max"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "m"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "m_min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "m_max"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "v"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "v_min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "v_max"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "beta"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "beta_min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "beta_max"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "gamma"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "gamma_min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "gamma_max"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "result"
+#     type_attr: "out_type"
+#   }
+#   output_arg {
+#     name: "result_min"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "result_max"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "Tinput"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "variance_epsilon"
+#     type: "float"
+#   }
+#   attr {
+#     name: "scale_after_normalization"
+#     type: "bool"
+#   }
+# }
+# op {
+#   name: "QuantizedBiasAdd"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T1"
+#   }
+#   input_arg {
+#     name: "bias"
+#     type_attr: "T2"
+#   }
+#   input_arg {
+#     name: "min_input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min_bias"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_bias"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "out_type"
+#   }
+#   output_arg {
+#     name: "min_out"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "max_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T1"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T2"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedConv2D"
+#   input_arg {
+#     name: "input"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "filter"
+#     type_attr: "Tfilter"
+#   }
+#   input_arg {
+#     name: "min_input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min_filter"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_filter"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "out_type"
+#   }
+#   output_arg {
+#     name: "min_output"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "max_output"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "Tinput"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tfilter"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     default_value {
+#       type: DT_QINT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedMaxPool"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "min_input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_input"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "min_output"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "max_output"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "ksize"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedRelu"
+#   input_arg {
+#     name: "features"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "min_features"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_features"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "activations"
+#     type_attr: "out_type"
+#   }
+#   output_arg {
+#     name: "min_activations"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "max_activations"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "Tinput"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     default_value {
+#       type: DT_QUINT8
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedRelu6"
+#   input_arg {
+#     name: "features"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "min_features"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_features"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "activations"
+#     type_attr: "out_type"
+#   }
+#   output_arg {
+#     name: "min_activations"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "max_activations"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "Tinput"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     default_value {
+#       type: DT_QUINT8
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedReluX"
+#   input_arg {
+#     name: "features"
+#     type_attr: "Tinput"
+#   }
+#   input_arg {
+#     name: "max_value"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min_features"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_features"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "activations"
+#     type_attr: "out_type"
+#   }
+#   output_arg {
+#     name: "min_activations"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "max_activations"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "Tinput"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     default_value {
+#       type: DT_QUINT8
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Relu"
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "activations"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Relu6"
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "activations"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Relu6Grad"
+#   input_arg {
+#     name: "gradients"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "backprops"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ReluGrad"
+#   input_arg {
+#     name: "gradients"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "backprops"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Softmax"
+#   input_arg {
+#     name: "logits"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "softmax"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SoftmaxCrossEntropyWithLogits"
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "labels"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "loss"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "backprop"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Softplus"
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "activations"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SoftplusGrad"
+#   input_arg {
+#     name: "gradients"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "backprops"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Softsign"
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "activations"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SoftsignGrad"
+#   input_arg {
+#     name: "gradients"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "backprops"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SparseSoftmaxCrossEntropyWithLogits"
+#   input_arg {
+#     name: "features"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "labels"
+#     type_attr: "Tlabels"
+#   }
+#   output_arg {
+#     name: "loss"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "backprop"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tlabels"
+#     type: "type"
+#     default_value {
+#       type: DT_INT64
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "TopK"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "values"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "k"
+#     type: "int"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "sorted"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 7
+#     explanation: "Use TopKV2 instead"
+#   }
+# }
+# op {
+#   name: "TopKV2"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "k"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "values"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "sorted"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\273\001\n\007AvgPool\022\n\n\005value\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\n\277\001\n\tAvgPool3D\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\005\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"0\n\013data_format\022\006string\032\007\022\005NDHWC:\020\n\016\022\005NDHWC\022\005NCDHW\"\021\n\001T\022\004type:\006\n\0042\002\001\002\n\330\001\n\rAvgPool3DGrad\022\024\n\020orig_input_shape\030\003\022\t\n\004grad\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\005\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"0\n\013data_format\022\006string\032\007\022\005NDHWC:\020\n\016\022\005NDHWC\022\005NCDHW\"\021\n\001T\022\004type:\006\n\0042\002\001\002\n\324\001\n\013AvgPoolGrad\022\024\n\020orig_input_shape\030\003\022\t\n\004grad\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\n\340\001\n BatchNormWithGlobalNormalization\022\006\n\001t\"\001T\022\006\n\001m\"\001T\022\006\n\001v\"\001T\022\t\n\004beta\"\001T\022\n\n\005gamma\"\001T\032\013\n\006result\"\001T\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\031\n\020variance_epsilon\022\005float\"!\n\031scale_after_normalization\022\004boolB#\010\t\022\037Use tf.nn.batch_normalization()\n\210\002\n$BatchNormWithGlobalNormalizationGrad\022\006\n\001t\"\001T\022\006\n\001m\"\001T\022\006\n\001v\"\001T\022\n\n\005gamma\"\001T\022\r\n\010backprop\"\001T\032\007\n\002dx\"\001T\032\007\n\002dm\"\001T\032\007\n\002dv\"\001T\032\007\n\002db\"\001T\032\007\n\002dg\"\001T\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\031\n\020variance_epsilon\022\005float\"!\n\031scale_after_normalization\022\004boolB#\010\t\022\037Use tf.nn.batch_normalization()\n{\n\007BiasAdd\022\n\n\005value\"\001T\022\t\n\004bias\"\001T\032\013\n\006output\"\001T\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\n{\n\013BiasAddGrad\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\nN\n\tBiasAddV1\022\n\n\005value\"\001T\022\t\n\004bias\"\001T\032\013\n\006output\"\001T\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\n\310\001\n\006Conv2D\022\n\n\005input\"\001T\022\013\n\006filter\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\023\001\"\024\n\007strides\022\tlist(int)\"\034\n\020use_cudnn_on_gpu\022\004bool\032\002(\001\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\n\356\001\n\024Conv2DBackpropFilter\022\n\n\005input\"\001T\022\020\n\014filter_sizes\030\003\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\023\001\"\024\n\007strides\022\tlist(int)\"\034\n\020use_cudnn_on_gpu\022\004bool\032\002(\001\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\n\355\001\n\023Conv2DBackpropInput\022\017\n\013input_sizes\030\003\022\013\n\006filter\"\001T\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\023\001\"\024\n\007strides\022\tlist(int)\"\034\n\020use_cudnn_on_gpu\022\004bool\032\002(\001\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\n\261\001\n\006Conv3D\022\n\n\005input\"\001T\022\013\n\006filter\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"0\n\013data_format\022\006string\032\007\022\005NDHWC:\020\n\016\022\005NDHWC\022\005NCDHW\n\300\001\n\024Conv3DBackpropFilter\022\n\n\005input\"\001T\022\013\n\006filter\"\001T\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALIDB\036\010\n\022\032Use Conv3DBackpropFilterV2\n\331\001\n\026Conv3DBackpropFilterV2\022\n\n\005input\"\001T\022\020\n\014filter_sizes\030\003\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"0\n\013data_format\022\006string\032\007\022\005NDHWC:\020\n\016\022\005NDHWC\022\005NCDHW\n\276\001\n\023Conv3DBackpropInput\022\n\n\005input\"\001T\022\013\n\006filter\"\001T\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALIDB\035\010\n\022\031Use Conv3DBackpropInputV2\n\330\001\n\025Conv3DBackpropInputV2\022\017\n\013input_sizes\030\003\022\013\n\006filter\"\001T\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"0\n\013data_format\022\006string\032\007\022\005NDHWC:\020\n\016\022\005NDHWC\022\005NCDHW\n\271\001\n\025DepthwiseConv2dNative\022\n\n\005input\"\001T\022\013\n\006filter\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\"\024\n\007strides\022\tlist(int)\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\n\337\001\n#DepthwiseConv2dNativeBackpropFilter\022\n\n\005input\"\001T\022\020\n\014filter_sizes\030\003\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\"\024\n\007strides\022\tlist(int)\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\n\336\001\n\"DepthwiseConv2dNativeBackpropInput\022\017\n\013input_sizes\030\003\022\013\n\006filter\"\001T\022\021\n\014out_backprop\"\001T\032\013\n\006output\"\001T\"\021\n\001T\022\004type:\006\n\0042\002\001\002\"\024\n\007strides\022\tlist(int)\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\n\242\001\n\nDilation2D\022\n\n\005input\"\001T\022\013\n\006filter\"\001T\032\013\n\006output\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\"\030\n\007strides\022\tlist(int)(\0010\004\"\026\n\005rates\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\n\314\001\n\030Dilation2DBackpropFilter\022\n\n\005input\"\001T\022\013\n\006filter\"\001T\022\021\n\014out_backprop\"\001T\032\024\n\017filter_backprop\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\"\030\n\007strides\022\tlist(int)(\0010\004\"\026\n\005rates\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\n\307\001\n\027Dilation2DBackpropInput\022\n\n\005input\"\001T\022\013\n\006filter\"\001T\022\021\n\014out_backprop\"\001T\032\020\n\013in_backprop\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\"\030\n\007strides\022\tlist(int)(\0010\004\"\026\n\005rates\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\n:\n\003Elu\022\r\n\010features\"\001T\032\020\n\013activations\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\nK\n\007EluGrad\022\016\n\tgradients\"\001T\022\014\n\007outputs\"\001T\032\016\n\tbackprops\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\n\211\002\n\021FractionalAvgPool\022\n\n\005value\"\001T\032\013\n\006output\"\001T\032\030\n\024row_pooling_sequence\030\t\032\030\n\024col_pooling_sequence\030\t\" \n\rpooling_ratio\022\013list(float)(\0010\004\"\031\n\rpseudo_random\022\004bool\032\002(\000\"\027\n\013overlapping\022\004bool\032\002(\000\"\031\n\rdeterministic\022\004bool\032\002(\000\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\023\n\001T\022\004type:\010\n\0062\004\001\002\003\t\n\266\001\n\025FractionalAvgPoolGrad\022\033\n\027orig_input_tensor_shape\030\t\022\021\n\014out_backprop\"\001T\022\030\n\024row_pooling_sequence\030\t\022\030\n\024col_pooling_sequence\030\t\032\013\n\006output\"\001T\"\027\n\013overlapping\022\004bool\032\002(\000\"\023\n\001T\022\004type:\010\n\0062\004\001\002\003\t\n\211\002\n\021FractionalMaxPool\022\n\n\005value\"\001T\032\013\n\006output\"\001T\032\030\n\024row_pooling_sequence\030\t\032\030\n\024col_pooling_sequence\030\t\" \n\rpooling_ratio\022\013list(float)(\0010\004\"\031\n\rpseudo_random\022\004bool\032\002(\000\"\027\n\013overlapping\022\004bool\032\002(\000\"\031\n\rdeterministic\022\004bool\032\002(\000\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\023\n\001T\022\004type:\010\n\0062\004\001\002\003\t\n\274\001\n\025FractionalMaxPoolGrad\022\017\n\norig_input\"\001T\022\020\n\013orig_output\"\001T\022\021\n\014out_backprop\"\001T\022\030\n\024row_pooling_sequence\030\t\022\030\n\024col_pooling_sequence\030\t\032\013\n\006output\"\001T\"\027\n\013overlapping\022\004bool\032\002(\000\"\023\n\001T\022\004type:\010\n\0062\004\001\002\003\t\n\210\002\n\016FusedBatchNorm\022\006\n\001x\"\001T\022\n\n\005scale\"\001T\022\013\n\006offset\"\001T\022\t\n\004mean\"\001T\022\r\n\010variance\"\001T\032\006\n\001y\"\001T\032\017\n\nbatch_mean\"\001T\032\023\n\016batch_variance\"\001T\032\024\n\017reserve_space_1\"\001T\032\024\n\017reserve_space_2\"\001T\"\020\n\001T\022\004type:\005\n\0032\001\001\"\027\n\007epsilon\022\005float\032\005%\027\267\3218\"\035\n\013data_format\022\006string\032\006\022\004NHWC\"\027\n\013is_training\022\004bool\032\002(\001\n\260\002\n\022FusedBatchNormGrad\022\017\n\ny_backprop\"\001T\022\006\n\001x\"\001T\022\n\n\005scale\"\001T\022\024\n\017reserve_space_1\"\001T\022\024\n\017reserve_space_2\"\001T\032\017\n\nx_backprop\"\001T\032\023\n\016scale_backprop\"\001T\032\024\n\017offset_backprop\"\001T\032\024\n\017reserve_space_3\"\001T\032\024\n\017reserve_space_4\"\001T\"\020\n\001T\022\004type:\005\n\0032\001\001\"\027\n\007epsilon\022\005float\032\005%\027\267\3218\"\035\n\013data_format\022\006string\032\006\022\004NHWC\"\027\n\013is_training\022\004bool\032\002(\001\n\270\001\n\016FusedPadConv2D\022\n\n\005input\"\001T\022\014\n\010paddings\030\003\022\013\n\006filter\"\001T\032\013\n\006output\"\001T\"\020\n\001T\022\004type:\005\n\0032\001\001\"&\n\004mode\022\006string:\026\n\024\022\007REFLECT\022\tSYMMETRIC\"\024\n\007strides\022\tlist(int)\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\n\355\001\n\027FusedResizeAndPadConv2D\022\n\n\005input\"\001T\022\010\n\004size\030\003\022\014\n\010paddings\030\003\022\013\n\006filter\"\001T\032\013\n\006output\"\001T\"\020\n\001T\022\004type:\005\n\0032\001\001\" \n\024resize_align_corners\022\004bool\032\002(\000\"&\n\004mode\022\006string:\026\n\024\022\007REFLECT\022\tSYMMETRIC\"\024\n\007strides\022\tlist(int)\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\nW\n\006InTopK\022\017\n\013predictions\030\001\022\014\n\007targets\"\001T\032\r\n\tprecision\030\n\"\010\n\001k\022\003int\"\025\n\001T\022\004type\032\0020\003:\006\n\0042\002\003\t\n1\n\006L2Loss\022\006\n\001t\"\001T\032\013\n\006output\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\n\221\001\n\003LRN\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\027\n\014depth_radius\022\003int\032\002\030\005\"\024\n\004bias\022\005float\032\005%\000\000\200?\"\025\n\005alpha\022\005float\032\005%\000\000\200?\"\024\n\004beta\022\005float\032\005%\000\000\000?\"\025\n\001T\022\004type\032\0020\001:\006\n\0042\002\001\023\n\300\001\n\007LRNGrad\022\020\n\013input_grads\"\001T\022\020\n\013input_image\"\001T\022\021\n\014output_image\"\001T\032\013\n\006output\"\001T\"\027\n\014depth_radius\022\003int\032\002\030\005\"\024\n\004bias\022\005float\032\005%\000\000\200?\"\025\n\005alpha\022\005float\032\005%\000\000\200?\"\024\n\004beta\022\005float\032\005%\000\000\000?\"\025\n\001T\022\004type\032\0020\001:\006\n\0042\002\001\023\n>\n\nLogSoftmax\022\013\n\006logits\"\001T\032\017\n\nlogsoftmax\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\n\305\001\n\007MaxPool\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\034\n\001T\022\004type\032\0020\001:\r\n\0132\t\001\002\003\t\004\005\006\021\023\"\026\n\005ksize\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\n\276\001\n\tMaxPool3D\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\005\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"0\n\013data_format\022\006string\032\007\022\005NDHWC:\020\n\016\022\005NDHWC\022\005NCDHW\"\020\n\001T\022\004type:\005\n\0032\001\001\n\215\002\n\rMaxPool3DGrad\022\024\n\norig_input\"\006TInput\022\025\n\013orig_output\"\006TInput\022\t\n\004grad\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\005\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"0\n\013data_format\022\006string\032\007\022\005NDHWC:\020\n\016\022\005NDHWC\022\005NCDHW\"\024\n\001T\022\004type\032\0020\001:\005\n\0032\001\001\"\031\n\006TInput\022\004type\032\0020\001:\005\n\0032\001\001\n\350\001\n\021MaxPool3DGradGrad\022\017\n\norig_input\"\001T\022\020\n\013orig_output\"\001T\022\t\n\004grad\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\005\"\030\n\007strides\022\tlist(int)(\0010\005\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"0\n\013data_format\022\006string\032\007\022\005NDHWC:\020\n\016\022\005NDHWC\022\005NCDHW\"\020\n\001T\022\004type:\005\n\0032\001\001\n\353\001\n\013MaxPoolGrad\022\017\n\norig_input\"\001T\022\020\n\013orig_output\"\001T\022\t\n\004grad\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\"\034\n\001T\022\004type\032\0020\001:\r\n\0132\t\001\002\003\t\004\005\006\021\023\n\353\001\n\017MaxPoolGradGrad\022\017\n\norig_input\"\001T\022\020\n\013orig_output\"\001T\022\t\n\004grad\"\001T\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"-\n\013data_format\022\006string\032\006\022\004NHWC:\016\n\014\022\004NHWC\022\004NCHW\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\n\333\001\n\031MaxPoolGradGradWithArgmax\022\n\n\005input\"\001T\022\t\n\004grad\"\001T\022\021\n\006argmax\"\007Targmax\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"\027\n\007Targmax\022\004type:\006\n\0042\002\003\t\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\n\327\001\n\025MaxPoolGradWithArgmax\022\n\n\005input\"\001T\022\t\n\004grad\"\001T\022\021\n\006argmax\"\007Targmax\032\013\n\006output\"\001T\"\026\n\005ksize\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"\027\n\007Targmax\022\004type:\006\n\0042\002\003\t\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\n\314\001\n\021MaxPoolWithArgmax\022\n\n\005input\"\001T\032\013\n\006output\"\001T\032\021\n\006argmax\"\007Targmax\"\026\n\005ksize\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\033\n\007Targmax\022\004type\032\0020\t:\006\n\0042\002\003\t\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\n\315\001\n\020QuantizedAvgPool\022\n\n\005input\"\001T\022\r\n\tmin_input\030\001\022\r\n\tmax_input\030\001\032\013\n\006output\"\001T\032\016\n\nmin_output\030\001\032\016\n\nmax_output\030\001\"\024\n\001T\022\004type:\t\n\0072\005\013\014\017\020\r\"\022\n\005ksize\022\tlist(int)\"\024\n\007strides\022\tlist(int)\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\n\231\003\n)QuantizedBatchNormWithGlobalNormalization\022\013\n\001t\"\006Tinput\022\t\n\005t_min\030\001\022\t\n\005t_max\030\001\022\013\n\001m\"\006Tinput\022\t\n\005m_min\030\001\022\t\n\005m_max\030\001\022\013\n\001v\"\006Tinput\022\t\n\005v_min\030\001\022\t\n\005v_max\030\001\022\016\n\004beta\"\006Tinput\022\014\n\010beta_min\030\001\022\014\n\010beta_max\030\001\022\017\n\005gamma\"\006Tinput\022\r\n\tgamma_min\030\001\022\r\n\tgamma_max\030\001\032\022\n\006result\"\010out_type\032\016\n\nresult_min\030\001\032\016\n\nresult_max\030\001\"\031\n\006Tinput\022\004type:\t\n\0072\005\013\014\017\020\r\"\033\n\010out_type\022\004type:\t\n\0072\005\013\014\017\020\r\"\031\n\020variance_epsilon\022\005float\"!\n\031scale_after_normalization\022\004bool\n\336\001\n\020QuantizedBiasAdd\022\013\n\005input\"\002T1\022\n\n\004bias\"\002T2\022\r\n\tmin_input\030\001\022\r\n\tmax_input\030\001\022\014\n\010min_bias\030\001\022\014\n\010max_bias\030\001\032\022\n\006output\"\010out_type\032\013\n\007min_out\030\001\032\013\n\007max_out\030\001\"\025\n\002T1\022\004type:\t\n\0072\005\013\014\017\020\r\"\025\n\002T2\022\004type:\t\n\0072\005\013\014\017\020\r\"\033\n\010out_type\022\004type:\t\n\0072\005\013\014\017\020\r\n\271\002\n\017QuantizedConv2D\022\017\n\005input\"\006Tinput\022\021\n\006filter\"\007Tfilter\022\r\n\tmin_input\030\001\022\r\n\tmax_input\030\001\022\016\n\nmin_filter\030\001\022\016\n\nmax_filter\030\001\032\022\n\006output\"\010out_type\032\016\n\nmin_output\030\001\032\016\n\nmax_output\030\001\"\031\n\006Tinput\022\004type:\t\n\0072\005\013\014\017\020\r\"\032\n\007Tfilter\022\004type:\t\n\0072\005\013\014\017\020\r\"\037\n\010out_type\022\004type\032\0020\r:\t\n\0072\005\013\014\017\020\r\"\024\n\007strides\022\tlist(int)\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\n\315\001\n\020QuantizedMaxPool\022\n\n\005input\"\001T\022\r\n\tmin_input\030\001\022\r\n\tmax_input\030\001\032\013\n\006output\"\001T\032\016\n\nmin_output\030\001\032\016\n\nmax_output\030\001\"\024\n\001T\022\004type:\t\n\0072\005\013\014\017\020\r\"\022\n\005ksize\022\tlist(int)\"\024\n\007strides\022\tlist(int)\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\n\306\001\n\rQuantizedRelu\022\022\n\010features\"\006Tinput\022\020\n\014min_features\030\001\022\020\n\014max_features\030\001\032\027\n\013activations\"\010out_type\032\023\n\017min_activations\030\001\032\023\n\017max_activations\030\001\"\031\n\006Tinput\022\004type:\t\n\0072\005\013\014\017\020\r\"\037\n\010out_type\022\004type\032\0020\014:\t\n\0072\005\013\014\017\020\r\n\307\001\n\016QuantizedRelu6\022\022\n\010features\"\006Tinput\022\020\n\014min_features\030\001\022\020\n\014max_features\030\001\032\027\n\013activations\"\010out_type\032\023\n\017min_activations\030\001\032\023\n\017max_activations\030\001\"\031\n\006Tinput\022\004type:\t\n\0072\005\013\014\017\020\r\"\037\n\010out_type\022\004type\032\0020\014:\t\n\0072\005\013\014\017\020\r\n\326\001\n\016QuantizedReluX\022\022\n\010features\"\006Tinput\022\r\n\tmax_value\030\001\022\020\n\014min_features\030\001\022\020\n\014max_features\030\001\032\027\n\013activations\"\010out_type\032\023\n\017min_activations\030\001\032\023\n\017max_activations\030\001\"\031\n\006Tinput\022\004type:\t\n\0072\005\013\014\017\020\r\"\037\n\010out_type\022\004type\032\0020\014:\t\n\0072\005\013\014\017\020\r\nA\n\004Relu\022\r\n\010features\"\001T\032\020\n\013activations\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\nB\n\005Relu6\022\r\n\010features\"\001T\032\020\n\013activations\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\nT\n\tRelu6Grad\022\016\n\tgradients\"\001T\022\r\n\010features\"\001T\032\016\n\tbackprops\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\nS\n\010ReluGrad\022\016\n\tgradients\"\001T\022\r\n\010features\"\001T\032\016\n\tbackprops\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\n8\n\007Softmax\022\013\n\006logits\"\001T\032\014\n\007softmax\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\ni\n\035SoftmaxCrossEntropyWithLogits\022\r\n\010features\"\001T\022\013\n\006labels\"\001T\032\t\n\004loss\"\001T\032\r\n\010backprop\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\nE\n\010Softplus\022\r\n\010features\"\001T\032\020\n\013activations\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\nW\n\014SoftplusGrad\022\016\n\tgradients\"\001T\022\r\n\010features\"\001T\032\016\n\tbackprops\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\nE\n\010Softsign\022\r\n\010features\"\001T\032\020\n\013activations\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\nW\n\014SoftsignGrad\022\016\n\tgradients\"\001T\022\r\n\010features\"\001T\032\016\n\tbackprops\"\001T\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\n\222\001\n#SparseSoftmaxCrossEntropyWithLogits\022\r\n\010features\"\001T\022\021\n\006labels\"\007Tlabels\032\t\n\004loss\"\001T\032\r\n\010backprop\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\"\033\n\007Tlabels\022\004type\032\0020\t:\006\n\0042\002\003\t\n~\n\004TopK\022\n\n\005input\"\001T\032\013\n\006values\"\001T\032\013\n\007indices\030\003\"\n\n\001k\022\003int(\001\"\022\n\006sorted\022\004bool\032\002(\001\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023B\026\010\007\022\022Use TopKV2 instead\nc\n\006TopKV2\022\n\n\005input\"\001T\022\005\n\001k\030\003\032\013\n\006values\"\001T\032\013\n\007indices\030\003\"\022\n\006sorted\022\004bool\032\002(\001\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023")
