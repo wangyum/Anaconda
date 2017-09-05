@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -161,7 +159,7 @@ def _barrier_close(handle, cancel_pending_enqueues=None, name=None):
     handle: A `Tensor` of type mutable `string`. The handle to a barrier.
     cancel_pending_enqueues: An optional `bool`. Defaults to `False`.
       If true, all pending enqueue requests that are
-      blocked on the barrier's queue will be cancelled. InsertMany will fail, even
+      blocked on the barrier's queue will be canceled. InsertMany will fail, even
       if no new key is introduced.
     name: A name for the operation (optional).
 
@@ -619,6 +617,404 @@ def _get_session_tensor(handle, dtype, name=None):
 
 
 
+def map_clear(dtypes, capacity=None, memory_limit=None, container=None,
+              shared_name=None, name=None):
+  r"""Op removes all elements in the underlying container.
+
+  Args:
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    The created Operation.
+  """
+  result = _op_def_lib.apply_op("MapClear", dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def map_incomplete_size(dtypes, capacity=None, memory_limit=None,
+                        container=None, shared_name=None, name=None):
+  r"""Op returns the number of incomplete elements in the underlying container.
+
+  Args:
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `int32`.
+  """
+  result = _op_def_lib.apply_op("MapIncompleteSize", dtypes=dtypes,
+                                capacity=capacity, memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def map_peek(key, indices, dtypes, capacity=None, memory_limit=None,
+             container=None, shared_name=None, name=None):
+  r"""Op peeks at the values at the specified key.  If the
+
+  underlying container does not contain this key
+  this op will block until it does.
+
+  Args:
+    key: A `Tensor` of type `int64`.
+    indices: A `Tensor` of type `int32`.
+    dtypes: A list of `tf.DTypes` that has length `>= 1`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A list of `Tensor` objects of type `dtypes`.
+  """
+  result = _op_def_lib.apply_op("MapPeek", key=key, indices=indices,
+                                dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def map_size(dtypes, capacity=None, memory_limit=None, container=None,
+             shared_name=None, name=None):
+  r"""Op returns the number of elements in the underlying container.
+
+  Args:
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `int32`.
+  """
+  result = _op_def_lib.apply_op("MapSize", dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def map_stage(key, indices, values, dtypes, capacity=None, memory_limit=None,
+              container=None, shared_name=None, name=None):
+  r"""Stage (key, values) in the underlying container which behaves like a hashtable.
+
+  Args:
+    key: A `Tensor` of type `int64`. int64
+    indices: A `Tensor` of type `int32`.
+    values: A list of `Tensor` objects. a list of tensors
+      dtypes A list of data types that inserted values should adhere to.
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+      Maximum number of elements in the Staging Area. If > 0, inserts
+      on the container will block when the capacity is reached.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+      If non-empty, this queue is placed in the given container. Otherwise,
+      a default container is used.
+    shared_name: An optional `string`. Defaults to `""`.
+      It is necessary to match this name to the matching Unstage Op.
+    name: A name for the operation (optional).
+
+  Returns:
+    The created Operation.
+  """
+  result = _op_def_lib.apply_op("MapStage", key=key, indices=indices,
+                                values=values, dtypes=dtypes,
+                                capacity=capacity, memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def map_unstage(key, indices, dtypes, capacity=None, memory_limit=None,
+                container=None, shared_name=None, name=None):
+  r"""Op removes and returns the values associated with the key
+
+  from the underlying container.   If the underlying container
+  does not contain this key, the op will block until it does.
+
+  Args:
+    key: A `Tensor` of type `int64`.
+    indices: A `Tensor` of type `int32`.
+    dtypes: A list of `tf.DTypes` that has length `>= 1`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A list of `Tensor` objects of type `dtypes`.
+  """
+  result = _op_def_lib.apply_op("MapUnstage", key=key, indices=indices,
+                                dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+_map_unstage_no_key_outputs = ["key", "values"]
+_MapUnstageNoKeyOutput = _collections.namedtuple(
+    "MapUnstageNoKey", _map_unstage_no_key_outputs)
+
+
+def map_unstage_no_key(indices, dtypes, capacity=None, memory_limit=None,
+                       container=None, shared_name=None, name=None):
+  r"""Op removes and returns a random (key, value)
+
+  from the underlying container.   If the underlying container
+  does not contain elements, the op will block until it does.
+
+  Args:
+    indices: A `Tensor` of type `int32`.
+    dtypes: A list of `tf.DTypes` that has length `>= 1`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A tuple of `Tensor` objects (key, values).
+
+    key: A `Tensor` of type `int64`.
+    values: A list of `Tensor` objects of type `dtypes`.
+  """
+  result = _op_def_lib.apply_op("MapUnstageNoKey", indices=indices,
+                                dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return _MapUnstageNoKeyOutput._make(result)
+
+
+
+def ordered_map_clear(dtypes, capacity=None, memory_limit=None,
+                      container=None, shared_name=None, name=None):
+  r"""Op removes all elements in the underlying container.
+
+  Args:
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    The created Operation.
+  """
+  result = _op_def_lib.apply_op("OrderedMapClear", dtypes=dtypes,
+                                capacity=capacity, memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def ordered_map_incomplete_size(dtypes, capacity=None, memory_limit=None,
+                                container=None, shared_name=None, name=None):
+  r"""Op returns the number of incomplete elements in the underlying container.
+
+  Args:
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `int32`.
+  """
+  result = _op_def_lib.apply_op("OrderedMapIncompleteSize", dtypes=dtypes,
+                                capacity=capacity, memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def ordered_map_peek(key, indices, dtypes, capacity=None, memory_limit=None,
+                     container=None, shared_name=None, name=None):
+  r"""Op peeks at the values at the specified key.  If the
+
+  underlying container does not contain this key
+  this op will block until it does.   This Op is optimized for
+  performance.
+
+  Args:
+    key: A `Tensor` of type `int64`.
+    indices: A `Tensor` of type `int32`.
+    dtypes: A list of `tf.DTypes` that has length `>= 1`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A list of `Tensor` objects of type `dtypes`.
+  """
+  result = _op_def_lib.apply_op("OrderedMapPeek", key=key, indices=indices,
+                                dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def ordered_map_size(dtypes, capacity=None, memory_limit=None, container=None,
+                     shared_name=None, name=None):
+  r"""Op returns the number of elements in the underlying container.
+
+  Args:
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `int32`.
+  """
+  result = _op_def_lib.apply_op("OrderedMapSize", dtypes=dtypes,
+                                capacity=capacity, memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def ordered_map_stage(key, indices, values, dtypes, capacity=None,
+                      memory_limit=None, container=None, shared_name=None,
+                      name=None):
+  r"""Stage (key, values) in the underlying container which behaves like a ordered
+
+  associative container.   Elements are ordered by key.
+
+  Args:
+    key: A `Tensor` of type `int64`. int64
+    indices: A `Tensor` of type `int32`.
+    values: A list of `Tensor` objects. a list of tensors
+      dtypes A list of data types that inserted values should adhere to.
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+      Maximum number of elements in the Staging Area. If > 0, inserts
+      on the container will block when the capacity is reached.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+      If non-empty, this queue is placed in the given container. Otherwise,
+      a default container is used.
+    shared_name: An optional `string`. Defaults to `""`.
+      It is necessary to match this name to the matching Unstage Op.
+    name: A name for the operation (optional).
+
+  Returns:
+    The created Operation.
+  """
+  result = _op_def_lib.apply_op("OrderedMapStage", key=key, indices=indices,
+                                values=values, dtypes=dtypes,
+                                capacity=capacity, memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def ordered_map_unstage(key, indices, dtypes, capacity=None,
+                        memory_limit=None, container=None, shared_name=None,
+                        name=None):
+  r"""Op removes and returns the values associated with the key
+
+  from the underlying container.   If the underlying container
+  does not contain this key, the op will block until it does.
+
+  Args:
+    key: A `Tensor` of type `int64`.
+    indices: A `Tensor` of type `int32`.
+    dtypes: A list of `tf.DTypes` that has length `>= 1`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A list of `Tensor` objects of type `dtypes`.
+  """
+  result = _op_def_lib.apply_op("OrderedMapUnstage", key=key, indices=indices,
+                                dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+_ordered_map_unstage_no_key_outputs = ["key", "values"]
+_OrderedMapUnstageNoKeyOutput = _collections.namedtuple(
+    "OrderedMapUnstageNoKey", _ordered_map_unstage_no_key_outputs)
+
+
+def ordered_map_unstage_no_key(indices, dtypes, capacity=None,
+                               memory_limit=None, container=None,
+                               shared_name=None, name=None):
+  r"""Op removes and returns the (key, value) element with the smallest
+
+  key from the underlying container.   If the underlying container
+  does not contain elements, the op will block until it does.
+
+  Args:
+    indices: A `Tensor` of type `int32`.
+    dtypes: A list of `tf.DTypes` that has length `>= 1`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A tuple of `Tensor` objects (key, values).
+
+    key: A `Tensor` of type `int64`.
+    values: A list of `Tensor` objects of type `dtypes`.
+  """
+  result = _op_def_lib.apply_op("OrderedMapUnstageNoKey", indices=indices,
+                                dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return _OrderedMapUnstageNoKeyOutput._make(result)
+
+
+
 def _padding_fifo_queue(component_types, shapes=None, capacity=None,
                         container=None, shared_name=None, name=None):
   r"""A queue that produces elements in first-in first-out order.
@@ -798,7 +1194,7 @@ def _queue_close(handle, cancel_pending_enqueues=None, name=None):
     handle: A `Tensor` of type mutable `string`. The handle to a queue.
     cancel_pending_enqueues: An optional `bool`. Defaults to `False`.
       If true, all pending enqueue requests that are
-      blocked on the given queue will be cancelled.
+      blocked on the given queue will be canceled.
     name: A name for the operation (optional).
 
   Returns:
@@ -824,7 +1220,7 @@ def _queue_close_v2(handle, cancel_pending_enqueues=None, name=None):
     handle: A `Tensor` of type `resource`. The handle to a queue.
     cancel_pending_enqueues: An optional `bool`. Defaults to `False`.
       If true, all pending enqueue requests that are
-      blocked on the given queue will be cancelled.
+      blocked on the given queue will be canceled.
     name: A name for the operation (optional).
 
   Returns:
@@ -1193,6 +1589,42 @@ def _queue_enqueue_v2(handle, components, timeout_ms=None, name=None):
 
 
 
+def queue_is_closed(handle, name=None):
+  r"""Returns true if queue is closed.
+
+  This operation returns true if the queue is closed and false if the queue
+  is open.
+
+  Args:
+    handle: A `Tensor` of type mutable `string`. The handle to a queue.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `bool`.
+  """
+  result = _op_def_lib.apply_op("QueueIsClosed", handle=handle, name=name)
+  return result
+
+
+
+def queue_is_closed_v2(handle, name=None):
+  r"""Returns true if queue is closed.
+
+  This operation returns true if the queue is closed and false if the queue
+  is open.
+
+  Args:
+    handle: A `Tensor` of type `resource`. The handle to a queue.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `bool`.
+  """
+  result = _op_def_lib.apply_op("QueueIsClosedV2", handle=handle, name=name)
+  return result
+
+
+
 def _queue_size(handle, name=None):
   r"""Computes the number of elements in the given queue.
 
@@ -1460,17 +1892,15 @@ def sparse_conditional_accumulator(dtype, shape, container=None,
 
 
 def _stack(elem_type, stack_name=None, name=None):
-  r"""A stack that produces elements in first-in last-out order.
+  r"""Deprecated, use StackV2.
 
   Args:
-    elem_type: A `tf.DType`. The type of the elements on the stack.
+    elem_type: A `tf.DType`.
     stack_name: An optional `string`. Defaults to `""`.
-      Overrides the name used for the temporary stack resource. Default
-      value is the name of the 'Stack' op (which is guaranteed unique).
     name: A name for the operation (optional).
 
   Returns:
-    A `Tensor` of type mutable `string`. The handle to the stack.
+    A `Tensor` of type mutable `string`.
   """
   result = _op_def_lib.apply_op("Stack", elem_type=elem_type,
                                 stack_name=stack_name, name=name)
@@ -1479,10 +1909,10 @@ def _stack(elem_type, stack_name=None, name=None):
 
 
 def _stack_close(handle, name=None):
-  r"""Delete the stack from its resource container.
+  r"""Deprecated, use StackCloseV2.
 
   Args:
-    handle: A `Tensor` of type mutable `string`. The handle to a stack.
+    handle: A `Tensor` of type mutable `string`.
     name: A name for the operation (optional).
 
   Returns:
@@ -1493,17 +1923,31 @@ def _stack_close(handle, name=None):
 
 
 
-def _stack_pop(handle, elem_type, name=None):
-  r"""Pop the element at the top of the stack.
+def _stack_close_v2(handle, name=None):
+  r"""Delete the stack from its resource container.
 
   Args:
-    handle: A `Tensor` of type mutable `string`. The handle to a stack.
-    elem_type: A `tf.DType`. The type of the elem that is popped.
+    handle: A `Tensor` of type `resource`. The handle to a stack.
+    name: A name for the operation (optional).
+
+  Returns:
+    The created Operation.
+  """
+  result = _op_def_lib.apply_op("StackCloseV2", handle=handle, name=name)
+  return result
+
+
+
+def _stack_pop(handle, elem_type, name=None):
+  r"""Deprecated, use StackPopV2.
+
+  Args:
+    handle: A `Tensor` of type mutable `string`.
+    elem_type: A `tf.DType`.
     name: A name for the operation (optional).
 
   Returns:
     A `Tensor` of type `elem_type`.
-    The tensor that is popped from the top of the stack.
   """
   result = _op_def_lib.apply_op("StackPop", handle=handle,
                                 elem_type=elem_type, name=name)
@@ -1511,11 +1955,47 @@ def _stack_pop(handle, elem_type, name=None):
 
 
 
+def _stack_pop_v2(handle, elem_type, name=None):
+  r"""Pop the element at the top of the stack.
+
+  Args:
+    handle: A `Tensor` of type `resource`. The handle to a stack.
+    elem_type: A `tf.DType`. The type of the elem that is popped.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `elem_type`.
+    The tensor that is popped from the top of the stack.
+  """
+  result = _op_def_lib.apply_op("StackPopV2", handle=handle,
+                                elem_type=elem_type, name=name)
+  return result
+
+
+
 def _stack_push(handle, elem, swap_memory=None, name=None):
+  r"""Deprecated, use StackPushV2.
+
+  Args:
+    handle: A `Tensor` of type mutable `string`.
+    elem: A `Tensor`.
+    swap_memory: An optional `bool`. Defaults to `False`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor`. Has the same type as `elem`.
+  """
+  result = _op_def_lib.apply_op("StackPush", handle=handle, elem=elem,
+                                swap_memory=swap_memory, name=name)
+  return result
+
+
+
+def _stack_push_v2(handle, elem, swap_memory=None, name=None):
   r"""Push an element onto the stack.
 
   Args:
-    handle: A `Tensor` of type mutable `string`. The handle to a stack.
+    handle: A `Tensor` of type `resource`. The handle to a stack.
     elem: A `Tensor`. The tensor to be pushed onto the stack.
     swap_memory: An optional `bool`. Defaults to `False`.
       Swap `elem` to CPU. Default to false.
@@ -1525,13 +2005,37 @@ def _stack_push(handle, elem, swap_memory=None, name=None):
     A `Tensor`. Has the same type as `elem`.
     The same tensor as the input 'elem'.
   """
-  result = _op_def_lib.apply_op("StackPush", handle=handle, elem=elem,
+  result = _op_def_lib.apply_op("StackPushV2", handle=handle, elem=elem,
                                 swap_memory=swap_memory, name=name)
   return result
 
 
 
-def stage(values, container=None, shared_name=None, name=None):
+def _stack_v2(max_size, elem_type, stack_name=None, name=None):
+  r"""A stack that produces elements in first-in last-out order.
+
+  Args:
+    max_size: A `Tensor` of type `int32`.
+      The maximum size of the stack if non-negative. If negative, the stack
+      size is unlimited.
+    elem_type: A `tf.DType`. The type of the elements on the stack.
+    stack_name: An optional `string`. Defaults to `""`.
+      Overrides the name used for the temporary stack resource. Default
+      value is the name of the 'Stack' op (which is guaranteed unique).
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `resource`. The handle to the stack.
+  """
+  result = _op_def_lib.apply_op("StackV2", max_size=max_size,
+                                elem_type=elem_type, stack_name=stack_name,
+                                name=name)
+  return result
+
+
+
+def stage(values, capacity=None, memory_limit=None, container=None,
+          shared_name=None, name=None):
   r"""Stage values similar to a lightweight Enqueue.
 
   The basic functionality of this Op is similar to a queue with many
@@ -1539,6 +2043,13 @@ def stage(values, container=None, shared_name=None, name=None):
 
   Args:
     values: A list of `Tensor` objects. a list of tensors
+      dtypes A list of data types that inserted values should adhere to.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+      Maximum number of elements in the Staging Area. If > 0, inserts
+      on the container will block when the capacity is reached.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+      The maximum number of bytes allowed for Tensors in the Staging Area.
+      If > 0, inserts will block until sufficient space is available.
     container: An optional `string`. Defaults to `""`.
       If non-empty, this queue is placed in the given container. Otherwise,
       a default container is used.
@@ -1549,8 +2060,84 @@ def stage(values, container=None, shared_name=None, name=None):
   Returns:
     The created Operation.
   """
-  result = _op_def_lib.apply_op("Stage", values=values, container=container,
-                                shared_name=shared_name, name=name)
+  result = _op_def_lib.apply_op("Stage", values=values, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def stage_clear(dtypes, capacity=None, memory_limit=None, container=None,
+                shared_name=None, name=None):
+  r"""Op removes all elements in the underlying container.
+
+  Args:
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    The created Operation.
+  """
+  result = _op_def_lib.apply_op("StageClear", dtypes=dtypes,
+                                capacity=capacity, memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def stage_peek(index, dtypes, capacity=None, memory_limit=None,
+               container=None, shared_name=None, name=None):
+  r"""Op peeks at the values at the specified index.  If the
+
+  underlying container does not contain sufficient elements
+  this op will block until it does.   This Op is optimized for
+  performance.
+
+  Args:
+    index: A `Tensor` of type `int32`.
+    dtypes: A list of `tf.DTypes` that has length `>= 1`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A list of `Tensor` objects of type `dtypes`.
+  """
+  result = _op_def_lib.apply_op("StagePeek", index=index, dtypes=dtypes,
+                                capacity=capacity, memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
+  return result
+
+
+
+def stage_size(dtypes, capacity=None, memory_limit=None, container=None,
+               shared_name=None, name=None):
+  r"""Op returns the number of elements in the underlying container.
+
+  Args:
+    dtypes: A list of `tf.DTypes`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
+    container: An optional `string`. Defaults to `""`.
+    shared_name: An optional `string`. Defaults to `""`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `int32`.
+  """
+  result = _op_def_lib.apply_op("StageSize", dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
   return result
 
 
@@ -1884,7 +2471,7 @@ def _tensor_array_grad_v3(handle, flow_in, source, name=None):
 
   TensorArray gradient calls use an accumulator TensorArray object.  If
   multiple gradients are calculated and run in the same session, the multiple
-  gradient nodes may accidentally flow throuth the same accumulator TensorArray.
+  gradient nodes may accidentally flow through the same accumulator TensorArray.
   This double counts and generally breaks the TensorArray gradient flow.
 
   The solution is to identify which gradient call this particular
@@ -2355,14 +2942,17 @@ def _tensor_array_write_v3(handle, index, value, flow_in, name=None):
 
 
 
-def unstage(dtypes, container=None, shared_name=None, name=None):
+def unstage(dtypes, capacity=None, memory_limit=None, container=None,
+            shared_name=None, name=None):
   r"""Op is similar to a lightweight Dequeue.
 
-  The basic funtionality is similar to dequeue with many fewer
+  The basic functionality is similar to dequeue with many fewer
   capabilities and options.  This Op is optimized for performance.
 
   Args:
     dtypes: A list of `tf.DTypes` that has length `>= 1`.
+    capacity: An optional `int` that is `>= 0`. Defaults to `0`.
+    memory_limit: An optional `int` that is `>= 0`. Defaults to `0`.
     container: An optional `string`. Defaults to `""`.
     shared_name: An optional `string`. Defaults to `""`.
     name: A name for the operation (optional).
@@ -2370,2378 +2960,3303 @@ def unstage(dtypes, container=None, shared_name=None, name=None):
   Returns:
     A list of `Tensor` objects of type `dtypes`.
   """
-  result = _op_def_lib.apply_op("Unstage", dtypes=dtypes, container=container,
-                                shared_name=shared_name, name=name)
+  result = _op_def_lib.apply_op("Unstage", dtypes=dtypes, capacity=capacity,
+                                memory_limit=memory_limit,
+                                container=container, shared_name=shared_name,
+                                name=name)
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "AccumulatorApplyGradient"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "local_step"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "gradient"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "AccumulatorNumAccumulated"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "num_accumulated"
-    type: DT_INT32
-  }
-}
-op {
-  name: "AccumulatorSetGlobalStep"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "new_global_step"
-    type: DT_INT64
-  }
-}
-op {
-  name: "AccumulatorTakeGradient"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "num_required"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "average"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "Barrier"
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "BarrierClose"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "cancel_pending_enqueues"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "BarrierIncompleteSize"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT32
-  }
-}
-op {
-  name: "BarrierInsertMany"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "keys"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "values"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "component_index"
-    type: "int"
-  }
-}
-op {
-  name: "BarrierReadySize"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT32
-  }
-}
-op {
-  name: "BarrierTakeMany"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "num_elements"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "indices"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "keys"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "values"
-    type_list_attr: "component_types"
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "allow_small_batch"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "wait_for_incomplete"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-}
-op {
-  name: "ConditionalAccumulator"
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "DeleteSessionTensor"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-}
-op {
-  name: "DynamicPartition"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "partitions"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "outputs"
-    type_attr: "T"
-    number_attr: "num_partitions"
-  }
-  attr {
-    name: "num_partitions"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "DynamicStitch"
-  input_arg {
-    name: "indices"
-    type: DT_INT32
-    number_attr: "N"
-  }
-  input_arg {
-    name: "data"
-    type_attr: "T"
-    number_attr: "N"
-  }
-  output_arg {
-    name: "merged"
-    type_attr: "T"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "FIFOQueue"
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "FIFOQueueV2"
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "FakeQueue"
-  input_arg {
-    name: "resource"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  is_stateful: true
-}
-op {
-  name: "GetSessionHandle"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "GetSessionHandleV2"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "GetSessionTensor"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-}
-op {
-  name: "PaddingFIFOQueue"
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "PaddingFIFOQueueV2"
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "PriorityQueue"
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "PriorityQueueV2"
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "QueueClose"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "cancel_pending_enqueues"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "QueueCloseV2"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "cancel_pending_enqueues"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "QueueDequeue"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "components"
-    type_list_attr: "component_types"
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-}
-op {
-  name: "QueueDequeueMany"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "n"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "components"
-    type_list_attr: "component_types"
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-}
-op {
-  name: "QueueDequeueManyV2"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "n"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "components"
-    type_list_attr: "component_types"
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "QueueDequeueUpTo"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "n"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "components"
-    type_list_attr: "component_types"
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-}
-op {
-  name: "QueueDequeueUpToV2"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "n"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "components"
-    type_list_attr: "component_types"
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "QueueDequeueV2"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "components"
-    type_list_attr: "component_types"
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "QueueEnqueue"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "components"
-    type_list_attr: "Tcomponents"
-  }
-  attr {
-    name: "Tcomponents"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-}
-op {
-  name: "QueueEnqueueMany"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "components"
-    type_list_attr: "Tcomponents"
-  }
-  attr {
-    name: "Tcomponents"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-}
-op {
-  name: "QueueEnqueueManyV2"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "components"
-    type_list_attr: "Tcomponents"
-  }
-  attr {
-    name: "Tcomponents"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "QueueEnqueueV2"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "components"
-    type_list_attr: "Tcomponents"
-  }
-  attr {
-    name: "Tcomponents"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "timeout_ms"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "QueueSize"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT32
-  }
-}
-op {
-  name: "QueueSizeV2"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  is_stateful: true
-}
-op {
-  name: "RandomShuffleQueue"
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "min_after_dequeue"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "RandomShuffleQueueV2"
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "component_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "capacity"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "min_after_dequeue"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "RecordInput"
-  output_arg {
-    name: "records"
-    type: DT_STRING
-  }
-  attr {
-    name: "file_pattern"
-    type: "string"
-  }
-  attr {
-    name: "file_random_seed"
-    type: "int"
-    default_value {
-      i: 301
-    }
-  }
-  attr {
-    name: "file_shuffle_shift_ratio"
-    type: "float"
-    default_value {
-      f: 0
-    }
-  }
-  attr {
-    name: "file_buffer_size"
-    type: "int"
-    default_value {
-      i: 10000
-    }
-  }
-  attr {
-    name: "file_parallelism"
-    type: "int"
-    default_value {
-      i: 16
-    }
-  }
-  attr {
-    name: "batch_size"
-    type: "int"
-    default_value {
-      i: 32
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "SparseAccumulatorApplyGradient"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "local_step"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "gradient_indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "gradient_values"
-    type_attr: "dtype"
-  }
-  input_arg {
-    name: "gradient_shape"
-    type: DT_INT64
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "has_known_shape"
-    type: "bool"
-  }
-}
-op {
-  name: "SparseAccumulatorTakeGradient"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "num_required"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "indices"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "values"
-    type_attr: "dtype"
-  }
-  output_arg {
-    name: "shape"
-    type: DT_INT64
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "SparseConditionalAccumulator"
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "Stack"
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "elem_type"
-    type: "type"
-  }
-  attr {
-    name: "stack_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "StackClose"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-}
-op {
-  name: "StackPop"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "elem"
-    type_attr: "elem_type"
-  }
-  attr {
-    name: "elem_type"
-    type: "type"
-  }
-}
-op {
-  name: "StackPush"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "elem"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "swap_memory"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "Stage"
-  input_arg {
-    name: "values"
-    type_list_attr: "dtypes"
-  }
-  attr {
-    name: "dtypes"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArray"
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "dynamic_size"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "clear_after_read"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "tensor_array_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "element_shape"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArrayV3"
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayClose"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArrayCloseV3"
-  }
-}
-op {
-  name: "TensorArrayCloseV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-}
-op {
-  name: "TensorArrayCloseV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayConcat"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  output_arg {
-    name: "lengths"
-    type: DT_INT64
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape_except0"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArrayGradV3"
-  }
-}
-op {
-  name: "TensorArrayConcatV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  output_arg {
-    name: "lengths"
-    type: DT_INT64
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape_except0"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-}
-op {
-  name: "TensorArrayConcatV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  output_arg {
-    name: "lengths"
-    type: DT_INT64
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape_except0"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayGather"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArrayGatherV3"
-  }
-}
-op {
-  name: "TensorArrayGatherV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-}
-op {
-  name: "TensorArrayGatherV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayGrad"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "grad_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "source"
-    type: "string"
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArrayGradV3"
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayGradV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "grad_handle"
-    type: DT_STRING
-  }
-  attr {
-    name: "source"
-    type: "string"
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayGradV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "grad_handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "source"
-    type: "string"
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayPack"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArrayGatherV3 with RangeOp"
-  }
-}
-op {
-  name: "TensorArrayRead"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "index"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArrayReadV3"
-  }
-}
-op {
-  name: "TensorArrayReadV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "index"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-}
-op {
-  name: "TensorArrayReadV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "index"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "value"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayScatter"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 19
-    explanation: "Use TensorArrayGradV3"
-  }
-}
-op {
-  name: "TensorArrayScatterV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "TensorArrayScatterV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArraySize"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArraySizeV3"
-  }
-}
-op {
-  name: "TensorArraySizeV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT32
-  }
-}
-op {
-  name: "TensorArraySizeV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArraySplit"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "lengths"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArraySplitV3"
-  }
-}
-op {
-  name: "TensorArraySplitV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "lengths"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "TensorArraySplitV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "lengths"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayUnpack"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 20
-    explanation: "Use TensorArrayScatterV3 with RangeOp"
-  }
-}
-op {
-  name: "TensorArrayV2"
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-  attr {
-    name: "dynamic_size"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "clear_after_read"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "tensor_array_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayV3"
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "flow"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "element_shape"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-  attr {
-    name: "dynamic_size"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "clear_after_read"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "tensor_array_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorArrayWrite"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "index"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 16
-    explanation: "Use TensorArrayWriteV3"
-  }
-}
-op {
-  name: "TensorArrayWriteV2"
-  input_arg {
-    name: "handle"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "index"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "TensorArrayWriteV3"
-  input_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "index"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "flow_in"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "flow_out"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "Unstage"
-  output_arg {
-    name: "values"
-    type_list_attr: "dtypes"
-  }
-  attr {
-    name: "dtypes"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "AccumulatorApplyGradient"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "local_step"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "gradient"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "AccumulatorNumAccumulated"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "num_accumulated"
+#     type: DT_INT32
+#   }
+# }
+# op {
+#   name: "AccumulatorSetGlobalStep"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "new_global_step"
+#     type: DT_INT64
+#   }
+# }
+# op {
+#   name: "AccumulatorTakeGradient"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "num_required"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "average"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Barrier"
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "BarrierClose"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "cancel_pending_enqueues"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "BarrierIncompleteSize"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+# }
+# op {
+#   name: "BarrierInsertMany"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "keys"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "component_index"
+#     type: "int"
+#   }
+# }
+# op {
+#   name: "BarrierReadySize"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+# }
+# op {
+#   name: "BarrierTakeMany"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "num_elements"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "indices"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "keys"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "component_types"
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "allow_small_batch"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "wait_for_incomplete"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+# }
+# op {
+#   name: "ConditionalAccumulator"
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "DeleteSessionTensor"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "DynamicPartition"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "partitions"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "outputs"
+#     type_attr: "T"
+#     number_attr: "num_partitions"
+#   }
+#   attr {
+#     name: "num_partitions"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "DynamicStitch"
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#     number_attr: "N"
+#   }
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "merged"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "FIFOQueue"
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "FIFOQueueV2"
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "FakeQueue"
+#   input_arg {
+#     name: "resource"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "GetSessionHandle"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "GetSessionHandleV2"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "GetSessionTensor"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "MapClear"
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MapIncompleteSize"
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MapPeek"
+#   input_arg {
+#     name: "key"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MapSize"
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MapStage"
+#   input_arg {
+#     name: "key"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "values"
+#     type_list_attr: "fake_dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "fake_dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MapUnstage"
+#   input_arg {
+#     name: "key"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MapUnstageNoKey"
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "key"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "OrderedMapClear"
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "OrderedMapIncompleteSize"
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "OrderedMapPeek"
+#   input_arg {
+#     name: "key"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "OrderedMapSize"
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "OrderedMapStage"
+#   input_arg {
+#     name: "key"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "values"
+#     type_list_attr: "fake_dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "fake_dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "OrderedMapUnstage"
+#   input_arg {
+#     name: "key"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "OrderedMapUnstageNoKey"
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "key"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "PaddingFIFOQueue"
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "PaddingFIFOQueueV2"
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "PriorityQueue"
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "PriorityQueueV2"
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "QueueClose"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "cancel_pending_enqueues"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "QueueCloseV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "cancel_pending_enqueues"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "QueueDequeue"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "components"
+#     type_list_attr: "component_types"
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+# }
+# op {
+#   name: "QueueDequeueMany"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "n"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "components"
+#     type_list_attr: "component_types"
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+# }
+# op {
+#   name: "QueueDequeueManyV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "n"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "components"
+#     type_list_attr: "component_types"
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "QueueDequeueUpTo"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "n"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "components"
+#     type_list_attr: "component_types"
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+# }
+# op {
+#   name: "QueueDequeueUpToV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "n"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "components"
+#     type_list_attr: "component_types"
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "QueueDequeueV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "components"
+#     type_list_attr: "component_types"
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "QueueEnqueue"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "components"
+#     type_list_attr: "Tcomponents"
+#   }
+#   attr {
+#     name: "Tcomponents"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+# }
+# op {
+#   name: "QueueEnqueueMany"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "components"
+#     type_list_attr: "Tcomponents"
+#   }
+#   attr {
+#     name: "Tcomponents"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+# }
+# op {
+#   name: "QueueEnqueueManyV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "components"
+#     type_list_attr: "Tcomponents"
+#   }
+#   attr {
+#     name: "Tcomponents"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "QueueEnqueueV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "components"
+#     type_list_attr: "Tcomponents"
+#   }
+#   attr {
+#     name: "Tcomponents"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "timeout_ms"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "QueueIsClosed"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "is_closed"
+#     type: DT_BOOL
+#   }
+# }
+# op {
+#   name: "QueueIsClosedV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "is_closed"
+#     type: DT_BOOL
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "QueueSize"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+# }
+# op {
+#   name: "QueueSizeV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RandomShuffleQueue"
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "min_after_dequeue"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RandomShuffleQueueV2"
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "component_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "min_after_dequeue"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RecordInput"
+#   output_arg {
+#     name: "records"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "file_pattern"
+#     type: "string"
+#   }
+#   attr {
+#     name: "file_random_seed"
+#     type: "int"
+#     default_value {
+#       i: 301
+#     }
+#   }
+#   attr {
+#     name: "file_shuffle_shift_ratio"
+#     type: "float"
+#     default_value {
+#       f: 0
+#     }
+#   }
+#   attr {
+#     name: "file_buffer_size"
+#     type: "int"
+#     default_value {
+#       i: 10000
+#     }
+#   }
+#   attr {
+#     name: "file_parallelism"
+#     type: "int"
+#     default_value {
+#       i: 16
+#     }
+#   }
+#   attr {
+#     name: "batch_size"
+#     type: "int"
+#     default_value {
+#       i: 32
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "SparseAccumulatorApplyGradient"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "local_step"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "gradient_indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "gradient_values"
+#     type_attr: "dtype"
+#   }
+#   input_arg {
+#     name: "gradient_shape"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "has_known_shape"
+#     type: "bool"
+#   }
+# }
+# op {
+#   name: "SparseAccumulatorTakeGradient"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "num_required"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "indices"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "values"
+#     type_attr: "dtype"
+#   }
+#   output_arg {
+#     name: "shape"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SparseConditionalAccumulator"
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "Stack"
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "elem_type"
+#     type: "type"
+#   }
+#   attr {
+#     name: "stack_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "StackClose"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+# }
+# op {
+#   name: "StackCloseV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "StackPop"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "elem"
+#     type_attr: "elem_type"
+#   }
+#   attr {
+#     name: "elem_type"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "StackPopV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "elem"
+#     type_attr: "elem_type"
+#   }
+#   attr {
+#     name: "elem_type"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "StackPush"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "elem"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "swap_memory"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "StackPushV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "elem"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "swap_memory"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "StackV2"
+#   input_arg {
+#     name: "max_size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "elem_type"
+#     type: "type"
+#   }
+#   attr {
+#     name: "stack_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "Stage"
+#   input_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "StageClear"
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "StagePeek"
+#   input_arg {
+#     name: "index"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "StageSize"
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArray"
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "dynamic_size"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "clear_after_read"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "tensor_array_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "element_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArrayV3"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayClose"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArrayCloseV3"
+#   }
+# }
+# op {
+#   name: "TensorArrayCloseV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "TensorArrayCloseV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayConcat"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   output_arg {
+#     name: "lengths"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape_except0"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArrayGradV3"
+#   }
+# }
+# op {
+#   name: "TensorArrayConcatV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   output_arg {
+#     name: "lengths"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape_except0"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "TensorArrayConcatV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   output_arg {
+#     name: "lengths"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape_except0"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayGather"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArrayGatherV3"
+#   }
+# }
+# op {
+#   name: "TensorArrayGatherV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "TensorArrayGatherV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayGrad"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "grad_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "source"
+#     type: "string"
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArrayGradV3"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayGradV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "grad_handle"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "source"
+#     type: "string"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayGradV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "grad_handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "source"
+#     type: "string"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayPack"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArrayGatherV3 with RangeOp"
+#   }
+# }
+# op {
+#   name: "TensorArrayRead"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "index"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArrayReadV3"
+#   }
+# }
+# op {
+#   name: "TensorArrayReadV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "index"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "TensorArrayReadV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "index"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "value"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayScatter"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 19
+#     explanation: "Use TensorArrayGradV3"
+#   }
+# }
+# op {
+#   name: "TensorArrayScatterV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "TensorArrayScatterV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArraySize"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArraySizeV3"
+#   }
+# }
+# op {
+#   name: "TensorArraySizeV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+# }
+# op {
+#   name: "TensorArraySizeV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArraySplit"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "lengths"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArraySplitV3"
+#   }
+# }
+# op {
+#   name: "TensorArraySplitV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "lengths"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "TensorArraySplitV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "lengths"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayUnpack"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 20
+#     explanation: "Use TensorArrayScatterV3 with RangeOp"
+#   }
+# }
+# op {
+#   name: "TensorArrayV2"
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+#   attr {
+#     name: "dynamic_size"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "clear_after_read"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "tensor_array_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayV3"
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "flow"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "element_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+#   attr {
+#     name: "dynamic_size"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "clear_after_read"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "tensor_array_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorArrayWrite"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "index"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 16
+#     explanation: "Use TensorArrayWriteV3"
+#   }
+# }
+# op {
+#   name: "TensorArrayWriteV2"
+#   input_arg {
+#     name: "handle"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "index"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "TensorArrayWriteV3"
+#   input_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "index"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "flow_in"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "flow_out"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "Unstage"
+#   output_arg {
+#     name: "values"
+#     type_list_attr: "dtypes"
+#   }
+#   attr {
+#     name: "capacity"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "memory_limit"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "dtypes"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+_op_def_lib = _InitOpDefLibrary(b"\no\n\030AccumulatorApplyGradient\022\r\n\006handle\030\007\200\001\001\022\016\n\nlocal_step\030\t\022\021\n\010gradient\"\005dtype\"!\n\005dtype\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\n?\n\031AccumulatorNumAccumulated\022\r\n\006handle\030\007\200\001\001\032\023\n\017num_accumulated\030\003\n>\n\030AccumulatorSetGlobalStep\022\r\n\006handle\030\007\200\001\001\022\023\n\017new_global_step\030\t\no\n\027AccumulatorTakeGradient\022\r\n\006handle\030\007\200\001\001\022\020\n\014num_required\030\003\032\020\n\007average\"\005dtype\"!\n\005dtype\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\n\255\001\n\007Barrier\032\r\n\006handle\030\007\200\001\001\"!\n\017component_types\022\nlist(type)(\0010\001\"\033\n\006shapes\022\013list(shape)\032\002\n\000(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\nB\n\014BarrierClose\022\r\n\006handle\030\007\200\001\001\"#\n\027cancel_pending_enqueues\022\004bool\032\002(\000\n0\n\025BarrierIncompleteSize\022\r\n\006handle\030\007\200\001\001\032\010\n\004size\030\003\n\\\n\021BarrierInsertMany\022\r\n\006handle\030\007\200\001\001\022\010\n\004keys\030\007\022\013\n\006values\"\001T\"\t\n\001T\022\004type\"\026\n\017component_index\022\003int\n+\n\020BarrierReadySize\022\r\n\006handle\030\007\200\001\001\032\010\n\004size\030\003\n\347\001\n\017BarrierTakeMany\022\r\n\006handle\030\007\200\001\001\022\020\n\014num_elements\030\003\032\013\n\007indices\030\t\032\010\n\004keys\030\007\032\031\n\006values2\017component_types\"!\n\017component_types\022\nlist(type)(\0010\001\"\035\n\021allow_small_batch\022\004bool\032\002(\000\"\037\n\023wait_for_incomplete\022\004bool\032\002(\000\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\n\221\001\n\026ConditionalAccumulator\032\r\n\006handle\030\007\200\001\001\"!\n\005dtype\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\016\n\005shape\022\005shape\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n!\n\023DeleteSessionTensor\022\n\n\006handle\030\007\nq\n\020DynamicPartition\022\t\n\004data\"\001T\022\016\n\npartitions\030\003\032\034\n\007outputs\"\001T*\016num_partitions\"\031\n\016num_partitions\022\003int(\0010\001\"\t\n\001T\022\004type\nS\n\rDynamicStitch\022\016\n\007indices\030\003*\001N\022\014\n\004data\"\001T*\001N\032\013\n\006merged\"\001T\"\014\n\001N\022\003int(\0010\001\"\t\n\001T\022\004type\n\257\001\n\tFIFOQueue\032\r\n\006handle\030\007\200\001\001\"!\n\017component_types\022\nlist(type)(\0010\001\"\033\n\006shapes\022\013list(shape)\032\002\n\000(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\256\001\n\013FIFOQueueV2\032\n\n\006handle\030\024\"!\n\017component_types\022\nlist(type)(\0010\001\"\033\n\006shapes\022\013list(shape)\032\002\n\000(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n+\n\tFakeQueue\022\014\n\010resource\030\024\032\r\n\006handle\030\007\200\001\001\210\001\001\n5\n\020GetSessionHandle\022\n\n\005value\"\001T\032\n\n\006handle\030\007\"\t\n\001T\022\004type\n:\n\022GetSessionHandleV2\022\n\n\005value\"\001T\032\n\n\006handle\030\024\"\t\n\001T\022\004type\210\001\001\n=\n\020GetSessionTensor\022\n\n\006handle\030\007\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\n\211\001\n\010MapClear\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\234\001\n\021MapIncompleteSize\032\010\n\004size\030\003\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\264\001\n\007MapPeek\022\007\n\003key\030\t\022\013\n\007indices\030\003\032\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\222\001\n\007MapSize\032\010\n\004size\030\003\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\325\001\n\010MapStage\022\007\n\003key\030\t\022\013\n\007indices\030\003\022\025\n\006values2\013fake_dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\035\n\013fake_dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\267\001\n\nMapUnstage\022\007\n\003key\030\t\022\013\n\007indices\030\003\032\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\274\001\n\017MapUnstageNoKey\022\013\n\007indices\030\003\032\007\n\003key\030\t\032\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\220\001\n\017OrderedMapClear\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\243\001\n\030OrderedMapIncompleteSize\032\010\n\004size\030\003\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\273\001\n\016OrderedMapPeek\022\007\n\003key\030\t\022\013\n\007indices\030\003\032\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\231\001\n\016OrderedMapSize\032\010\n\004size\030\003\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\334\001\n\017OrderedMapStage\022\007\n\003key\030\t\022\013\n\007indices\030\003\022\025\n\006values2\013fake_dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\035\n\013fake_dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\276\001\n\021OrderedMapUnstage\022\007\n\003key\030\t\022\013\n\007indices\030\003\032\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\303\001\n\026OrderedMapUnstageNoKey\022\013\n\007indices\030\003\032\007\n\003key\030\t\032\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\266\001\n\020PaddingFIFOQueue\032\r\n\006handle\030\007\200\001\001\"!\n\017component_types\022\nlist(type)(\0010\001\"\033\n\006shapes\022\013list(shape)\032\002\n\000(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\265\001\n\022PaddingFIFOQueueV2\032\n\n\006handle\030\024\"!\n\017component_types\022\nlist(type)(\0010\001\"\033\n\006shapes\022\013list(shape)\032\002\n\000(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\261\001\n\rPriorityQueue\032\r\n\006handle\030\007\200\001\001\"#\n\017component_types\022\nlist(type)\032\002\n\000(\001\"\027\n\006shapes\022\013list(shape)(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\260\001\n\017PriorityQueueV2\032\n\n\006handle\030\024\"#\n\017component_types\022\nlist(type)\032\002\n\000(\001\"\027\n\006shapes\022\013list(shape)(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n@\n\nQueueClose\022\r\n\006handle\030\007\200\001\001\"#\n\027cancel_pending_enqueues\022\004bool\032\002(\000\nB\n\014QueueCloseV2\022\n\n\006handle\030\024\"#\n\027cancel_pending_enqueues\022\004bool\032\002(\000\210\001\001\n\177\n\014QueueDequeue\022\r\n\006handle\030\007\200\001\001\032\035\n\ncomponents2\017component_types\"!\n\017component_types\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\n\212\001\n\020QueueDequeueMany\022\r\n\006handle\030\007\200\001\001\022\005\n\001n\030\003\032\035\n\ncomponents2\017component_types\"!\n\017component_types\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\n\214\001\n\022QueueDequeueManyV2\022\n\n\006handle\030\024\022\005\n\001n\030\003\032\035\n\ncomponents2\017component_types\"!\n\017component_types\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\210\001\001\n\212\001\n\020QueueDequeueUpTo\022\r\n\006handle\030\007\200\001\001\022\005\n\001n\030\003\032\035\n\ncomponents2\017component_types\"!\n\017component_types\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\n\214\001\n\022QueueDequeueUpToV2\022\n\n\006handle\030\024\022\005\n\001n\030\003\032\035\n\ncomponents2\017component_types\"!\n\017component_types\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\210\001\001\n\201\001\n\016QueueDequeueV2\022\n\n\006handle\030\024\032\035\n\ncomponents2\017component_types\"!\n\017component_types\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\210\001\001\nw\n\014QueueEnqueue\022\r\n\006handle\030\007\200\001\001\022\031\n\ncomponents2\013Tcomponents\"\035\n\013Tcomponents\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\n{\n\020QueueEnqueueMany\022\r\n\006handle\030\007\200\001\001\022\031\n\ncomponents2\013Tcomponents\"\035\n\013Tcomponents\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\n}\n\022QueueEnqueueManyV2\022\n\n\006handle\030\024\022\031\n\ncomponents2\013Tcomponents\"\035\n\013Tcomponents\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\210\001\001\ny\n\016QueueEnqueueV2\022\n\n\006handle\030\024\022\031\n\ncomponents2\013Tcomponents\"\035\n\013Tcomponents\022\nlist(type)(\0010\001\"\036\n\ntimeout_ms\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\210\001\001\n-\n\rQueueIsClosed\022\r\n\006handle\030\007\200\001\001\032\r\n\tis_closed\030\n\n/\n\017QueueIsClosedV2\022\n\n\006handle\030\024\032\r\n\tis_closed\030\n\210\001\001\n$\n\tQueueSize\022\r\n\006handle\030\007\200\001\001\032\010\n\004size\030\003\n&\n\013QueueSizeV2\022\n\n\006handle\030\024\032\010\n\004size\030\003\210\001\001\n\371\001\n\022RandomShuffleQueue\032\r\n\006handle\030\007\200\001\001\"!\n\017component_types\022\nlist(type)(\0010\001\"\033\n\006shapes\022\013list(shape)\032\002\n\000(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\034\n\021min_after_dequeue\022\003int\032\002\030\000\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\370\001\n\024RandomShuffleQueueV2\032\n\n\006handle\030\024\"!\n\017component_types\022\nlist(type)(\0010\001\"\033\n\006shapes\022\013list(shape)\032\002\n\000(\001\"\034\n\010capacity\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\034\n\021min_after_dequeue\022\003int\032\002\030\000\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\317\001\n\013RecordInput\032\013\n\007records\030\007\"\026\n\014file_pattern\022\006string\"\034\n\020file_random_seed\022\003int\032\003\030\255\002\"(\n\030file_shuffle_shift_ratio\022\005float\032\005%\000\000\000\000\"\034\n\020file_buffer_size\022\003int\032\003\030\220N\"\033\n\020file_parallelism\022\003int\032\002\030\020\"\025\n\nbatch_size\022\003int\032\002\030 \210\001\001\n\277\001\n\036SparseAccumulatorApplyGradient\022\r\n\006handle\030\007\200\001\001\022\016\n\nlocal_step\030\t\022\024\n\020gradient_indices\030\t\022\030\n\017gradient_values\"\005dtype\022\022\n\016gradient_shape\030\t\"!\n\005dtype\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\027\n\017has_known_shape\022\004bool\n\214\001\n\035SparseAccumulatorTakeGradient\022\r\n\006handle\030\007\200\001\001\022\020\n\014num_required\030\003\032\013\n\007indices\030\t\032\017\n\006values\"\005dtype\032\t\n\005shape\030\t\"!\n\005dtype\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\n\227\001\n\034SparseConditionalAccumulator\032\r\n\006handle\030\007\200\001\001\"!\n\005dtype\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\016\n\005shape\022\005shape\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\nF\n\005Stack\032\r\n\006handle\030\007\200\001\001\"\021\n\telem_type\022\004type\"\030\n\nstack_name\022\006string\032\002\022\000\210\001\001\n\033\n\nStackClose\022\r\n\006handle\030\007\200\001\001\n\035\n\014StackCloseV2\022\n\n\006handle\030\024\210\001\001\n?\n\010StackPop\022\r\n\006handle\030\007\200\001\001\032\021\n\004elem\"\telem_type\"\021\n\telem_type\022\004type\nA\n\nStackPopV2\022\n\n\006handle\030\024\032\021\n\004elem\"\telem_type\"\021\n\telem_type\022\004type\210\001\001\nV\n\tStackPush\022\r\n\006handle\030\007\200\001\001\022\t\n\004elem\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\027\n\013swap_memory\022\004bool\032\002(\000\nX\n\013StackPushV2\022\n\n\006handle\030\024\022\t\n\004elem\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\027\n\013swap_memory\022\004bool\032\002(\000\210\001\001\nS\n\007StackV2\022\014\n\010max_size\030\003\032\n\n\006handle\030\024\"\021\n\telem_type\022\004type\"\030\n\nstack_name\022\006string\032\002\022\000\210\001\001\n\234\001\n\005Stage\022\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\213\001\n\nStageClear\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\253\001\n\tStagePeek\022\t\n\005index\030\003\032\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\224\001\n\tStageSize\032\010\n\004size\030\003\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\024\n\006dtypes\022\nlist(type)\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\306\001\n\013TensorArray\022\010\n\004size\030\003\032\r\n\006handle\030\007\200\001\001\"\r\n\005dtype\022\004type\"\030\n\014dynamic_size\022\004bool\032\002(\000\"\034\n\020clear_after_read\022\004bool\032\002(\001\"\037\n\021tensor_array_name\022\006string\032\002\022\000\"\034\n\relement_shape\022\005shape\032\004:\002\030\001B\025\010\020\022\021Use TensorArrayV3\210\001\001\n=\n\020TensorArrayClose\022\r\n\006handle\030\007\200\001\001B\032\010\020\022\026Use TensorArrayCloseV3\n \n\022TensorArrayCloseV2\022\n\n\006handle\030\007\n#\n\022TensorArrayCloseV3\022\n\n\006handle\030\024\210\001\001\n\234\001\n\021TensorArrayConcat\022\r\n\006handle\030\007\200\001\001\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\032\013\n\007lengths\030\t\"\r\n\005dtype\022\004type\"$\n\025element_shape_except0\022\005shape\032\004:\002\030\001B\031\010\020\022\025Use TensorArrayGradV3\n\200\001\n\023TensorArrayConcatV2\022\n\n\006handle\030\007\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\032\013\n\007lengths\030\t\"\r\n\005dtype\022\004type\"$\n\025element_shape_except0\022\005shape\032\004:\002\030\001\n\203\001\n\023TensorArrayConcatV3\022\n\n\006handle\030\024\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\032\013\n\007lengths\030\t\"\r\n\005dtype\022\004type\"$\n\025element_shape_except0\022\005shape\032\004:\002\030\001\210\001\001\n\226\001\n\021TensorArrayGather\022\r\n\006handle\030\007\200\001\001\022\013\n\007indices\030\003\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\"\034\n\relement_shape\022\005shape\032\004:\002\030\001B\033\010\020\022\027Use TensorArrayGatherV3\nx\n\023TensorArrayGatherV2\022\n\n\006handle\030\007\022\013\n\007indices\030\003\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\"\034\n\relement_shape\022\005shape\032\004:\002\030\001\n{\n\023TensorArrayGatherV3\022\n\n\006handle\030\024\022\013\n\007indices\030\003\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\"\034\n\relement_shape\022\005shape\032\004:\002\030\001\210\001\001\nn\n\017TensorArrayGrad\022\n\n\006handle\030\007\022\013\n\007flow_in\030\001\032\022\n\013grad_handle\030\007\200\001\001\"\020\n\006source\022\006stringB\031\010\020\022\025Use TensorArrayGradV3\210\001\001\nR\n\021TensorArrayGradV2\022\n\n\006handle\030\007\022\013\n\007flow_in\030\001\032\017\n\013grad_handle\030\007\"\020\n\006source\022\006string\210\001\001\n`\n\021TensorArrayGradV3\022\n\n\006handle\030\024\022\013\n\007flow_in\030\001\032\017\n\013grad_handle\030\024\032\014\n\010flow_out\030\001\"\020\n\006source\022\006string\210\001\001\n\224\001\n\017TensorArrayPack\022\r\n\006handle\030\007\200\001\001\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\"\034\n\relement_shape\022\005shape\032\004:\002\030\001B(\010\020\022$Use TensorArrayGatherV3 with RangeOp\nr\n\017TensorArrayRead\022\r\n\006handle\030\007\200\001\001\022\t\n\005index\030\003\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004typeB\031\010\020\022\025Use TensorArrayReadV3\nV\n\021TensorArrayReadV2\022\n\n\006handle\030\007\022\t\n\005index\030\003\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\nY\n\021TensorArrayReadV3\022\n\n\006handle\030\024\022\t\n\005index\030\003\022\013\n\007flow_in\030\001\032\016\n\005value\"\005dtype\"\r\n\005dtype\022\004type\210\001\001\n}\n\022TensorArrayScatter\022\r\n\006handle\030\007\200\001\001\022\013\n\007indices\030\003\022\n\n\005value\"\001T\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004typeB\031\010\023\022\025Use TensorArrayGradV3\na\n\024TensorArrayScatterV2\022\n\n\006handle\030\007\022\013\n\007indices\030\003\022\n\n\005value\"\001T\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004type\nd\n\024TensorArrayScatterV3\022\n\n\006handle\030\024\022\013\n\007indices\030\003\022\n\n\005value\"\001T\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004type\210\001\001\nR\n\017TensorArraySize\022\r\n\006handle\030\007\200\001\001\022\013\n\007flow_in\030\001\032\010\n\004size\030\003B\031\010\020\022\025Use TensorArraySizeV3\n6\n\021TensorArraySizeV2\022\n\n\006handle\030\007\022\013\n\007flow_in\030\001\032\010\n\004size\030\003\n9\n\021TensorArraySizeV3\022\n\n\006handle\030\024\022\013\n\007flow_in\030\001\032\010\n\004size\030\003\210\001\001\n|\n\020TensorArraySplit\022\r\n\006handle\030\007\200\001\001\022\n\n\005value\"\001T\022\013\n\007lengths\030\t\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004typeB\032\010\020\022\026Use TensorArraySplitV3\n_\n\022TensorArraySplitV2\022\n\n\006handle\030\007\022\n\n\005value\"\001T\022\013\n\007lengths\030\t\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004type\nb\n\022TensorArraySplitV3\022\n\n\006handle\030\024\022\n\n\005value\"\001T\022\013\n\007lengths\030\t\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004type\210\001\001\n\177\n\021TensorArrayUnpack\022\r\n\006handle\030\007\200\001\001\022\n\n\005value\"\001T\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004typeB)\010\024\022%Use TensorArrayScatterV3 with RangeOp\n\256\001\n\rTensorArrayV2\022\010\n\004size\030\003\032\n\n\006handle\030\007\"\r\n\005dtype\022\004type\"\034\n\relement_shape\022\005shape\032\004:\002\030\001\"\030\n\014dynamic_size\022\004bool\032\002(\000\"\034\n\020clear_after_read\022\004bool\032\002(\001\"\037\n\021tensor_array_name\022\006string\032\002\022\000\210\001\001\n\270\001\n\rTensorArrayV3\022\010\n\004size\030\003\032\n\n\006handle\030\024\032\010\n\004flow\030\001\"\r\n\005dtype\022\004type\"\034\n\relement_shape\022\005shape\032\004:\002\030\001\"\030\n\014dynamic_size\022\004bool\032\002(\000\"\034\n\020clear_after_read\022\004bool\032\002(\001\"\037\n\021tensor_array_name\022\006string\032\002\022\000\210\001\001\nz\n\020TensorArrayWrite\022\r\n\006handle\030\007\200\001\001\022\t\n\005index\030\003\022\n\n\005value\"\001T\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004typeB\032\010\020\022\026Use TensorArrayWriteV3\n]\n\022TensorArrayWriteV2\022\n\n\006handle\030\007\022\t\n\005index\030\003\022\n\n\005value\"\001T\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004type\n`\n\022TensorArrayWriteV3\022\n\n\006handle\030\024\022\t\n\005index\030\003\022\n\n\005value\"\001T\022\013\n\007flow_in\030\001\032\014\n\010flow_out\030\001\"\t\n\001T\022\004type\210\001\001\n\236\001\n\007Unstage\032\020\n\006values2\006dtypes\"\025\n\010capacity\022\003int\032\002\030\000(\001\"\031\n\014memory_limit\022\003int\032\002\030\000(\001\"\030\n\006dtypes\022\nlist(type)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001")

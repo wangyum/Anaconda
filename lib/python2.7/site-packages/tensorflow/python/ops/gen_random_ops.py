@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -166,7 +164,7 @@ def _random_shuffle(value, seed=None, seed2=None, name=None):
     to one and only one `output[i]`. For example, a mapping that might occur for a
     3x2 tensor is:
 
-  ```prettyprint
+  ```
   [[1, 2],       [[5, 6],
    [3, 4],  ==>   [1, 2],
    [5, 6]]        [3, 4]]
@@ -319,453 +317,450 @@ def _truncated_normal(shape, dtype, seed=None, seed2=None, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "Multinomial"
-  input_arg {
-    name: "logits"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "num_samples"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_INT64
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "ParameterizedTruncatedNormal"
-  input_arg {
-    name: "shape"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "means"
-    type_attr: "dtype"
-  }
-  input_arg {
-    name: "stdevs"
-    type_attr: "dtype"
-  }
-  input_arg {
-    name: "minvals"
-    type_attr: "dtype"
-  }
-  input_arg {
-    name: "maxvals"
-    type_attr: "dtype"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "RandomGamma"
-  input_arg {
-    name: "shape"
-    type_attr: "S"
-  }
-  input_arg {
-    name: "alpha"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "S"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "RandomPoisson"
-  input_arg {
-    name: "shape"
-    type_attr: "S"
-  }
-  input_arg {
-    name: "rate"
-    type_attr: "dtype"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "S"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "RandomShuffle"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "RandomStandardNormal"
-  input_arg {
-    name: "shape"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "RandomUniform"
-  input_arg {
-    name: "shape"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "RandomUniformInt"
-  input_arg {
-    name: "shape"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "minval"
-    type_attr: "Tout"
-  }
-  input_arg {
-    name: "maxval"
-    type_attr: "Tout"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "Tout"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "Tout"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "TruncatedNormal"
-  input_arg {
-    name: "shape"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  is_stateful: true
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "Multinomial"
+#   input_arg {
+#     name: "logits"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "num_samples"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ParameterizedTruncatedNormal"
+#   input_arg {
+#     name: "shape"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "means"
+#     type_attr: "dtype"
+#   }
+#   input_arg {
+#     name: "stdevs"
+#     type_attr: "dtype"
+#   }
+#   input_arg {
+#     name: "minvals"
+#     type_attr: "dtype"
+#   }
+#   input_arg {
+#     name: "maxvals"
+#     type_attr: "dtype"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RandomGamma"
+#   input_arg {
+#     name: "shape"
+#     type_attr: "S"
+#   }
+#   input_arg {
+#     name: "alpha"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "S"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RandomPoisson"
+#   input_arg {
+#     name: "shape"
+#     type_attr: "S"
+#   }
+#   input_arg {
+#     name: "rate"
+#     type_attr: "dtype"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "S"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RandomShuffle"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RandomStandardNormal"
+#   input_arg {
+#     name: "shape"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RandomUniform"
+#   input_arg {
+#     name: "shape"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RandomUniformInt"
+#   input_arg {
+#     name: "shape"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "minval"
+#     type_attr: "Tout"
+#   }
+#   input_arg {
+#     name: "maxval"
+#     type_attr: "Tout"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "Tout"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TruncatedNormal"
+#   input_arg {
+#     name: "shape"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+_op_def_lib = _InitOpDefLibrary(b"\nw\n\013Multinomial\022\013\n\006logits\"\001T\022\017\n\013num_samples\030\003\032\n\n\006output\030\t\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\210\001\001\n\321\001\n\034ParameterizedTruncatedNormal\022\n\n\005shape\"\001T\022\016\n\005means\"\005dtype\022\017\n\006stdevs\"\005dtype\022\020\n\007minvals\"\005dtype\022\020\n\007maxvals\"\005dtype\032\017\n\006output\"\005dtype\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\026\n\005dtype\022\004type:\007\n\0052\003\023\001\002\"\021\n\001T\022\004type:\006\n\0042\002\003\t\210\001\001\n\177\n\013RandomGamma\022\n\n\005shape\"\001S\022\n\n\005alpha\"\001T\032\013\n\006output\"\001T\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\021\n\001S\022\004type:\006\n\0042\002\003\t\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\210\001\001\n\214\001\n\rRandomPoisson\022\n\n\005shape\"\001S\022\r\n\004rate\"\005dtype\032\017\n\006output\"\005dtype\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\021\n\001S\022\004type:\006\n\0042\002\003\t\"\026\n\005dtype\022\004type:\007\n\0052\003\023\001\002\210\001\001\nY\n\rRandomShuffle\022\n\n\005value\"\001T\032\013\n\006output\"\001T\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\t\n\001T\022\004type\210\001\001\n\204\001\n\024RandomStandardNormal\022\n\n\005shape\"\001T\032\017\n\006output\"\005dtype\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\026\n\005dtype\022\004type:\007\n\0052\003\023\001\002\"\021\n\001T\022\004type:\006\n\0042\002\003\t\210\001\001\n}\n\rRandomUniform\022\n\n\005shape\"\001T\032\017\n\006output\"\005dtype\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\026\n\005dtype\022\004type:\007\n\0052\003\023\001\002\"\021\n\001T\022\004type:\006\n\0042\002\003\t\210\001\001\n\235\001\n\020RandomUniformInt\022\n\n\005shape\"\001T\022\016\n\006minval\"\004Tout\022\016\n\006maxval\"\004Tout\032\016\n\006output\"\004Tout\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\024\n\004Tout\022\004type:\006\n\0042\002\003\t\"\021\n\001T\022\004type:\006\n\0042\002\003\t\210\001\001\n\177\n\017TruncatedNormal\022\n\n\005shape\"\001T\032\017\n\006output\"\005dtype\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\026\n\005dtype\022\004type:\007\n\0052\003\023\001\002\"\021\n\001T\022\004type:\006\n\0042\002\003\t\210\001\001")

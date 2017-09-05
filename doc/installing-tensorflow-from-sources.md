@@ -37,8 +37,10 @@ sh bazel/compile.sh
 export PATH=/opt/cloudera/parcels/Anaconda/bin/:/root/bazel/output/:${PATH}
 
 git clone https://github.com/tensorflow/tensorflow && cd tensorflow
-git checkout v1.2.0
+git checkout v1.3.0
 # ./configure 
+.....................
+You have bazel 0.4.5- installed.
 Please specify the location of python. [Default is /opt/cloudera/parcels/Anaconda/bin/python]: 
 Found possible Python library paths:
   /opt/cloudera/parcels/Anaconda/lib/python2.7/site-packages
@@ -62,8 +64,8 @@ Do you wish to build TensorFlow with OpenCL support? [y/N]
 No OpenCL support will be enabled for TensorFlow
 Do you wish to build TensorFlow with CUDA support? [y/N] 
 No CUDA support will be enabled for TensorFlow
-......................
-INFO: Starting clean (this may take a while). Consider using --async if the clean takes more than several minutes.
+Do you wish to build TensorFlow with MPI support? [y/N] 
+MPI support will not be enabled for TensorFlow
 Configuration finished
 ```
 
@@ -75,6 +77,5 @@ bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
 ### Install tensorflow
 ```bash
-pip install --upgrade /tmp/tensorflow_pkg/tensorflow-1.2.0-cp27-cp27mu-linux_x86_64.whl
+pip install --upgrade /tmp/tensorflow_pkg/tensorflow-1.3.0-cp27-cp27mu-linux_x86_64.whl
 ```
-

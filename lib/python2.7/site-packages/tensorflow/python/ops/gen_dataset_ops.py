@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -34,6 +32,57 @@ def batch_dataset(input_dataset, batch_size, output_types, output_shapes,
   """
   result = _op_def_lib.apply_op("BatchDataset", input_dataset=input_dataset,
                                 batch_size=batch_size,
+                                output_types=output_types,
+                                output_shapes=output_shapes, name=name)
+  return result
+
+
+
+def cache_dataset(input_dataset, filename, output_types, output_shapes,
+                  name=None):
+  r"""Creates a dataset that caches elements from `input_dataset`.
+
+  A CacheDataset will iterate over the input_dataset, and store tensors. If the
+  cache already exists, the cache will be used. If the cache is inappropriate
+  (e.g. cannot be opened, contains tensors of the wrong shape / size), an error
+  will the returned when used.
+
+  Args:
+    input_dataset: A `Tensor` of type `resource`.
+    filename: A `Tensor` of type `string`.
+      A path on the filesystem where we should cache the dataset. Note: this
+      will be a directory.
+    output_types: A list of `tf.DTypes` that has length `>= 1`.
+    output_shapes: A list of shapes (each a `tf.TensorShape` or list of `ints`) that has length `>= 1`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `resource`.
+  """
+  result = _op_def_lib.apply_op("CacheDataset", input_dataset=input_dataset,
+                                filename=filename, output_types=output_types,
+                                output_shapes=output_shapes, name=name)
+  return result
+
+
+
+def concatenate_dataset(input_dataset, another_dataset, output_types,
+                        output_shapes, name=None):
+  r"""Creates a dataset that concatenates `input_dataset` with `another_dataset`.
+
+  Args:
+    input_dataset: A `Tensor` of type `resource`.
+    another_dataset: A `Tensor` of type `resource`.
+    output_types: A list of `tf.DTypes` that has length `>= 1`.
+    output_shapes: A list of shapes (each a `tf.TensorShape` or list of `ints`) that has length `>= 1`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `resource`.
+  """
+  result = _op_def_lib.apply_op("ConcatenateDataset",
+                                input_dataset=input_dataset,
+                                another_dataset=another_dataset,
                                 output_types=output_types,
                                 output_shapes=output_shapes, name=name)
   return result
@@ -198,6 +247,65 @@ def group_by_window_dataset(input_dataset, key_func_other_arguments,
 
 
 
+def ignore_errors_dataset(input_dataset, output_types, output_shapes,
+                          name=None):
+  r"""Creates a dataset that contains the elements of `input_dataset` ignoring errors.
+
+  Args:
+    input_dataset: A `Tensor` of type `resource`.
+    output_types: A list of `tf.DTypes` that has length `>= 1`.
+    output_shapes: A list of shapes (each a `tf.TensorShape` or list of `ints`) that has length `>= 1`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `resource`.
+  """
+  result = _op_def_lib.apply_op("IgnoreErrorsDataset",
+                                input_dataset=input_dataset,
+                                output_types=output_types,
+                                output_shapes=output_shapes, name=name)
+  return result
+
+
+
+def interleave_dataset(input_dataset, other_arguments, cycle_length,
+                       block_length, f, output_types, output_shapes,
+                       name=None):
+  r"""Creates a dataset that applies `f` to the outputs of `input_dataset`.
+
+  Unlike MapDataset, the `f` in InterleaveDataset is expected to return
+  a Dataset resource, and InterleaveDataset will flatten successive
+  results into a single Dataset. Unlike FlatMapDataset,
+  InterleaveDataset will interleave sequences of up to `block_length`
+  consecutive elements from `cycle_length` input elements.
+
+  Args:
+    input_dataset: A `Tensor` of type `resource`.
+    other_arguments: A list of `Tensor` objects.
+    cycle_length: A `Tensor` of type `int64`.
+    block_length: A `Tensor` of type `int64`.
+    f: A function decorated with @Defun.
+      A function mapping elements of `input_dataset`, concatenated with
+      `other_arguments`, to a Dataset resource that contains elements matching
+      `output_types` and `output_shapes`.
+    output_types: A list of `tf.DTypes` that has length `>= 1`.
+    output_shapes: A list of shapes (each a `tf.TensorShape` or list of `ints`) that has length `>= 1`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `resource`.
+  """
+  result = _op_def_lib.apply_op("InterleaveDataset",
+                                input_dataset=input_dataset,
+                                other_arguments=other_arguments,
+                                cycle_length=cycle_length,
+                                block_length=block_length, f=f,
+                                output_types=output_types,
+                                output_shapes=output_shapes, name=name)
+  return result
+
+
+
 def iterator(shared_name, container, output_types, output_shapes, name=None):
   r"""A container for an iterator resource.
 
@@ -237,6 +345,23 @@ def iterator_dispose(iterator, name=None):
 
 
 
+def iterator_from_string_handle(string_handle, name=None):
+  r"""Converts the given string representing a handle to an iterator to a resource.
+
+  Args:
+    string_handle: A `Tensor` of type `string`.
+      A string representation of the given handle.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `resource`. A handle to an iterator resource.
+  """
+  result = _op_def_lib.apply_op("IteratorFromStringHandle",
+                                string_handle=string_handle, name=name)
+  return result
+
+
+
 def iterator_get_next(iterator, output_types, output_shapes, name=None):
   r"""Gets the next output from the given iterator.
 
@@ -252,6 +377,23 @@ def iterator_get_next(iterator, output_types, output_shapes, name=None):
   result = _op_def_lib.apply_op("IteratorGetNext", iterator=iterator,
                                 output_types=output_types,
                                 output_shapes=output_shapes, name=name)
+  return result
+
+
+
+def iterator_to_string_handle(resource_handle, name=None):
+  r"""Converts the given `resource_handle` representing an iterator to a string.
+
+  Args:
+    resource_handle: A `Tensor` of type `resource`.
+      A handle to an iterator resource.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `string`. A string representation of the given handle.
+  """
+  result = _op_def_lib.apply_op("IteratorToStringHandle",
+                                resource_handle=resource_handle, name=name)
   return result
 
 
@@ -615,20 +757,23 @@ def tensor_slice_dataset(components, output_shapes, name=None):
 
 
 
-def text_line_dataset(filenames, name=None):
+def text_line_dataset(filenames, compression_type, name=None):
   r"""Creates a dataset that emits the lines of one or more text files.
 
   Args:
     filenames: A `Tensor` of type `string`.
       A scalar or a vector containing the name(s) of the file(s) to be
       read.
+    compression_type: A `Tensor` of type `string`.
+      A scalar containing either (i) the empty string (no
+      compression), (ii) "ZLIB", or (iii) "GZIP".
     name: A name for the operation (optional).
 
   Returns:
     A `Tensor` of type `resource`.
   """
   result = _op_def_lib.apply_op("TextLineDataset", filenames=filenames,
-                                name=name)
+                                compression_type=compression_type, name=name)
   return result
 
 
@@ -651,746 +796,896 @@ def zip_dataset(input_datasets, output_types, output_shapes, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "BatchDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "batch_size"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "DenseToSparseBatchDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "batch_size"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "row_shape"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "FilterDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "other_arguments"
-    type_list_attr: "Targuments"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "predicate"
-    type: "func"
-  }
-  attr {
-    name: "Targuments"
-    type: "list(type)"
-    has_minimum: true
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "FixedLengthRecordDataset"
-  input_arg {
-    name: "filenames"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "header_bytes"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "record_bytes"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "footer_bytes"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  is_stateful: true
-}
-op {
-  name: "FlatMapDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "other_arguments"
-    type_list_attr: "Targuments"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "f"
-    type: "func"
-  }
-  attr {
-    name: "Targuments"
-    type: "list(type)"
-    has_minimum: true
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "GroupByWindowDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "key_func_other_arguments"
-    type_list_attr: "Tkey_func_other_arguments"
-  }
-  input_arg {
-    name: "reduce_func_other_arguments"
-    type_list_attr: "Treduce_func_other_arguments"
-  }
-  input_arg {
-    name: "window_size"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "key_func"
-    type: "func"
-  }
-  attr {
-    name: "reduce_func"
-    type: "func"
-  }
-  attr {
-    name: "Tkey_func_other_arguments"
-    type: "list(type)"
-    has_minimum: true
-  }
-  attr {
-    name: "Treduce_func_other_arguments"
-    type: "list(type)"
-    has_minimum: true
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "Iterator"
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-  }
-  attr {
-    name: "container"
-    type: "string"
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "IteratorDispose"
-  input_arg {
-    name: "iterator"
-    type: DT_RESOURCE
-  }
-  is_stateful: true
-}
-op {
-  name: "IteratorGetNext"
-  input_arg {
-    name: "iterator"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "components"
-    type_list_attr: "output_types"
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "MakeIterator"
-  input_arg {
-    name: "dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "iterator"
-    type: DT_RESOURCE
-  }
-  is_stateful: true
-}
-op {
-  name: "MapDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "other_arguments"
-    type_list_attr: "Targuments"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "f"
-    type: "func"
-  }
-  attr {
-    name: "Targuments"
-    type: "list(type)"
-    has_minimum: true
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "OneShotIterator"
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "dataset_factory"
-    type: "func"
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "PaddedBatchDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "batch_size"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "padded_shapes"
-    type: DT_INT64
-    number_attr: "N"
-  }
-  input_arg {
-    name: "padding_values"
-    type_list_attr: "Toutput_types"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "Toutput_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "ParallelMapDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "other_arguments"
-    type_list_attr: "Targuments"
-  }
-  input_arg {
-    name: "num_threads"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "output_buffer_size"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "f"
-    type: "func"
-  }
-  attr {
-    name: "Targuments"
-    type: "list(type)"
-    has_minimum: true
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "RangeDataset"
-  input_arg {
-    name: "start"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "stop"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "step"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "RepeatDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "count"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "ShuffleDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "buffer_size"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "seed"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "seed2"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "SkipDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "count"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "SparseTensorSliceDataset"
-  input_arg {
-    name: "indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "values"
-    type_attr: "Tvalues"
-  }
-  input_arg {
-    name: "dense_shape"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "Tvalues"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "TFRecordDataset"
-  input_arg {
-    name: "filenames"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "compression_type"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  is_stateful: true
-}
-op {
-  name: "TakeDataset"
-  input_arg {
-    name: "input_dataset"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "count"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorDataset"
-  input_arg {
-    name: "components"
-    type_list_attr: "Toutput_types"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "Toutput_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "TensorSliceDataset"
-  input_arg {
-    name: "components"
-    type_list_attr: "Toutput_types"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "Toutput_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-op {
-  name: "TextLineDataset"
-  input_arg {
-    name: "filenames"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  is_stateful: true
-}
-op {
-  name: "ZipDataset"
-  input_arg {
-    name: "input_datasets"
-    type: DT_RESOURCE
-    number_attr: "N"
-  }
-  output_arg {
-    name: "handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "output_types"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "output_shapes"
-    type: "list(shape)"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  is_stateful: true
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "BatchDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "batch_size"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "CacheDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ConcatenateDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "another_dataset"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "DenseToSparseBatchDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "batch_size"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "row_shape"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "FilterDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "other_arguments"
+#     type_list_attr: "Targuments"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "predicate"
+#     type: "func"
+#   }
+#   attr {
+#     name: "Targuments"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "FixedLengthRecordDataset"
+#   input_arg {
+#     name: "filenames"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "header_bytes"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "record_bytes"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "footer_bytes"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "FlatMapDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "other_arguments"
+#     type_list_attr: "Targuments"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "f"
+#     type: "func"
+#   }
+#   attr {
+#     name: "Targuments"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "GroupByWindowDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "key_func_other_arguments"
+#     type_list_attr: "Tkey_func_other_arguments"
+#   }
+#   input_arg {
+#     name: "reduce_func_other_arguments"
+#     type_list_attr: "Treduce_func_other_arguments"
+#   }
+#   input_arg {
+#     name: "window_size"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "key_func"
+#     type: "func"
+#   }
+#   attr {
+#     name: "reduce_func"
+#     type: "func"
+#   }
+#   attr {
+#     name: "Tkey_func_other_arguments"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "Treduce_func_other_arguments"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "IgnoreErrorsDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "InterleaveDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "other_arguments"
+#     type_list_attr: "Targuments"
+#   }
+#   input_arg {
+#     name: "cycle_length"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "block_length"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "f"
+#     type: "func"
+#   }
+#   attr {
+#     name: "Targuments"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "Iterator"
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "IteratorDispose"
+#   input_arg {
+#     name: "iterator"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "IteratorFromStringHandle"
+#   input_arg {
+#     name: "string_handle"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "resource_handle"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "IteratorGetNext"
+#   input_arg {
+#     name: "iterator"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "components"
+#     type_list_attr: "output_types"
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "IteratorToStringHandle"
+#   input_arg {
+#     name: "resource_handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "string_handle"
+#     type: DT_STRING
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MakeIterator"
+#   input_arg {
+#     name: "dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "iterator"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MapDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "other_arguments"
+#     type_list_attr: "Targuments"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "f"
+#     type: "func"
+#   }
+#   attr {
+#     name: "Targuments"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "OneShotIterator"
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "dataset_factory"
+#     type: "func"
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "PaddedBatchDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "batch_size"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "padded_shapes"
+#     type: DT_INT64
+#     number_attr: "N"
+#   }
+#   input_arg {
+#     name: "padding_values"
+#     type_list_attr: "Toutput_types"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "Toutput_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ParallelMapDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "other_arguments"
+#     type_list_attr: "Targuments"
+#   }
+#   input_arg {
+#     name: "num_threads"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "output_buffer_size"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "f"
+#     type: "func"
+#   }
+#   attr {
+#     name: "Targuments"
+#     type: "list(type)"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RangeDataset"
+#   input_arg {
+#     name: "start"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "stop"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "step"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "RepeatDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "count"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ShuffleDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "buffer_size"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "seed"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "seed2"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "SkipDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "count"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "SparseTensorSliceDataset"
+#   input_arg {
+#     name: "indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "Tvalues"
+#   }
+#   input_arg {
+#     name: "dense_shape"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "Tvalues"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TFRecordDataset"
+#   input_arg {
+#     name: "filenames"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "compression_type"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TakeDataset"
+#   input_arg {
+#     name: "input_dataset"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "count"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorDataset"
+#   input_arg {
+#     name: "components"
+#     type_list_attr: "Toutput_types"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "Toutput_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TensorSliceDataset"
+#   input_arg {
+#     name: "components"
+#     type_list_attr: "Toutput_types"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "Toutput_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "TextLineDataset"
+#   input_arg {
+#     name: "filenames"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "compression_type"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ZipDataset"
+#   input_arg {
+#     name: "input_datasets"
+#     type: DT_RESOURCE
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "output_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "output_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   is_stateful: true
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\202\001\n\014BatchDataset\022\021\n\rinput_dataset\030\024\022\016\n\nbatch_size\030\t\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\200\001\n\014CacheDataset\022\021\n\rinput_dataset\030\024\022\014\n\010filename\030\007\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\215\001\n\022ConcatenateDataset\022\021\n\rinput_dataset\030\024\022\023\n\017another_dataset\030\024\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\236\001\n\031DenseToSparseBatchDataset\022\021\n\rinput_dataset\030\024\022\016\n\nbatch_size\030\t\022\r\n\trow_shape\030\t\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\301\001\n\rFilterDataset\022\021\n\rinput_dataset\030\024\022\035\n\017other_arguments2\nTarguments\032\n\n\006handle\030\024\"\021\n\tpredicate\022\004func\"\032\n\nTarguments\022\nlist(type)(\001\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\nn\n\030FixedLengthRecordDataset\022\r\n\tfilenames\030\007\022\020\n\014header_bytes\030\t\022\020\n\014record_bytes\030\t\022\020\n\014footer_bytes\030\t\032\n\n\006handle\030\024\210\001\001\n\272\001\n\016FlatMapDataset\022\021\n\rinput_dataset\030\024\022\035\n\017other_arguments2\nTarguments\032\n\n\006handle\030\024\"\t\n\001f\022\004func\"\032\n\nTarguments\022\nlist(type)(\001\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\377\002\n\024GroupByWindowDataset\022\021\n\rinput_dataset\030\024\0225\n\030key_func_other_arguments2\031Tkey_func_other_arguments\022;\n\033reduce_func_other_arguments2\034Treduce_func_other_arguments\022\017\n\013window_size\030\t\032\n\n\006handle\030\024\"\020\n\010key_func\022\004func\"\023\n\013reduce_func\022\004func\")\n\031Tkey_func_other_arguments\022\nlist(type)(\001\",\n\034Treduce_func_other_arguments\022\nlist(type)(\001\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\ny\n\023IgnoreErrorsDataset\022\021\n\rinput_dataset\030\024\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\341\001\n\021InterleaveDataset\022\021\n\rinput_dataset\030\024\022\035\n\017other_arguments2\nTarguments\022\020\n\014cycle_length\030\t\022\020\n\014block_length\030\t\032\n\n\006handle\030\024\"\t\n\001f\022\004func\"\032\n\nTarguments\022\nlist(type)(\001\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\207\001\n\010Iterator\032\n\n\006handle\030\024\"\025\n\013shared_name\022\006string\"\023\n\tcontainer\022\006string\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\"\n\017IteratorDispose\022\014\n\010iterator\030\024\210\001\001\nE\n\030IteratorFromStringHandle\022\021\n\rstring_handle\030\007\032\023\n\017resource_handle\030\024\210\001\001\n\200\001\n\017IteratorGetNext\022\014\n\010iterator\030\024\032\032\n\ncomponents2\014output_types\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\nC\n\026IteratorToStringHandle\022\023\n\017resource_handle\030\024\032\021\n\rstring_handle\030\007\210\001\001\n,\n\014MakeIterator\022\013\n\007dataset\030\024\022\014\n\010iterator\030\024\210\001\001\n\266\001\n\nMapDataset\022\021\n\rinput_dataset\030\024\022\035\n\017other_arguments2\nTarguments\032\n\n\006handle\030\024\"\t\n\001f\022\004func\"\032\n\nTarguments\022\nlist(type)(\001\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\257\001\n\017OneShotIterator\032\n\n\006handle\030\024\"\027\n\017dataset_factory\022\004func\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\210\001\001\n\316\001\n\022PaddedBatchDataset\022\021\n\rinput_dataset\030\024\022\016\n\nbatch_size\030\t\022\024\n\rpadded_shapes\030\t*\001N\022\037\n\016padding_values2\rToutput_types\032\n\n\006handle\030\024\"\037\n\rToutput_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\"\014\n\001N\022\003int(\0010\001\210\001\001\n\347\001\n\022ParallelMapDataset\022\021\n\rinput_dataset\030\024\022\035\n\017other_arguments2\nTarguments\022\017\n\013num_threads\030\003\022\026\n\022output_buffer_size\030\t\032\n\n\006handle\030\024\"\t\n\001f\022\004func\"\032\n\nTarguments\022\nlist(type)(\001\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n~\n\014RangeDataset\022\t\n\005start\030\t\022\010\n\004stop\030\t\022\010\n\004step\030\t\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n~\n\rRepeatDataset\022\021\n\rinput_dataset\030\024\022\t\n\005count\030\t\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\232\001\n\016ShuffleDataset\022\021\n\rinput_dataset\030\024\022\017\n\013buffer_size\030\t\022\010\n\004seed\030\t\022\t\n\005seed2\030\t\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n|\n\013SkipDataset\022\021\n\rinput_dataset\030\024\022\t\n\005count\030\t\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\nk\n\030SparseTensorSliceDataset\022\013\n\007indices\030\t\022\021\n\006values\"\007Tvalues\022\017\n\013dense_shape\030\t\032\n\n\006handle\030\024\"\017\n\007Tvalues\022\004type\210\001\001\nE\n\017TFRecordDataset\022\r\n\tfilenames\030\007\022\024\n\020compression_type\030\007\032\n\n\006handle\030\024\210\001\001\n|\n\013TakeDataset\022\021\n\rinput_dataset\030\024\022\t\n\005count\030\t\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n~\n\rTensorDataset\022\033\n\ncomponents2\rToutput_types\032\n\n\006handle\030\024\"\037\n\rToutput_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\n\203\001\n\022TensorSliceDataset\022\033\n\ncomponents2\rToutput_types\032\n\n\006handle\030\024\"\037\n\rToutput_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\210\001\001\nE\n\017TextLineDataset\022\r\n\tfilenames\030\007\022\024\n\020compression_type\030\007\032\n\n\006handle\030\024\210\001\001\n\202\001\n\nZipDataset\022\025\n\016input_datasets\030\024*\001N\032\n\n\006handle\030\024\"\036\n\014output_types\022\nlist(type)(\0010\001\" \n\routput_shapes\022\013list(shape)(\0010\001\"\014\n\001N\022\003int(\0010\001\210\001\001")

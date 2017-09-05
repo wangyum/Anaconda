@@ -3172,6 +3172,17 @@ class TestTemporaryElide(TestCase):
         a = np.bool_()
         assert_(type(~(a & a)) is np.bool_)
 
+    def test_elide_readonly(self):
+        # don't try to elide readonly temporaries
+        r = np.asarray(np.broadcast_to(np.zeros(1), 100000).flat) * 0.0
+        assert_equal(r, 0)
+
+    def test_elide_updateifcopy(self):
+        a = np.ones(2**20)[::2]
+        b = a.flat.__array__() + 1
+        del b
+        assert_equal(a, 1)
+
 
 class TestCAPI(TestCase):
     def test_IsPythonScalar(self):
@@ -4302,6 +4313,18 @@ class TestResize(TestCase):
         assert_array_equal(x, np.eye(3))
         x.resize()
         assert_array_equal(x, np.eye(3))
+
+    def test_0d_shape(self):
+        # to it multiple times to test it does not break alloc cache gh-9216
+        for i in range(10):
+            x = np.empty((1,))
+            x.resize(())
+            assert_equal(x.shape, ())
+            assert_equal(x.size, 1)
+            x = np.empty(())
+            x.resize((1,))
+            assert_equal(x.shape, (1,))
+            assert_equal(x.size, 1)
 
     def test_invalid_arguments(self):
         self.assertRaises(TypeError, np.eye(3).resize, 'hi')
@@ -6629,6 +6652,17 @@ class TestWhere(TestCase):
         ibad = np.vstack(np.where(x == 99.))
         assert_array_equal(ibad,
                            np.atleast_2d(np.array([[],[]], dtype=np.intp)))
+
+    def test_largedim(self):
+        # invalid read regression gh-9304
+        shape = [10, 2, 3, 4, 5, 6]
+        np.random.seed(2)
+        array = np.random.rand(*shape)
+
+        for i in range(10):
+            benchmark = array.nonzero()
+            result = array.nonzero()
+            assert_array_equal(benchmark, result)
 
 
 if not IS_PYPY:

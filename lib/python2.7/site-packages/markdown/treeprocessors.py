@@ -1,7 +1,8 @@
-import re
-import inlinepatterns
-import util
-import odict
+from __future__ import unicode_literals
+from __future__ import absolute_import
+from . import util
+from . import odict
+from . import inlinepatterns
 
 
 def build_treeprocessors(md_instance, **kwargs):
@@ -15,17 +16,11 @@ def build_treeprocessors(md_instance, **kwargs):
 def isString(s):
     """ Check if it's string """
     if not isinstance(s, util.AtomicString):
-        return isinstance(s, basestring)
+        return isinstance(s, util.string_type)
     return False
 
 
-class Processor:
-    def __init__(self, markdown_instance=None):
-        if markdown_instance:
-            self.markdown = markdown_instance
-
-
-class Treeprocessor(Processor):
+class Treeprocessor(util.Processor):
     """
     Treeprocessors are run on the ElementTree object before serialization.
 
@@ -39,11 +34,11 @@ class Treeprocessor(Processor):
     def run(self, root):
         """
         Subclasses of Treeprocessor should implement a `run` method, which
-        takes a root ElementTree. This method can return another ElementTree 
-        object, and the existing root ElementTree will be replaced, or it can 
+        takes a root ElementTree. This method can return another ElementTree
+        object, and the existing root ElementTree will be replaced, or it can
         modify the current tree and return None.
         """
-        pass
+        pass  # pragma: no cover
 
 
 class InlineProcessor(Treeprocessor):
@@ -58,6 +53,7 @@ class InlineProcessor(Treeprocessor):
                                       + len(self.__placeholder_suffix)
         self.__placeholder_re = util.INLINE_PLACEHOLDER_RE
         self.markdown = md
+        self.inlinePatterns = md.inlinePatterns
 
     def __makePlaceholder(self, type):
         """ Generate a placeholder """
@@ -75,7 +71,7 @@ class InlineProcessor(Treeprocessor):
         * index: index, from which we start search
 
         Returns: placeholder id and string index, after the found placeholder.
-        
+
         """
         m = self.__placeholder_re.search(data, index)
         if m:
@@ -104,9 +100,9 @@ class InlineProcessor(Treeprocessor):
         """
         if not isinstance(data, util.AtomicString):
             startIndex = 0
-            while patternIndex < len(self.markdown.inlinePatterns):
+            while patternIndex < len(self.inlinePatterns):
                 data, matched, startIndex = self.__applyPattern(
-                    self.markdown.inlinePatterns.value_for_index(patternIndex),
+                    self.inlinePatterns.value_for_index(patternIndex),
                     data, patternIndex, startIndex)
                 if not matched:
                     patternIndex += 1
@@ -133,11 +129,10 @@ class InlineProcessor(Treeprocessor):
             text = subnode.tail
             subnode.tail = None
 
-        childResult = self.__processPlaceholders(text, subnode)
+        childResult = self.__processPlaceholders(text, subnode, isText)
 
         if not isText and node is not subnode:
-            pos = node.getchildren().index(subnode)
-            node.remove(subnode)
+            pos = list(node).index(subnode) + 1
         else:
             pos = 0
 
@@ -145,7 +140,7 @@ class InlineProcessor(Treeprocessor):
         for newChild in childResult:
             node.insert(pos, newChild)
 
-    def __processPlaceholders(self, data, parent):
+    def __processPlaceholders(self, data, parent, isText=True):
         """
         Process string with placeholders and generate ElementTree tree.
 
@@ -155,7 +150,7 @@ class InlineProcessor(Treeprocessor):
         * parent: Element, which contains processing inline data
 
         Returns: list with ElementTree elements with applied inline patterns.
-        
+
         """
         def linkText(text):
             if text:
@@ -164,6 +159,11 @@ class InlineProcessor(Treeprocessor):
                         result[-1].tail += text
                     else:
                         result[-1].tail = text
+                elif not isText:
+                    if parent.tail:
+                        parent.tail += text
+                    else:
+                        parent.tail = text
                 else:
                     if parent.text:
                         parent.text += text
@@ -183,15 +183,17 @@ class InlineProcessor(Treeprocessor):
                         text = data[strartIndex:index]
                         linkText(text)
 
-                    if not isString(node): # it's Element
-                        for child in [node] + node.getchildren():
+                    if not isString(node):  # it's Element
+                        for child in [node] + list(node):
                             if child.tail:
                                 if child.tail.strip():
-                                    self.__processElementText(node, child,False)
+                                    self.__processElementText(
+                                        node, child, False
+                                    )
                             if child.text:
                                 if child.text.strip():
                                     self.__processElementText(child, child)
-                    else: # it's just a string
+                    else:  # it's just a string
                         linkText(node)
                         strartIndex = phEndIndex
                         continue
@@ -199,7 +201,7 @@ class InlineProcessor(Treeprocessor):
                     strartIndex = phEndIndex
                     result.append(node)
 
-                else: # wrong placeholder
+                else:  # wrong placeholder
                     end = index + len(self.__placeholder_prefix)
                     linkText(data[strartIndex:end])
                     strartIndex = end
@@ -242,14 +244,16 @@ class InlineProcessor(Treeprocessor):
         if not isString(node):
             if not isinstance(node.text, util.AtomicString):
                 # We need to process current node too
-                for child in [node] + node.getchildren():
+                for child in [node] + list(node):
                     if not isString(node):
-                        if child.text: 
-                            child.text = self.__handleInline(child.text,
-                                                            patternIndex + 1)
+                        if child.text:
+                            child.text = self.__handleInline(
+                                child.text, patternIndex + 1
+                            )
                         if child.tail:
-                            child.tail = self.__handleInline(child.tail,
-                                                            patternIndex)
+                            child.tail = self.__handleInline(
+                                child.tail, patternIndex
+                            )
 
         placeholder = self.__stashNode(node, pattern.type())
 
@@ -262,8 +266,8 @@ class InlineProcessor(Treeprocessor):
 
         Iterate over ElementTree, find elements with inline tag, apply inline
         patterns and append newly created Elements to tree.  If you don't
-        want to process your data with inline paterns, instead of normal string,
-        use subclass AtomicString:
+        want to process your data with inline paterns, instead of normal
+        string, use subclass AtomicString:
 
             node.text = markdown.AtomicString("This will not be processed.")
 
@@ -281,47 +285,49 @@ class InlineProcessor(Treeprocessor):
         while stack:
             currElement = stack.pop()
             insertQueue = []
-            for child in currElement.getchildren():
-                if child.text and not isinstance(child.text, util.AtomicString):
+            for child in currElement:
+                if child.text and not isinstance(
+                    child.text, util.AtomicString
+                ):
                     text = child.text
                     child.text = None
-                    lst = self.__processPlaceholders(self.__handleInline(
-                                                    text), child)
+                    lst = self.__processPlaceholders(
+                        self.__handleInline(text), child
+                    )
                     stack += lst
                     insertQueue.append((child, lst))
                 if child.tail:
                     tail = self.__handleInline(child.tail)
                     dumby = util.etree.Element('d')
-                    tailResult = self.__processPlaceholders(tail, dumby)
-                    if dumby.text:
-                        child.tail = dumby.text
-                    else:
-                        child.tail = None
-                    pos = currElement.getchildren().index(child) + 1
+                    child.tail = None
+                    tailResult = self.__processPlaceholders(tail, dumby, False)
+                    if dumby.tail:
+                        child.tail = dumby.tail
+                    pos = list(currElement).index(child) + 1
                     tailResult.reverse()
                     for newChild in tailResult:
                         currElement.insert(pos, newChild)
-                if child.getchildren():
+                if len(child):
                     stack.append(child)
 
             for element, lst in insertQueue:
                 if self.markdown.enable_attributes:
-                    if element.text:
-                        element.text = \
-                            inlinepatterns.handleAttributes(element.text, 
-                                                                    element)
+                    if element.text and isString(element.text):
+                        element.text = inlinepatterns.handleAttributes(
+                            element.text, element
+                        )
                 i = 0
                 for newChild in lst:
                     if self.markdown.enable_attributes:
                         # Processing attributes
-                        if newChild.tail:
-                            newChild.tail = \
-                                inlinepatterns.handleAttributes(newChild.tail,
-                                                                    element)
-                        if newChild.text:
-                            newChild.text = \
-                                inlinepatterns.handleAttributes(newChild.text,
-                                                                    newChild)
+                        if newChild.tail and isString(newChild.tail):
+                            newChild.tail = inlinepatterns.handleAttributes(
+                                newChild.tail, element
+                            )
+                        if newChild.text and isString(newChild.text):
+                            newChild.text = inlinepatterns.handleAttributes(
+                                newChild.text, newChild
+                            )
                     element.insert(i, newChild)
                     i += 1
         return tree
@@ -352,9 +358,14 @@ class PrettifyTreeprocessor(Treeprocessor):
         self._prettifyETree(root)
         # Do <br />'s seperately as they are often in the middle of
         # inline content and missed by _prettifyETree.
-        brs = root.getiterator('br')
+        brs = root.iter('br')
         for br in brs:
             if not br.tail or not br.tail.strip():
                 br.tail = '\n'
             else:
                 br.tail = '\n%s' % br.tail
+        # Clean up extra empty lines at end of code blocks.
+        pres = root.iter('pre')
+        for pre in pres:
+            if len(pre) and pre[0].tag == 'code':
+                pre[0].text = util.AtomicString(pre[0].text.rstrip() + '\n')

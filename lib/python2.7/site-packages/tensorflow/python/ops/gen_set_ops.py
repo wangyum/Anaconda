@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -241,228 +239,225 @@ def sparse_to_sparse_set_operation(set1_indices, set1_values, set1_shape,
   return _SparseToSparseSetOperationOutput._make(result)
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "DenseToDenseSetOperation"
-  input_arg {
-    name: "set1"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "set2"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "result_indices"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "result_values"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "result_shape"
-    type: DT_INT64
-  }
-  attr {
-    name: "set_operation"
-    type: "string"
-  }
-  attr {
-    name: "validate_indices"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_STRING
-      }
-    }
-  }
-}
-op {
-  name: "DenseToSparseSetOperation"
-  input_arg {
-    name: "set1"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "set2_indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "set2_values"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "set2_shape"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "result_indices"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "result_values"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "result_shape"
-    type: DT_INT64
-  }
-  attr {
-    name: "set_operation"
-    type: "string"
-  }
-  attr {
-    name: "validate_indices"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_STRING
-      }
-    }
-  }
-}
-op {
-  name: "SetSize"
-  input_arg {
-    name: "set_indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "set_values"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "set_shape"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  attr {
-    name: "validate_indices"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_STRING
-      }
-    }
-  }
-}
-op {
-  name: "SparseToSparseSetOperation"
-  input_arg {
-    name: "set1_indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "set1_values"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "set1_shape"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "set2_indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "set2_values"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "set2_shape"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "result_indices"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "result_values"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "result_shape"
-    type: DT_INT64
-  }
-  attr {
-    name: "set_operation"
-    type: "string"
-  }
-  attr {
-    name: "validate_indices"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_STRING
-      }
-    }
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "DenseToDenseSetOperation"
+#   input_arg {
+#     name: "set1"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "set2"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "result_indices"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "result_values"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "result_shape"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "set_operation"
+#     type: "string"
+#   }
+#   attr {
+#     name: "validate_indices"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_STRING
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "DenseToSparseSetOperation"
+#   input_arg {
+#     name: "set1"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "set2_indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "set2_values"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "set2_shape"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "result_indices"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "result_values"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "result_shape"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "set_operation"
+#     type: "string"
+#   }
+#   attr {
+#     name: "validate_indices"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_STRING
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SetSize"
+#   input_arg {
+#     name: "set_indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "set_values"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "set_shape"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "validate_indices"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_STRING
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SparseToSparseSetOperation"
+#   input_arg {
+#     name: "set1_indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "set1_values"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "set1_shape"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "set2_indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "set2_values"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "set2_shape"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "result_indices"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "result_values"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "result_shape"
+#     type: DT_INT64
+#   }
+#   attr {
+#     name: "set_operation"
+#     type: "string"
+#   }
+#   attr {
+#     name: "validate_indices"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_STRING
+#       }
+#     }
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\271\001\n\030DenseToDenseSetOperation\022\t\n\004set1\"\001T\022\t\n\004set2\"\001T\032\022\n\016result_indices\030\t\032\022\n\rresult_values\"\001T\032\020\n\014result_shape\030\t\"\027\n\rset_operation\022\006string\"\034\n\020validate_indices\022\004bool\032\002(\001\"\026\n\001T\022\004type:\013\n\t2\007\006\005\003\t\004\021\007\n\343\001\n\031DenseToSparseSetOperation\022\t\n\004set1\"\001T\022\020\n\014set2_indices\030\t\022\020\n\013set2_values\"\001T\022\016\n\nset2_shape\030\t\032\022\n\016result_indices\030\t\032\022\n\rresult_values\"\001T\032\020\n\014result_shape\030\t\"\027\n\rset_operation\022\006string\"\034\n\020validate_indices\022\004bool\032\002(\001\"\026\n\001T\022\004type:\013\n\t2\007\006\005\003\t\004\021\007\nz\n\007SetSize\022\017\n\013set_indices\030\t\022\017\n\nset_values\"\001T\022\r\n\tset_shape\030\t\032\010\n\004size\030\003\"\034\n\020validate_indices\022\004bool\032\002(\001\"\026\n\001T\022\004type:\013\n\t2\007\006\005\003\t\004\021\007\n\215\002\n\032SparseToSparseSetOperation\022\020\n\014set1_indices\030\t\022\020\n\013set1_values\"\001T\022\016\n\nset1_shape\030\t\022\020\n\014set2_indices\030\t\022\020\n\013set2_values\"\001T\022\016\n\nset2_shape\030\t\032\022\n\016result_indices\030\t\032\022\n\rresult_values\"\001T\032\020\n\014result_shape\030\t\"\027\n\rset_operation\022\006string\"\034\n\020validate_indices\022\004bool\032\002(\001\"\026\n\001T\022\004type:\013\n\t2\007\006\005\003\t\004\021\007")

@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -339,8 +337,8 @@ def bitcast(input, type, name=None):
   endian orderings will give different results.
 
   Args:
-    input: A `Tensor`. Must be one of the following types: `float32`, `float64`, `int64`, `int32`, `uint8`, `uint16`, `int16`, `int8`, `complex64`, `complex128`, `qint8`, `quint8`, `qint32`, `half`.
-    type: A `tf.DType` from: `tf.float32, tf.float64, tf.int64, tf.int32, tf.uint8, tf.uint16, tf.int16, tf.int8, tf.complex64, tf.complex128, tf.qint8, tf.quint8, tf.qint32, tf.half`.
+    input: A `Tensor`. Must be one of the following types: `float32`, `float64`, `int64`, `int32`, `uint8`, `uint16`, `int8`, `int16`, `complex64`, `complex128`, `qint8`, `quint8`, `qint16`, `quint16`, `qint32`, `half`.
+    type: A `tf.DType` from: `tf.float32, tf.float64, tf.int64, tf.int32, tf.uint8, tf.uint16, tf.int8, tf.int16, tf.complex64, tf.complex128, tf.qint8, tf.quint8, tf.qint16, tf.quint16, tf.qint32, tf.half`.
     name: A name for the operation (optional).
 
   Returns:
@@ -509,6 +507,25 @@ def _const(value, dtype, name=None):
     A `Tensor` of type `dtype`.
   """
   result = _op_def_lib.apply_op("Const", value=value, dtype=dtype, name=name)
+  return result
+
+
+
+def _debug_gradient_identity(input, name=None):
+  r"""Identity op for gradient debugging.
+
+  This op is hidden from public in Python. It is used by TensorFlow Debugger to
+  register gradient tensors for gradient debugging.
+
+  Args:
+    input: A `Tensor`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor`. Has the same type as `input`.
+  """
+  result = _op_def_lib.apply_op("DebugGradientIdentity", input=input,
+                                name=name)
   return result
 
 
@@ -880,7 +897,8 @@ def extract_image_patches(images, ksizes, strides, rates, padding, name=None):
       input stride, specifying how far two consecutive patch samples are in the
       input. Equivalent to extracting patches with
       `patch_sizes_eff = patch_sizes + (patch_sizes - 1) * (rates - 1)`, followed by
-      subsampling them spatially by a factor of `rates`.
+      subsampling them spatially by a factor of `rates`. This is equivalent to
+      `rate` in dilated (a.k.a. Atrous) convolutions.
     padding: A `string` from: `"SAME", "VALID"`.
       The type of padding algorithm to use.
 
@@ -897,7 +915,8 @@ def extract_image_patches(images, ksizes, strides, rates, padding, name=None):
     A `Tensor`. Has the same type as `images`.
     4-D Tensor with shape `[batch, out_rows, out_cols, ksize_rows *
     ksize_cols * depth]` containing image patches with size
-    `ksize_rows x ksize_cols x depth` vectorized in the "depth" dimension.
+    `ksize_rows x ksize_cols x depth` vectorized in the "depth" dimension. Note
+    `out_rows` and `out_cols` are the dimensions of the output patches.
   """
   result = _op_def_lib.apply_op("ExtractImagePatches", images=images,
                                 ksizes=ksizes, strides=strides, rates=rates,
@@ -907,13 +926,14 @@ def extract_image_patches(images, ksizes, strides, rates, padding, name=None):
 
 
 def fake_quant_with_min_max_args(inputs, min=None, max=None, num_bits=None,
-                                 name=None):
+                                 narrow_range=None, name=None):
   r"""Fake-quantize the 'inputs' tensor, type float to 'outputs' tensor of same type.
 
-  Attributes [min; max] define the clamping range for the 'inputs' data.  Op
-  divides this range into 255 steps (total of 256 values), then replaces each
-  'inputs' value with the closest of the quantized step values.
-  'num_bits' is the bitwidth of the quantization; between 2 and 8, inclusive.
+  Attributes `[min; max]` define the clamping range for the `inputs` data.
+  `inputs` values are quantized into the quantization range (`[0; 2^num_bits - 1]`
+  when `narrow_range` is false and `[1; 2^num_bits - 1]` when it is true) and
+  then de-quantized and output as floats in `[min; max]` interval.
+  `num_bits` is the bitwidth of the quantization; between 2 and 8, inclusive.
 
   Quantization is called fake since the output is still in floating point.
 
@@ -922,6 +942,7 @@ def fake_quant_with_min_max_args(inputs, min=None, max=None, num_bits=None,
     min: An optional `float`. Defaults to `-6`.
     max: An optional `float`. Defaults to `6`.
     num_bits: An optional `int`. Defaults to `8`.
+    narrow_range: An optional `bool`. Defaults to `False`.
     name: A name for the operation (optional).
 
   Returns:
@@ -929,13 +950,14 @@ def fake_quant_with_min_max_args(inputs, min=None, max=None, num_bits=None,
   """
   result = _op_def_lib.apply_op("FakeQuantWithMinMaxArgs", inputs=inputs,
                                 min=min, max=max, num_bits=num_bits,
-                                name=name)
+                                narrow_range=narrow_range, name=name)
   return result
 
 
 
 def fake_quant_with_min_max_args_gradient(gradients, inputs, min=None,
-                                          max=None, num_bits=None, name=None):
+                                          max=None, num_bits=None,
+                                          narrow_range=None, name=None):
   r"""Compute gradients for a FakeQuantWithMinMaxArgs operation.
 
   Args:
@@ -946,6 +968,7 @@ def fake_quant_with_min_max_args_gradient(gradients, inputs, min=None,
     min: An optional `float`. Defaults to `-6`.
     max: An optional `float`. Defaults to `6`.
     num_bits: An optional `int`. Defaults to `8`.
+    narrow_range: An optional `bool`. Defaults to `False`.
     name: A name for the operation (optional).
 
   Returns:
@@ -955,28 +978,33 @@ def fake_quant_with_min_max_args_gradient(gradients, inputs, min=None,
   """
   result = _op_def_lib.apply_op("FakeQuantWithMinMaxArgsGradient",
                                 gradients=gradients, inputs=inputs, min=min,
-                                max=max, num_bits=num_bits, name=name)
+                                max=max, num_bits=num_bits,
+                                narrow_range=narrow_range, name=name)
   return result
 
 
 
-def fake_quant_with_min_max_vars(inputs, min, max, num_bits=None, name=None):
+def fake_quant_with_min_max_vars(inputs, min, max, num_bits=None,
+                                 narrow_range=None, name=None):
   r"""Fake-quantize the 'inputs' tensor of type float via global float scalars `min`
 
   and `max` to 'outputs' tensor of same shape as `inputs`.
 
-  [min; max] is the clamping range for the 'inputs' data.  Op divides this range
-  into 255 steps (total of 256 values), then replaces each 'inputs' value with the
-  closest of the quantized step values.
-  'num_bits' is the bitwidth of the quantization; between 2 and 8, inclusive.
+  `[min; max]` define the clamping range for the `inputs` data.
+  `inputs` values are quantized into the quantization range (`[0; 2^num_bits - 1]`
+  when `narrow_range` is false and `[1; 2^num_bits - 1]` when it is true) and
+  then de-quantized and output as floats in `[min; max]` interval.
+  `num_bits` is the bitwidth of the quantization; between 2 and 8, inclusive.
 
-  This operation has a gradient and thus allows for training `min` and `max` values.
+  This operation has a gradient and thus allows for training `min` and `max`
+  values.
 
   Args:
     inputs: A `Tensor` of type `float32`.
     min: A `Tensor` of type `float32`.
     max: A `Tensor` of type `float32`.
     num_bits: An optional `int`. Defaults to `8`.
+    narrow_range: An optional `bool`. Defaults to `False`.
     name: A name for the operation (optional).
 
   Returns:
@@ -984,7 +1012,7 @@ def fake_quant_with_min_max_vars(inputs, min, max, num_bits=None, name=None):
   """
   result = _op_def_lib.apply_op("FakeQuantWithMinMaxVars", inputs=inputs,
                                 min=min, max=max, num_bits=num_bits,
-                                name=name)
+                                narrow_range=narrow_range, name=name)
   return result
 
 
@@ -998,7 +1026,8 @@ _FakeQuantWithMinMaxVarsGradientOutput = _collections.namedtuple(
 
 
 def fake_quant_with_min_max_vars_gradient(gradients, inputs, min, max,
-                                          num_bits=None, name=None):
+                                          num_bits=None, narrow_range=None,
+                                          name=None):
   r"""Compute gradients for a FakeQuantWithMinMaxVars operation.
 
   Args:
@@ -1011,6 +1040,8 @@ def fake_quant_with_min_max_vars_gradient(gradients, inputs, min, max,
     max: A `Tensor` of type `float32`.
     num_bits: An optional `int`. Defaults to `8`.
       The bitwidth of the quantization; between 2 and 8, inclusive.
+    narrow_range: An optional `bool`. Defaults to `False`.
+      Whether to quantize into 2^num_bits - 1 distinct values.
     name: A name for the operation (optional).
 
   Returns:
@@ -1025,30 +1056,34 @@ def fake_quant_with_min_max_vars_gradient(gradients, inputs, min, max,
   """
   result = _op_def_lib.apply_op("FakeQuantWithMinMaxVarsGradient",
                                 gradients=gradients, inputs=inputs, min=min,
-                                max=max, num_bits=num_bits, name=name)
+                                max=max, num_bits=num_bits,
+                                narrow_range=narrow_range, name=name)
   return _FakeQuantWithMinMaxVarsGradientOutput._make(result)
 
 
 
 def fake_quant_with_min_max_vars_per_channel(inputs, min, max, num_bits=None,
-                                             name=None):
+                                             narrow_range=None, name=None):
   r"""Fake-quantize the 'inputs' tensor of type float and one of the shapes: `[d]`,
 
   `[b, d]` `[b, h, w, d]` via per-channel floats `min` and `max` of shape `[d]`
   to 'outputs' tensor of same shape as `inputs`.
 
-  [min; max] is the clamping range for the 'inputs' data in the corresponding
-  depth channel.  Op divides this range into 255 steps (total of 256 values), then
-  replaces each 'inputs' value with the closest of the quantized step values.
-  'num_bits' is the bitwidth of the quantization; between 2 and 8, inclusive.
+  `[min; max]` define the clamping range for the `inputs` data.
+  `inputs` values are quantized into the quantization range (`[0; 2^num_bits - 1]`
+  when `narrow_range` is false and `[1; 2^num_bits - 1]` when it is true) and
+  then de-quantized and output as floats in `[min; max]` interval.
+  `num_bits` is the bitwidth of the quantization; between 2 and 8, inclusive.
 
-  This operation has a gradient and thus allows for training `min` and `max` values.
+  This operation has a gradient and thus allows for training `min` and `max`
+  values.
 
   Args:
     inputs: A `Tensor` of type `float32`.
     min: A `Tensor` of type `float32`.
     max: A `Tensor` of type `float32`.
     num_bits: An optional `int`. Defaults to `8`.
+    narrow_range: An optional `bool`. Defaults to `False`.
     name: A name for the operation (optional).
 
   Returns:
@@ -1056,7 +1091,8 @@ def fake_quant_with_min_max_vars_per_channel(inputs, min, max, num_bits=None,
   """
   result = _op_def_lib.apply_op("FakeQuantWithMinMaxVarsPerChannel",
                                 inputs=inputs, min=min, max=max,
-                                num_bits=num_bits, name=name)
+                                num_bits=num_bits, narrow_range=narrow_range,
+                                name=name)
   return result
 
 
@@ -1071,6 +1107,7 @@ _FakeQuantWithMinMaxVarsPerChannelGradientOutput = _collections.namedtuple(
 
 def fake_quant_with_min_max_vars_per_channel_gradient(gradients, inputs, min,
                                                       max, num_bits=None,
+                                                      narrow_range=None,
                                                       name=None):
   r"""Compute gradients for a FakeQuantWithMinMaxVarsPerChannel operation.
 
@@ -1086,6 +1123,8 @@ def fake_quant_with_min_max_vars_per_channel_gradient(gradients, inputs, min,
     max: A `Tensor` of type `float32`.
     num_bits: An optional `int`. Defaults to `8`.
       The bitwidth of the quantization; between 2 and 8, inclusive.
+    narrow_range: An optional `bool`. Defaults to `False`.
+      Whether to quantize into 2^num_bits - 1 distinct values.
     name: A name for the operation (optional).
 
   Returns:
@@ -1101,7 +1140,8 @@ def fake_quant_with_min_max_vars_per_channel_gradient(gradients, inputs, min,
   """
   result = _op_def_lib.apply_op("FakeQuantWithMinMaxVarsPerChannelGradient",
                                 gradients=gradients, inputs=inputs, min=min,
-                                max=max, num_bits=num_bits, name=name)
+                                max=max, num_bits=num_bits,
+                                narrow_range=narrow_range, name=name)
   return _FakeQuantWithMinMaxVarsPerChannelGradientOutput._make(result)
 
 
@@ -1182,15 +1222,25 @@ def gather(params, indices, validate_indices=None, name=None):
 
 
 def gather_nd(params, indices, name=None):
-  r"""Gather values or slices from `params` according to `indices`.
+  r"""Gather slices from `params` into a Tensor with shape specified by `indices`.
 
-  `indices` is an integer tensor containing indices into `params`.  The last
-  dimension of `indices` can be at most the rank of `params`:
+  `indices` is an K-dimensional integer tensor, best thought of as a
+  (K-1)-dimensional tensor of indices into `params`, where each element defines a
+  slice of `params`:
+
+      output[i_0, ..., i_{K-2}] = params[indices[i0, ..., i_{K-2}]]
+
+  Whereas in @{tf.gather} `indices` defines slices into the first
+  dimension of `params`, in `tf.gather_nd`, `indices` defines slices into the
+  first `N` dimensions of `params`, where `N = indices.shape[-1]`.
+
+  The last dimension of `indices` can be at most the rank of
+  `params`:
 
       indices.shape[-1] <= params.rank
 
   The last dimension of `indices` corresponds to elements
-  (if `indices.shape[-1] = params.rank`) or slices
+  (if `indices.shape[-1] == params.rank`) or slices
   (if `indices.shape[-1] < params.rank`) along dimension `indices.shape[-1]`
   of `params`.  The output tensor has shape
 
@@ -1286,6 +1336,53 @@ def gather_nd(params, indices, name=None):
   """
   result = _op_def_lib.apply_op("GatherNd", params=params, indices=indices,
                                 name=name)
+  return result
+
+
+
+def gather_v2(params, indices, axis, name=None):
+  r"""Gather slices from `params` axis `axis` according to `indices`.
+
+  `indices` must be an integer tensor of any dimension (usually 0-D or 1-D).
+  Produces an output tensor with shape `params.shape[:axis] + indices.shape +
+  params.shape[axis + 1:]` where:
+
+  ```python
+      # Scalar indices (output is rank(params) - 1).
+      output[a_0, ..., a_n, b_0, ..., b_n] =
+        params[a_0, ..., a_n, indices, b_0, ..., b_n]
+
+      # Vector indices (output is rank(params)).
+      output[a_0, ..., a_n, i, b_0, ..., b_n] =
+        params[a_0, ..., a_n, indices[i], b_0, ..., b_n]
+
+      # Higher rank indices (output is rank(params) + rank(indices) - 1).
+      output[a_0, ..., a_n, i, ..., j, b_0, ... b_n] =
+        params[a_0, ..., a_n, indices[i, ..., j], b_0, ..., b_n]
+  ```
+
+  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+  <img style="width:100%" src="https://www.tensorflow.org/images/Gather.png" alt>
+  </div>
+
+  Args:
+    params: A `Tensor`.
+      The tensor from which to gather values. Must be at least rank
+      `axis + 1`.
+    indices: A `Tensor`. Must be one of the following types: `int32`, `int64`.
+      Index tensor. Must be in range `[0, params.shape[axis])`.
+    axis: A `Tensor`. Must be one of the following types: `int32`, `int64`.
+      The axis in `params` to gather `indices` from. Defaults to the first
+      dimension. Supports negative indexes.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor`. Has the same type as `params`.
+    Values from `params` gathered from indices given by `indices`, with
+    shape `params.shape[:axis] + indices.shape + params.shape[axis + 1:]`.
+  """
+  result = _op_def_lib.apply_op("GatherV2", params=params, indices=indices,
+                                axis=axis, name=name)
   return result
 
 
@@ -1894,6 +1991,49 @@ def _pad(input, paddings, name=None):
 
 
 
+def _pad_v2(input, paddings, constant_values, name=None):
+  r"""Pads a tensor.
+
+  This operation pads `input` according to the `paddings` and `constant_values`
+  you specify. `paddings` is an integer tensor with shape `[Dn, 2]`, where n is
+  the rank of `input`. For each dimension D of `input`, `paddings[D, 0]` indicates
+  how many padding values to add before the contents of `input` in that dimension,
+  and `paddings[D, 1]` indicates how many padding values to add after the contents
+  of `input` in that dimension. `constant_values` is a scalar tensor of the same
+  type as `input` that indicates the value to use for padding `input`.
+
+  The padded size of each dimension D of the output is:
+
+  `paddings(D, 0) + input.dim_size(D) + paddings(D, 1)`
+
+  For example:
+
+  ```
+  # 't' is [[1, 1], [2, 2]]
+  # 'paddings' is [[1, 1], [2, 2]]
+  # 'constant_values' is 0
+  # rank of 't' is 2
+  pad(t, paddings) ==> [[0, 0, 0, 0, 0, 0]
+                        [0, 0, 1, 1, 0, 0]
+                        [0, 0, 2, 2, 0, 0]
+                        [0, 0, 0, 0, 0, 0]]
+  ```
+
+  Args:
+    input: A `Tensor`.
+    paddings: A `Tensor`. Must be one of the following types: `int32`, `int64`.
+    constant_values: A `Tensor`. Must have the same type as `input`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor`. Has the same type as `input`.
+  """
+  result = _op_def_lib.apply_op("PadV2", input=input, paddings=paddings,
+                                constant_values=constant_values, name=name)
+  return result
+
+
+
 def _parallel_concat(values, shape, name=None):
   r"""Concatenates a list of `N` tensors along the first dimension.
 
@@ -2128,6 +2268,34 @@ def quantize_and_dequantize_v2(input, input_min, input_max, signed_input=None,
   result = _op_def_lib.apply_op("QuantizeAndDequantizeV2", input=input,
                                 input_min=input_min, input_max=input_max,
                                 signed_input=signed_input, num_bits=num_bits,
+                                range_given=range_given, name=name)
+  return result
+
+
+
+def quantize_and_dequantize_v3(input, input_min, input_max, num_bits,
+                               signed_input=None, range_given=None,
+                               name=None):
+  r"""Quantizes then dequantizes a tensor.
+
+  This is almost identical to QuantizeAndDequantizeV2, except that num_bits is a
+  tensor, so its value can change during training.
+
+  Args:
+    input: A `Tensor`. Must be one of the following types: `float32`, `float64`.
+    input_min: A `Tensor`. Must have the same type as `input`.
+    input_max: A `Tensor`. Must have the same type as `input`.
+    num_bits: A `Tensor` of type `int32`.
+    signed_input: An optional `bool`. Defaults to `True`.
+    range_given: An optional `bool`. Defaults to `True`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor`. Has the same type as `input`.
+  """
+  result = _op_def_lib.apply_op("QuantizeAndDequantizeV3", input=input,
+                                input_min=input_min, input_max=input_max,
+                                num_bits=num_bits, signed_input=signed_input,
                                 range_given=range_given, name=name)
   return result
 
@@ -2706,8 +2874,8 @@ def scatter_nd(indices, updates, shape, name=None):
 
   Creates a new tensor by applying sparse `updates` to individual
   values or slices within a zero tensor of the given `shape` according to
-  indices.  This operator is the inverse of the [tf.gather_nd](#gather_nd)
-  operator which extracts values or slices from a given tensor.
+  indices.  This operator is the inverse of the @{tf.gather_nd} operator which
+  extracts values or slices from a given tensor.
 
   **WARNING**: The order in which updates are applied is nondeterministic, so the
   output will be nondeterministic if `indices` contains duplicates.
@@ -2791,6 +2959,67 @@ def scatter_nd(indices, updates, shape, name=None):
   """
   result = _op_def_lib.apply_op("ScatterNd", indices=indices, updates=updates,
                                 shape=shape, name=name)
+  return result
+
+
+
+def scatter_nd_non_aliasing_add(input, indices, updates, name=None):
+  r"""Applies sparse addition to `input` using individual values or slices
+
+  from `updates` according to indices `indices`.  The updates are non-aliasing:
+  `input` is only modified in-place if no other operations will use it.
+  Otherwise, a copy of `input` is made.  This operation has a gradient with
+  respect to both `input` and `updates`.
+
+  `input` is a `Tensor` with rank `P` and `indices` is a `Tensor` of rank `Q`.
+
+  `indices` must be integer tensor, containing indices into `input`.
+  It must be shape `[d_0, ..., d_{Q-2}, K]` where `0 < K <= P`.
+
+  The innermost dimension of `indices` (with length `K`) corresponds to
+  indices into elements (if `K = P`) or `(P-K)`-dimensional slices
+  (if `K < P`) along the `K`th dimension of `input`.
+
+  `updates` is `Tensor` of rank `Q-1+P-K` with shape:
+
+  ```
+  [d_0, ..., d_{Q-2}, input.shape[K], ..., input.shape[P-1]].
+  ```
+
+  For example, say we want to add 4 scattered elements to a rank-1 tensor to 8
+  elements. In Python, that addition would look like this:
+
+      input = tf.constant([1, 2, 3, 4, 5, 6, 7, 8])
+      indices = tf.constant([[4], [3], [1], [7]])
+      updates = tf.constant([9, 10, 11, 12])
+      output = tf.scatter_nd_non_aliasing_add(input, indices, updates)
+      with tf.Session() as sess:
+        print(sess.run(output))
+
+  The resulting value `output` would look like this:
+
+      [1, 13, 3, 14, 14, 6, 7, 20]
+
+  See @{tf.scatter_nd} for more details about how to make updates to slices.
+
+  Args:
+    input: A `Tensor`. Must be one of the following types: `float32`, `float64`, `int64`, `int32`, `uint8`, `uint16`, `int16`, `int8`, `complex64`, `complex128`, `qint8`, `quint8`, `qint32`, `half`.
+      A Tensor.
+    indices: A `Tensor`. Must be one of the following types: `int32`, `int64`.
+      A Tensor. Must be one of the following types: `int32`, `int64`.
+      A tensor of indices into `input`.
+    updates: A `Tensor`. Must have the same type as `input`.
+      A Tensor. Must have the same type as ref. A tensor of updated values
+      to add to `input`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor`. Has the same type as `input`.
+    A `Tensor` with the same shape as `input`, containing values of `input`
+    updated with `updates`.
+  """
+  result = _op_def_lib.apply_op("ScatterNdNonAliasingAdd", input=input,
+                                indices=indices, updates=updates, name=name)
   return result
 
 
@@ -3244,7 +3473,7 @@ def _split(split_dim, value, num_split, name=None):
   Args:
     split_dim: A `Tensor` of type `int32`.
       0-D.  The dimension along which to split.  Must be in the range
-      `[0, rank(value))`.
+      `[-rank(value), rank(value))`.
     value: A `Tensor`. The tensor to split.
     num_split: An `int` that is `>= 1`.
       The number of ways to split.  Must evenly divide
@@ -3274,7 +3503,7 @@ def _split_v(value, size_splits, split_dim, num_split, name=None):
       Can contain one -1 indicating that dimension is to be inferred.
     split_dim: A `Tensor` of type `int32`.
       0-D.  The dimension along which to split.  Must be in the range
-      `[0, rank(value))`.
+      `[-rank(value), rank(value))`.
     num_split: An `int` that is `>= 1`.
     name: A name for the operation (optional).
 
@@ -3841,2852 +4070,3088 @@ def _zeros_like(x, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "BatchMatrixBandPart"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "num_lower"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "num_upper"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "band"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 14
-    explanation: "Use MatrixBandPart"
-  }
-}
-op {
-  name: "BatchMatrixDiag"
-  input_arg {
-    name: "diagonal"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 14
-    explanation: "Use MatrixDiag"
-  }
-}
-op {
-  name: "BatchMatrixDiagPart"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "diagonal"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 14
-    explanation: "Use MatrixDiagPart"
-  }
-}
-op {
-  name: "BatchMatrixSetDiag"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "diagonal"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 14
-    explanation: "Use MatrixSetDiag"
-  }
-}
-op {
-  name: "BatchToSpace"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "crops"
-    type_attr: "Tidx"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "block_size"
-    type: "int"
-    has_minimum: true
-    minimum: 2
-  }
-  attr {
-    name: "Tidx"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "BatchToSpaceND"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "block_shape"
-    type_attr: "Tblock_shape"
-  }
-  input_arg {
-    name: "crops"
-    type_attr: "Tcrops"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tblock_shape"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "Tcrops"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Bitcast"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "type"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "type"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT64
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_UINT16
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT32
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "BroadcastArgs"
-  input_arg {
-    name: "s0"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "s1"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "r0"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "BroadcastGradientArgs"
-  input_arg {
-    name: "s0"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "s1"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "r0"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "r1"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "CheckNumerics"
-  input_arg {
-    name: "tensor"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "message"
-    type: "string"
-  }
-}
-op {
-  name: "Concat"
-  input_arg {
-    name: "concat_dim"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "values"
-    type_attr: "T"
-    number_attr: "N"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 2
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "ConcatOffset"
-  input_arg {
-    name: "concat_dim"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "shape"
-    type: DT_INT32
-    number_attr: "N"
-  }
-  output_arg {
-    name: "offset"
-    type: DT_INT32
-    number_attr: "N"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 2
-  }
-}
-op {
-  name: "ConcatV2"
-  input_arg {
-    name: "values"
-    type_attr: "T"
-    number_attr: "N"
-  }
-  input_arg {
-    name: "axis"
-    type_attr: "Tidx"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 2
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tidx"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Const"
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "value"
-    type: "tensor"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-}
-op {
-  name: "DepthToSpace"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "block_size"
-    type: "int"
-    has_minimum: true
-    minimum: 2
-  }
-}
-op {
-  name: "Dequantize"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "min_range"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_range"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "mode"
-    type: "string"
-    default_value {
-      s: "MIN_COMBINED"
-    }
-    allowed_values {
-      list {
-        s: "MIN_COMBINED"
-        s: "MIN_FIRST"
-      }
-    }
-  }
-}
-op {
-  name: "Diag"
-  input_arg {
-    name: "diagonal"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-      }
-    }
-  }
-}
-op {
-  name: "DiagPart"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "diagonal"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-      }
-    }
-  }
-}
-op {
-  name: "EditDistance"
-  input_arg {
-    name: "hypothesis_indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "hypothesis_values"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "hypothesis_shape"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "truth_indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "truth_values"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "truth_shape"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "normalize"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "ExpandDims"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "dim"
-    type_attr: "Tdim"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tdim"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "ExtractImagePatches"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "patches"
-    type_attr: "T"
-  }
-  attr {
-    name: "ksizes"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "strides"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "rates"
-    type: "list(int)"
-    has_minimum: true
-    minimum: 4
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_UINT16
-        type: DT_HALF
-      }
-    }
-  }
-  attr {
-    name: "padding"
-    type: "string"
-    allowed_values {
-      list {
-        s: "SAME"
-        s: "VALID"
-      }
-    }
-  }
-}
-op {
-  name: "FakeQuantWithMinMaxArgs"
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "outputs"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "min"
-    type: "float"
-    default_value {
-      f: -6
-    }
-  }
-  attr {
-    name: "max"
-    type: "float"
-    default_value {
-      f: 6
-    }
-  }
-  attr {
-    name: "num_bits"
-    type: "int"
-    default_value {
-      i: 8
-    }
-  }
-}
-op {
-  name: "FakeQuantWithMinMaxArgsGradient"
-  input_arg {
-    name: "gradients"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "backprops"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "min"
-    type: "float"
-    default_value {
-      f: -6
-    }
-  }
-  attr {
-    name: "max"
-    type: "float"
-    default_value {
-      f: 6
-    }
-  }
-  attr {
-    name: "num_bits"
-    type: "int"
-    default_value {
-      i: 8
-    }
-  }
-}
-op {
-  name: "FakeQuantWithMinMaxVars"
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "outputs"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_bits"
-    type: "int"
-    default_value {
-      i: 8
-    }
-  }
-}
-op {
-  name: "FakeQuantWithMinMaxVarsGradient"
-  input_arg {
-    name: "gradients"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "backprops_wrt_input"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "backprop_wrt_min"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "backprop_wrt_max"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_bits"
-    type: "int"
-    default_value {
-      i: 8
-    }
-  }
-}
-op {
-  name: "FakeQuantWithMinMaxVarsPerChannel"
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "outputs"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_bits"
-    type: "int"
-    default_value {
-      i: 8
-    }
-  }
-}
-op {
-  name: "FakeQuantWithMinMaxVarsPerChannelGradient"
-  input_arg {
-    name: "gradients"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "backprops_wrt_input"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "backprop_wrt_min"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "backprop_wrt_max"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_bits"
-    type: "int"
-    default_value {
-      i: 8
-    }
-  }
-}
-op {
-  name: "Fill"
-  input_arg {
-    name: "dims"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "Gather"
-  input_arg {
-    name: "params"
-    type_attr: "Tparams"
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "Tparams"
-  }
-  attr {
-    name: "validate_indices"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "Tparams"
-    type: "type"
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "GatherNd"
-  input_arg {
-    name: "params"
-    type_attr: "Tparams"
-  }
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "Tparams"
-  }
-  attr {
-    name: "Tparams"
-    type: "type"
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Identity"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "ImmutableConst"
-  output_arg {
-    name: "tensor"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-  attr {
-    name: "memory_region_name"
-    type: "string"
-  }
-}
-op {
-  name: "InvertPermutation"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "ListDiff"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "out"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "idx"
-    type_attr: "out_idx"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "out_idx"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "MatrixBandPart"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "num_lower"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "num_upper"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "band"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "MatrixDiag"
-  input_arg {
-    name: "diagonal"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "MatrixDiagPart"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "diagonal"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "MatrixSetDiag"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "diagonal"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "MirrorPad"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "paddings"
-    type_attr: "Tpaddings"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tpaddings"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "mode"
-    type: "string"
-    allowed_values {
-      list {
-        s: "REFLECT"
-        s: "SYMMETRIC"
-      }
-    }
-  }
-}
-op {
-  name: "MirrorPadGrad"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "paddings"
-    type_attr: "Tpaddings"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tpaddings"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "mode"
-    type: "string"
-    allowed_values {
-      list {
-        s: "REFLECT"
-        s: "SYMMETRIC"
-      }
-    }
-  }
-}
-op {
-  name: "OneHot"
-  input_arg {
-    name: "indices"
-    type_attr: "TI"
-  }
-  input_arg {
-    name: "depth"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "on_value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "off_value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "axis"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "TI"
-    type: "type"
-    default_value {
-      type: DT_INT64
-    }
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "OnesLike"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-      }
-    }
-  }
-}
-op {
-  name: "Pack"
-  input_arg {
-    name: "values"
-    type_attr: "T"
-    number_attr: "N"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "axis"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-}
-op {
-  name: "Pad"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "paddings"
-    type_attr: "Tpaddings"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tpaddings"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "ParallelConcat"
-  input_arg {
-    name: "values"
-    type_attr: "T"
-    number_attr: "N"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-}
-op {
-  name: "Placeholder"
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-    default_value {
-      shape {
-        unknown_rank: true
-      }
-    }
-  }
-}
-op {
-  name: "PlaceholderV2"
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-  deprecation {
-    version: 23
-    explanation: "Placeholder now behaves the same as PlaceholderV2."
-  }
-}
-op {
-  name: "PlaceholderWithDefault"
-  input_arg {
-    name: "input"
-    type_attr: "dtype"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-  }
-  attr {
-    name: "shape"
-    type: "shape"
-  }
-}
-op {
-  name: "PreventGradient"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "message"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-}
-op {
-  name: "QuantizeAndDequantize"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "signed_input"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "num_bits"
-    type: "int"
-    default_value {
-      i: 8
-    }
-  }
-  attr {
-    name: "range_given"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "input_min"
-    type: "float"
-    default_value {
-      f: 0
-    }
-  }
-  attr {
-    name: "input_max"
-    type: "float"
-    default_value {
-      f: 0
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  deprecation {
-    version: 22
-    explanation: "Replaced by QuantizeAndDequantizeV2"
-  }
-}
-op {
-  name: "QuantizeAndDequantizeV2"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "input_min"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "input_max"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "signed_input"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "num_bits"
-    type: "int"
-    default_value {
-      i: 8
-    }
-  }
-  attr {
-    name: "range_given"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "QuantizeV2"
-  input_arg {
-    name: "input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min_range"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_range"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_min"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output_max"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "mode"
-    type: "string"
-    default_value {
-      s: "MIN_COMBINED"
-    }
-    allowed_values {
-      list {
-        s: "MIN_COMBINED"
-        s: "MIN_FIRST"
-      }
-    }
-  }
-}
-op {
-  name: "QuantizedConcat"
-  input_arg {
-    name: "concat_dim"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "values"
-    type_attr: "T"
-    number_attr: "N"
-  }
-  input_arg {
-    name: "input_mins"
-    type: DT_FLOAT
-    number_attr: "N"
-  }
-  input_arg {
-    name: "input_maxes"
-    type: DT_FLOAT
-    number_attr: "N"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_min"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output_max"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 2
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "QuantizedInstanceNorm"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "x_min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "x_max"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "y_min"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "y_max"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_QINT8
-        type: DT_QUINT8
-        type: DT_QINT16
-        type: DT_QUINT16
-        type: DT_QINT32
-      }
-    }
-  }
-  attr {
-    name: "output_range_given"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "given_y_min"
-    type: "float"
-    default_value {
-      f: 0
-    }
-  }
-  attr {
-    name: "given_y_max"
-    type: "float"
-    default_value {
-      f: 0
-    }
-  }
-  attr {
-    name: "variance_epsilon"
-    type: "float"
-    default_value {
-      f: 1e-05
-    }
-  }
-  attr {
-    name: "min_separation"
-    type: "float"
-    default_value {
-      f: 0.001
-    }
-  }
-}
-op {
-  name: "QuantizedReshape"
-  input_arg {
-    name: "tensor"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "shape"
-    type_attr: "Tshape"
-  }
-  input_arg {
-    name: "input_min"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "input_max"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_min"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output_max"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tshape"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Rank"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type: DT_INT32
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "RefIdentity"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-    is_ref: true
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  allows_uninitialized_input: true
-}
-op {
-  name: "Reshape"
-  input_arg {
-    name: "tensor"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "shape"
-    type_attr: "Tshape"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tshape"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "ResourceStridedSliceAssign"
-  input_arg {
-    name: "ref"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "begin"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "end"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "strides"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Index"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "begin_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "end_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "ellipsis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "new_axis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "shrink_axis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "Reverse"
-  input_arg {
-    name: "tensor"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "dims"
-    type: DT_BOOL
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_BOOL
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_STRING
-      }
-    }
-  }
-}
-op {
-  name: "ReverseSequence"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "seq_lengths"
-    type_attr: "Tlen"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "seq_dim"
-    type: "int"
-  }
-  attr {
-    name: "batch_dim"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tlen"
-    type: "type"
-    default_value {
-      type: DT_INT64
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "ReverseV2"
-  input_arg {
-    name: "tensor"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "axis"
-    type_attr: "Tidx"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "Tidx"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_BOOL
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_COMPLEX64
-        type: DT_COMPLEX128
-        type: DT_STRING
-      }
-    }
-  }
-}
-op {
-  name: "ScatterNd"
-  input_arg {
-    name: "indices"
-    type_attr: "Tindices"
-  }
-  input_arg {
-    name: "updates"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "shape"
-    type_attr: "Tindices"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tindices"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Shape"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "out_type"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "ShapeN"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-    number_attr: "N"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "out_type"
-    number_attr: "N"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Size"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "out_type"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Slice"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "begin"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "size"
-    type_attr: "Index"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Index"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "SpaceToBatch"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "paddings"
-    type_attr: "Tpaddings"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tpaddings"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "block_size"
-    type: "int"
-    has_minimum: true
-    minimum: 2
-  }
-}
-op {
-  name: "SpaceToBatchND"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "block_shape"
-    type_attr: "Tblock_shape"
-  }
-  input_arg {
-    name: "paddings"
-    type_attr: "Tpaddings"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tblock_shape"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "Tpaddings"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "SpaceToDepth"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "block_size"
-    type: "int"
-    has_minimum: true
-    minimum: 2
-  }
-}
-op {
-  name: "Split"
-  input_arg {
-    name: "split_dim"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    number_attr: "num_split"
-  }
-  attr {
-    name: "num_split"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "SplitV"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "size_splits"
-    type_attr: "Tlen"
-  }
-  input_arg {
-    name: "split_dim"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    number_attr: "num_split"
-  }
-  attr {
-    name: "num_split"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tlen"
-    type: "type"
-    default_value {
-      type: DT_INT64
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Squeeze"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "squeeze_dims"
-    type: "list(int)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-}
-op {
-  name: "StopGradient"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "StridedSlice"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "begin"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "end"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "strides"
-    type_attr: "Index"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Index"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "begin_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "end_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "ellipsis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "new_axis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "shrink_axis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-}
-op {
-  name: "StridedSliceAssign"
-  input_arg {
-    name: "ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "begin"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "end"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "strides"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_ref"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Index"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "begin_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "end_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "ellipsis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "new_axis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "shrink_axis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-}
-op {
-  name: "StridedSliceGrad"
-  input_arg {
-    name: "shape"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "begin"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "end"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "strides"
-    type_attr: "Index"
-  }
-  input_arg {
-    name: "dy"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Index"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "begin_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "end_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "ellipsis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "new_axis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "shrink_axis_mask"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-}
-op {
-  name: "Tile"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "multiples"
-    type_attr: "Tmultiples"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tmultiples"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "TileGrad"
-  input_arg {
-    name: "input"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "multiples"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  deprecation {
-    version: 3
-    explanation: "TileGrad has been replaced with reduce_sum"
-  }
-}
-op {
-  name: "Transpose"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "perm"
-    type_attr: "Tperm"
-  }
-  output_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "Tperm"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Unique"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "idx"
-    type_attr: "out_idx"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "out_idx"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "UniqueWithCounts"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "idx"
-    type_attr: "out_idx"
-  }
-  output_arg {
-    name: "count"
-    type_attr: "out_idx"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "out_idx"
-    type: "type"
-    default_value {
-      type: DT_INT32
-    }
-    allowed_values {
-      list {
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-op {
-  name: "Unpack"
-  input_arg {
-    name: "value"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    number_attr: "num"
-  }
-  attr {
-    name: "num"
-    type: "int"
-    has_minimum: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "axis"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-}
-op {
-  name: "Where"
-  input_arg {
-    name: "input"
-    type: DT_BOOL
-  }
-  output_arg {
-    name: "index"
-    type: DT_INT64
-  }
-}
-op {
-  name: "ZerosLike"
-  input_arg {
-    name: "x"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "y"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "BatchMatrixBandPart"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "num_lower"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "num_upper"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "band"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 14
+#     explanation: "Use MatrixBandPart"
+#   }
+# }
+# op {
+#   name: "BatchMatrixDiag"
+#   input_arg {
+#     name: "diagonal"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 14
+#     explanation: "Use MatrixDiag"
+#   }
+# }
+# op {
+#   name: "BatchMatrixDiagPart"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "diagonal"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 14
+#     explanation: "Use MatrixDiagPart"
+#   }
+# }
+# op {
+#   name: "BatchMatrixSetDiag"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "diagonal"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 14
+#     explanation: "Use MatrixSetDiag"
+#   }
+# }
+# op {
+#   name: "BatchToSpace"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "crops"
+#     type_attr: "Tidx"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "block_size"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 2
+#   }
+#   attr {
+#     name: "Tidx"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "BatchToSpaceND"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "block_shape"
+#     type_attr: "Tblock_shape"
+#   }
+#   input_arg {
+#     name: "crops"
+#     type_attr: "Tcrops"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tblock_shape"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tcrops"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Bitcast"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "type"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "type"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "BroadcastArgs"
+#   input_arg {
+#     name: "s0"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "s1"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "r0"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "BroadcastGradientArgs"
+#   input_arg {
+#     name: "s0"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "s1"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "r0"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "r1"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "CheckNumerics"
+#   input_arg {
+#     name: "tensor"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "message"
+#     type: "string"
+#   }
+# }
+# op {
+#   name: "Concat"
+#   input_arg {
+#     name: "concat_dim"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "T"
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 2
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "ConcatOffset"
+#   input_arg {
+#     name: "concat_dim"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "shape"
+#     type: DT_INT32
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "offset"
+#     type: DT_INT32
+#     number_attr: "N"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 2
+#   }
+# }
+# op {
+#   name: "ConcatV2"
+#   input_arg {
+#     name: "values"
+#     type_attr: "T"
+#     number_attr: "N"
+#   }
+#   input_arg {
+#     name: "axis"
+#     type_attr: "Tidx"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 2
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tidx"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Const"
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "value"
+#     type: "tensor"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "DebugGradientIdentity"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   allows_uninitialized_input: true
+# }
+# op {
+#   name: "DepthToSpace"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "block_size"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 2
+#   }
+# }
+# op {
+#   name: "Dequantize"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "min_range"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_range"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "mode"
+#     type: "string"
+#     default_value {
+#       s: "MIN_COMBINED"
+#     }
+#     allowed_values {
+#       list {
+#         s: "MIN_COMBINED"
+#         s: "MIN_FIRST"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Diag"
+#   input_arg {
+#     name: "diagonal"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "DiagPart"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "diagonal"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "EditDistance"
+#   input_arg {
+#     name: "hypothesis_indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "hypothesis_values"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "hypothesis_shape"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "truth_indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "truth_values"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "truth_shape"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "normalize"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "ExpandDims"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "dim"
+#     type_attr: "Tdim"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tdim"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ExtractImagePatches"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "patches"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "ksizes"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "strides"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "rates"
+#     type: "list(int)"
+#     has_minimum: true
+#     minimum: 4
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_UINT16
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "padding"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "SAME"
+#         s: "VALID"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "FakeQuantWithMinMaxArgs"
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "outputs"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "min"
+#     type: "float"
+#     default_value {
+#       f: -6
+#     }
+#   }
+#   attr {
+#     name: "max"
+#     type: "float"
+#     default_value {
+#       f: 6
+#     }
+#   }
+#   attr {
+#     name: "num_bits"
+#     type: "int"
+#     default_value {
+#       i: 8
+#     }
+#   }
+#   attr {
+#     name: "narrow_range"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "FakeQuantWithMinMaxArgsGradient"
+#   input_arg {
+#     name: "gradients"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "backprops"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "min"
+#     type: "float"
+#     default_value {
+#       f: -6
+#     }
+#   }
+#   attr {
+#     name: "max"
+#     type: "float"
+#     default_value {
+#       f: 6
+#     }
+#   }
+#   attr {
+#     name: "num_bits"
+#     type: "int"
+#     default_value {
+#       i: 8
+#     }
+#   }
+#   attr {
+#     name: "narrow_range"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "FakeQuantWithMinMaxVars"
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "outputs"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_bits"
+#     type: "int"
+#     default_value {
+#       i: 8
+#     }
+#   }
+#   attr {
+#     name: "narrow_range"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "FakeQuantWithMinMaxVarsGradient"
+#   input_arg {
+#     name: "gradients"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "backprops_wrt_input"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "backprop_wrt_min"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "backprop_wrt_max"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_bits"
+#     type: "int"
+#     default_value {
+#       i: 8
+#     }
+#   }
+#   attr {
+#     name: "narrow_range"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "FakeQuantWithMinMaxVarsPerChannel"
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "outputs"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_bits"
+#     type: "int"
+#     default_value {
+#       i: 8
+#     }
+#   }
+#   attr {
+#     name: "narrow_range"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "FakeQuantWithMinMaxVarsPerChannelGradient"
+#   input_arg {
+#     name: "gradients"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "backprops_wrt_input"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "backprop_wrt_min"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "backprop_wrt_max"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_bits"
+#     type: "int"
+#     default_value {
+#       i: 8
+#     }
+#   }
+#   attr {
+#     name: "narrow_range"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "Fill"
+#   input_arg {
+#     name: "dims"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "Gather"
+#   input_arg {
+#     name: "params"
+#     type_attr: "Tparams"
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "Tparams"
+#   }
+#   attr {
+#     name: "validate_indices"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "Tparams"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "GatherNd"
+#   input_arg {
+#     name: "params"
+#     type_attr: "Tparams"
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "Tparams"
+#   }
+#   attr {
+#     name: "Tparams"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "GatherV2"
+#   input_arg {
+#     name: "params"
+#     type_attr: "Tparams"
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "axis"
+#     type_attr: "Taxis"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "Tparams"
+#   }
+#   attr {
+#     name: "Tparams"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Taxis"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Identity"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "ImmutableConst"
+#   output_arg {
+#     name: "tensor"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+#   attr {
+#     name: "memory_region_name"
+#     type: "string"
+#   }
+# }
+# op {
+#   name: "InvertPermutation"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ListDiff"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "out"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "idx"
+#     type_attr: "out_idx"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "out_idx"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MatrixBandPart"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "num_lower"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "num_upper"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "band"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "MatrixDiag"
+#   input_arg {
+#     name: "diagonal"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "MatrixDiagPart"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "diagonal"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "MatrixSetDiag"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "diagonal"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "MirrorPad"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "paddings"
+#     type_attr: "Tpaddings"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tpaddings"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "mode"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "REFLECT"
+#         s: "SYMMETRIC"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "MirrorPadGrad"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "paddings"
+#     type_attr: "Tpaddings"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tpaddings"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "mode"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "REFLECT"
+#         s: "SYMMETRIC"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "OneHot"
+#   input_arg {
+#     name: "indices"
+#     type_attr: "TI"
+#   }
+#   input_arg {
+#     name: "depth"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "on_value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "off_value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "axis"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "TI"
+#     type: "type"
+#     default_value {
+#       type: DT_INT64
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "OnesLike"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Pack"
+#   input_arg {
+#     name: "values"
+#     type_attr: "T"
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "axis"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+# }
+# op {
+#   name: "Pad"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "paddings"
+#     type_attr: "Tpaddings"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tpaddings"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "PadV2"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "paddings"
+#     type_attr: "Tpaddings"
+#   }
+#   input_arg {
+#     name: "constant_values"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tpaddings"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ParallelConcat"
+#   input_arg {
+#     name: "values"
+#     type_attr: "T"
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+# }
+# op {
+#   name: "Placeholder"
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#         unknown_rank: true
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "PlaceholderV2"
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+#   deprecation {
+#     version: 23
+#     explanation: "Placeholder now behaves the same as PlaceholderV2."
+#   }
+# }
+# op {
+#   name: "PlaceholderWithDefault"
+#   input_arg {
+#     name: "input"
+#     type_attr: "dtype"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "shape"
+#     type: "shape"
+#   }
+# }
+# op {
+#   name: "PreventGradient"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "message"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizeAndDequantize"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "signed_input"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "num_bits"
+#     type: "int"
+#     default_value {
+#       i: 8
+#     }
+#   }
+#   attr {
+#     name: "range_given"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "input_min"
+#     type: "float"
+#     default_value {
+#       f: 0
+#     }
+#   }
+#   attr {
+#     name: "input_max"
+#     type: "float"
+#     default_value {
+#       f: 0
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 22
+#     explanation: "Replaced by QuantizeAndDequantizeV2"
+#   }
+# }
+# op {
+#   name: "QuantizeAndDequantizeV2"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "input_min"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "input_max"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "signed_input"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "num_bits"
+#     type: "int"
+#     default_value {
+#       i: 8
+#     }
+#   }
+#   attr {
+#     name: "range_given"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizeAndDequantizeV3"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "input_min"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "input_max"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "num_bits"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "signed_input"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "range_given"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizeV2"
+#   input_arg {
+#     name: "input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min_range"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_range"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_min"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output_max"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "mode"
+#     type: "string"
+#     default_value {
+#       s: "MIN_COMBINED"
+#     }
+#     allowed_values {
+#       list {
+#         s: "MIN_COMBINED"
+#         s: "MIN_FIRST"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedConcat"
+#   input_arg {
+#     name: "concat_dim"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "T"
+#     number_attr: "N"
+#   }
+#   input_arg {
+#     name: "input_mins"
+#     type: DT_FLOAT
+#     number_attr: "N"
+#   }
+#   input_arg {
+#     name: "input_maxes"
+#     type: DT_FLOAT
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_min"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output_max"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 2
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "QuantizedInstanceNorm"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "x_min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "x_max"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "y_min"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "y_max"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT16
+#         type: DT_QUINT16
+#         type: DT_QINT32
+#       }
+#     }
+#   }
+#   attr {
+#     name: "output_range_given"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "given_y_min"
+#     type: "float"
+#     default_value {
+#       f: 0
+#     }
+#   }
+#   attr {
+#     name: "given_y_max"
+#     type: "float"
+#     default_value {
+#       f: 0
+#     }
+#   }
+#   attr {
+#     name: "variance_epsilon"
+#     type: "float"
+#     default_value {
+#       f: 1e-05
+#     }
+#   }
+#   attr {
+#     name: "min_separation"
+#     type: "float"
+#     default_value {
+#       f: 0.001
+#     }
+#   }
+# }
+# op {
+#   name: "QuantizedReshape"
+#   input_arg {
+#     name: "tensor"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "shape"
+#     type_attr: "Tshape"
+#   }
+#   input_arg {
+#     name: "input_min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "input_max"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_min"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output_max"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tshape"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Rank"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "RefIdentity"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   allows_uninitialized_input: true
+# }
+# op {
+#   name: "Reshape"
+#   input_arg {
+#     name: "tensor"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "shape"
+#     type_attr: "Tshape"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tshape"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ResourceStridedSliceAssign"
+#   input_arg {
+#     name: "ref"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "begin"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "end"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "strides"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Index"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "begin_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "end_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "ellipsis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "new_axis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "shrink_axis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "Reverse"
+#   input_arg {
+#     name: "tensor"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "dims"
+#     type: DT_BOOL
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_BOOL
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_STRING
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ReverseSequence"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "seq_lengths"
+#     type_attr: "Tlen"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "seq_dim"
+#     type: "int"
+#   }
+#   attr {
+#     name: "batch_dim"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tlen"
+#     type: "type"
+#     default_value {
+#       type: DT_INT64
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ReverseV2"
+#   input_arg {
+#     name: "tensor"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "axis"
+#     type_attr: "Tidx"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "Tidx"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_BOOL
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_STRING
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterNd"
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "shape"
+#     type_attr: "Tindices"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ScatterNdNonAliasingAdd"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "indices"
+#     type_attr: "Tindices"
+#   }
+#   input_arg {
+#     name: "updates"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT64
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_UINT16
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_COMPLEX64
+#         type: DT_COMPLEX128
+#         type: DT_QINT8
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_HALF
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tindices"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Shape"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "out_type"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ShapeN"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "out_type"
+#     number_attr: "N"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Size"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "out_type"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Slice"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "begin"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "size"
+#     type_attr: "Index"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Index"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SpaceToBatch"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "paddings"
+#     type_attr: "Tpaddings"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tpaddings"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "block_size"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 2
+#   }
+# }
+# op {
+#   name: "SpaceToBatchND"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "block_shape"
+#     type_attr: "Tblock_shape"
+#   }
+#   input_arg {
+#     name: "paddings"
+#     type_attr: "Tpaddings"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tblock_shape"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tpaddings"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "SpaceToDepth"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "block_size"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 2
+#   }
+# }
+# op {
+#   name: "Split"
+#   input_arg {
+#     name: "split_dim"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     number_attr: "num_split"
+#   }
+#   attr {
+#     name: "num_split"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "SplitV"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size_splits"
+#     type_attr: "Tlen"
+#   }
+#   input_arg {
+#     name: "split_dim"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     number_attr: "num_split"
+#   }
+#   attr {
+#     name: "num_split"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tlen"
+#     type: "type"
+#     default_value {
+#       type: DT_INT64
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Squeeze"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "squeeze_dims"
+#     type: "list(int)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+# }
+# op {
+#   name: "StopGradient"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "StridedSlice"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "begin"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "end"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "strides"
+#     type_attr: "Index"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Index"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "begin_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "end_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "ellipsis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "new_axis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "shrink_axis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+# }
+# op {
+#   name: "StridedSliceAssign"
+#   input_arg {
+#     name: "ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "begin"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "end"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "strides"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_ref"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Index"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "begin_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "end_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "ellipsis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "new_axis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "shrink_axis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+# }
+# op {
+#   name: "StridedSliceGrad"
+#   input_arg {
+#     name: "shape"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "begin"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "end"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "strides"
+#     type_attr: "Index"
+#   }
+#   input_arg {
+#     name: "dy"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Index"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "begin_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "end_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "ellipsis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "new_axis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "shrink_axis_mask"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+# }
+# op {
+#   name: "Tile"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "multiples"
+#     type_attr: "Tmultiples"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tmultiples"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "TileGrad"
+#   input_arg {
+#     name: "input"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "multiples"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   deprecation {
+#     version: 3
+#     explanation: "TileGrad has been replaced with reduce_sum"
+#   }
+# }
+# op {
+#   name: "Transpose"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "perm"
+#     type_attr: "Tperm"
+#   }
+#   output_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tperm"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Unique"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "idx"
+#     type_attr: "out_idx"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "out_idx"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "UniqueWithCounts"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "idx"
+#     type_attr: "out_idx"
+#   }
+#   output_arg {
+#     name: "count"
+#     type_attr: "out_idx"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "out_idx"
+#     type: "type"
+#     default_value {
+#       type: DT_INT32
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "Unpack"
+#   input_arg {
+#     name: "value"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     number_attr: "num"
+#   }
+#   attr {
+#     name: "num"
+#     type: "int"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "axis"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+# }
+# op {
+#   name: "Where"
+#   input_arg {
+#     name: "input"
+#     type: DT_BOOL
+#   }
+#   output_arg {
+#     name: "index"
+#     type: DT_INT64
+#   }
+# }
+# op {
+#   name: "ZerosLike"
+#   input_arg {
+#     name: "x"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "y"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\nm\n\023BatchMatrixBandPart\022\n\n\005input\"\001T\022\r\n\tnum_lower\030\t\022\r\n\tnum_upper\030\t\032\t\n\004band\"\001T\"\t\n\001T\022\004typeB\026\010\016\022\022Use MatrixBandPart\nL\n\017BatchMatrixDiag\022\r\n\010diagonal\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004typeB\022\010\016\022\016Use MatrixDiag\nS\n\023BatchMatrixDiagPart\022\n\n\005input\"\001T\032\r\n\010diagonal\"\001T\"\t\n\001T\022\004typeB\026\010\016\022\022Use MatrixDiagPart\n^\n\022BatchMatrixSetDiag\022\n\n\005input\"\001T\022\r\n\010diagonal\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004typeB\025\010\016\022\021Use MatrixSetDiag\nr\n\014BatchToSpace\022\n\n\005input\"\001T\022\r\n\005crops\"\004Tidx\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\025\n\nblock_size\022\003int(\0010\002\"\030\n\004Tidx\022\004type\032\0020\003:\006\n\0042\002\003\t\n\240\001\n\016BatchToSpaceND\022\n\n\005input\"\001T\022\033\n\013block_shape\"\014Tblock_shape\022\017\n\005crops\"\006Tcrops\032\013\n\006output\"\001T\"\t\n\001T\022\004type\" \n\014Tblock_shape\022\004type\032\0020\003:\006\n\0042\002\003\t\"\032\n\006Tcrops\022\004type\032\0020\003:\006\n\0042\002\003\t\nj\n\007Bitcast\022\n\n\005input\"\001T\032\016\n\006output\"\004type\"\037\n\001T\022\004type:\024\n\0222\020\001\002\t\003\004\021\006\005\010\022\013\014\017\020\r\023\"\"\n\004type\022\004type:\024\n\0222\020\001\002\t\003\004\021\006\005\010\022\013\014\017\020\r\023\nA\n\rBroadcastArgs\022\007\n\002s0\"\001T\022\007\n\002s1\"\001T\032\007\n\002r0\"\001T\"\025\n\001T\022\004type\032\0020\003:\006\n\0042\002\003\t\nR\n\025BroadcastGradientArgs\022\007\n\002s0\"\001T\022\007\n\002s1\"\001T\032\007\n\002r0\"\001T\032\007\n\002r1\"\001T\"\025\n\001T\022\004type\032\0020\003:\006\n\0042\002\003\t\nP\n\rCheckNumerics\022\013\n\006tensor\"\001T\032\013\n\006output\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\023\001\002\"\021\n\007message\022\006string\nN\n\006Concat\022\016\n\nconcat_dim\030\003\022\016\n\006values\"\001T*\001N\032\013\n\006output\"\001T\"\014\n\001N\022\003int(\0010\002\"\t\n\001T\022\004type\nI\n\014ConcatOffset\022\016\n\nconcat_dim\030\003\022\014\n\005shape\030\003*\001N\032\r\n\006offset\030\003*\001N\"\014\n\001N\022\003int(\0010\002\nh\n\010ConcatV2\022\016\n\006values\"\001T*\001N\022\014\n\004axis\"\004Tidx\032\013\n\006output\"\001T\"\014\n\001N\022\003int(\0010\002\"\t\n\001T\022\004type\"\030\n\004Tidx\022\004type\032\0020\003:\006\n\0042\002\003\t\n8\n\005Const\032\017\n\006output\"\005dtype\"\017\n\005value\022\006tensor\"\r\n\005dtype\022\004type\n>\n\025DebugGradientIdentity\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\230\001\001\nI\n\014DepthToSpace\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\025\n\nblock_size\022\003int(\0010\002\n\225\001\n\nDequantize\022\n\n\005input\"\001T\022\r\n\tmin_range\030\001\022\r\n\tmax_range\030\001\032\n\n\006output\030\001\"\024\n\001T\022\004type:\t\n\0072\005\013\014\017\020\r\";\n\004mode\022\006string\032\016\022\014MIN_COMBINED:\033\n\031\022\014MIN_COMBINED\022\tMIN_FIRST\n9\n\004Diag\022\r\n\010diagonal\"\001T\032\013\n\006output\"\001T\"\025\n\001T\022\004type:\n\n\0102\006\001\002\003\t\010\022\n<\n\010DiagPart\022\n\n\005input\"\001T\032\r\n\010diagonal\"\001T\"\025\n\001T\022\004type:\n\n\0102\006\001\002\003\t\010\022\n\271\001\n\014EditDistance\022\026\n\022hypothesis_indices\030\t\022\026\n\021hypothesis_values\"\001T\022\024\n\020hypothesis_shape\030\t\022\021\n\rtruth_indices\030\t\022\021\n\014truth_values\"\001T\022\017\n\013truth_shape\030\t\032\n\n\006output\030\001\"\025\n\tnormalize\022\004bool\032\002(\001\"\t\n\001T\022\004type\nW\n\nExpandDims\022\n\n\005input\"\001T\022\013\n\003dim\"\004Tdim\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\030\n\004Tdim\022\004type\032\0020\003:\006\n\0042\002\003\t\n\271\001\n\023ExtractImagePatches\022\013\n\006images\"\001T\032\014\n\007patches\"\001T\"\027\n\006ksizes\022\tlist(int)(\0010\004\"\030\n\007strides\022\tlist(int)(\0010\004\"\026\n\005rates\022\tlist(int)(\0010\004\"\030\n\001T\022\004type:\r\n\0132\t\001\002\003\t\004\005\006\021\023\"\"\n\007padding\022\006string:\017\n\r\022\004SAME\022\005VALID\n\213\001\n\027FakeQuantWithMinMaxArgs\022\n\n\006inputs\030\001\032\013\n\007outputs\030\001\"\023\n\003min\022\005float\032\005%\000\000\300\300\"\023\n\003max\022\005float\032\005%\000\000\300@\"\023\n\010num_bits\022\003int\032\002\030\010\"\030\n\014narrow_range\022\004bool\032\002(\000\n\244\001\n\037FakeQuantWithMinMaxArgsGradient\022\r\n\tgradients\030\001\022\n\n\006inputs\030\001\032\r\n\tbackprops\030\001\"\023\n\003min\022\005float\032\005%\000\000\300\300\"\023\n\003max\022\005float\032\005%\000\000\300@\"\023\n\010num_bits\022\003int\032\002\030\010\"\030\n\014narrow_range\022\004bool\032\002(\000\ns\n\027FakeQuantWithMinMaxVars\022\n\n\006inputs\030\001\022\007\n\003min\030\001\022\007\n\003max\030\001\032\013\n\007outputs\030\001\"\023\n\010num_bits\022\003int\032\002\030\010\"\030\n\014narrow_range\022\004bool\032\002(\000\n\302\001\n\037FakeQuantWithMinMaxVarsGradient\022\r\n\tgradients\030\001\022\n\n\006inputs\030\001\022\007\n\003min\030\001\022\007\n\003max\030\001\032\027\n\023backprops_wrt_input\030\001\032\024\n\020backprop_wrt_min\030\001\032\024\n\020backprop_wrt_max\030\001\"\023\n\010num_bits\022\003int\032\002\030\010\"\030\n\014narrow_range\022\004bool\032\002(\000\n}\n!FakeQuantWithMinMaxVarsPerChannel\022\n\n\006inputs\030\001\022\007\n\003min\030\001\022\007\n\003max\030\001\032\013\n\007outputs\030\001\"\023\n\010num_bits\022\003int\032\002\030\010\"\030\n\014narrow_range\022\004bool\032\002(\000\n\314\001\n)FakeQuantWithMinMaxVarsPerChannelGradient\022\r\n\tgradients\030\001\022\n\n\006inputs\030\001\022\007\n\003min\030\001\022\007\n\003max\030\001\032\027\n\023backprops_wrt_input\030\001\032\024\n\020backprop_wrt_min\030\001\032\024\n\020backprop_wrt_max\030\001\"\023\n\010num_bits\022\003int\032\002\030\010\"\030\n\014narrow_range\022\004bool\032\002(\000\n4\n\004Fill\022\010\n\004dims\030\003\022\n\n\005value\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\n\214\001\n\006Gather\022\021\n\006params\"\007Tparams\022\023\n\007indices\"\010Tindices\032\021\n\006output\"\007Tparams\"\034\n\020validate_indices\022\004bool\032\002(\001\"\017\n\007Tparams\022\004type\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\np\n\010GatherNd\022\021\n\006params\"\007Tparams\022\023\n\007indices\"\010Tindices\032\021\n\006output\"\007Tparams\"\017\n\007Tparams\022\004type\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\n\226\001\n\010GatherV2\022\021\n\006params\"\007Tparams\022\023\n\007indices\"\010Tindices\022\r\n\004axis\"\005Taxis\032\021\n\006output\"\007Tparams\"\017\n\007Tparams\022\004type\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\"\025\n\005Taxis\022\004type:\006\n\0042\002\003\t\n.\n\010Identity\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\n^\n\016ImmutableConst\032\017\n\006tensor\"\005dtype\"\r\n\005dtype\022\004type\"\016\n\005shape\022\005shape\"\034\n\022memory_region_name\022\006string\n:\n\021InvertPermutation\022\006\n\001x\"\001T\032\006\n\001y\"\001T\"\025\n\001T\022\004type\032\0020\003:\006\n\0042\002\003\t\n\\\n\010ListDiff\022\006\n\001x\"\001T\022\006\n\001y\"\001T\032\010\n\003out\"\001T\032\016\n\003idx\"\007out_idx\"\t\n\001T\022\004type\"\033\n\007out_idx\022\004type\032\0020\003:\006\n\0042\002\003\t\nP\n\016MatrixBandPart\022\n\n\005input\"\001T\022\r\n\tnum_lower\030\t\022\r\n\tnum_upper\030\t\032\t\n\004band\"\001T\"\t\n\001T\022\004type\n3\n\nMatrixDiag\022\r\n\010diagonal\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\n6\n\016MatrixDiagPart\022\n\n\005input\"\001T\032\r\n\010diagonal\"\001T\"\t\n\001T\022\004type\nB\n\rMatrixSetDiag\022\n\n\005input\"\001T\022\r\n\010diagonal\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\n\215\001\n\tMirrorPad\022\n\n\005input\"\001T\022\025\n\010paddings\"\tTpaddings\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\035\n\tTpaddings\022\004type\032\0020\003:\006\n\0042\002\003\t\"&\n\004mode\022\006string:\026\n\024\022\007REFLECT\022\tSYMMETRIC\n\221\001\n\rMirrorPadGrad\022\n\n\005input\"\001T\022\025\n\010paddings\"\tTpaddings\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\035\n\tTpaddings\022\004type\032\0020\003:\006\n\0042\002\003\t\"&\n\004mode\022\006string:\026\n\024\022\007REFLECT\022\tSYMMETRIC\n\214\001\n\006OneHot\022\r\n\007indices\"\002TI\022\t\n\005depth\030\003\022\r\n\010on_value\"\001T\022\016\n\toff_value\"\001T\032\013\n\006output\"\001T\"\030\n\004axis\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\t\n\001T\022\004type\"\027\n\002TI\022\004type\032\0020\t:\007\n\0052\003\004\003\t\n1\n\010OnesLike\022\006\n\001x\"\001T\032\006\n\001y\"\001T\"\025\n\001T\022\004type:\n\n\0102\006\001\002\003\t\010\022\nM\n\004Pack\022\016\n\006values\"\001T*\001N\032\013\n\006output\"\001T\"\014\n\001N\022\003int(\0010\001\"\t\n\001T\022\004type\"\017\n\004axis\022\003int\032\002\030\000\n_\n\003Pad\022\n\n\005input\"\001T\022\025\n\010paddings\"\tTpaddings\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\035\n\tTpaddings\022\004type\032\0020\003:\006\n\0042\002\003\t\nw\n\005PadV2\022\n\n\005input\"\001T\022\025\n\010paddings\"\tTpaddings\022\024\n\017constant_values\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\035\n\tTpaddings\022\004type\032\0020\003:\006\n\0042\002\003\t\nV\n\016ParallelConcat\022\016\n\006values\"\001T*\001N\032\013\n\006output\"\001T\"\014\n\001N\022\003int(\0010\001\"\t\n\001T\022\004type\"\016\n\005shape\022\005shape\nC\n\013Placeholder\032\017\n\006output\"\005dtype\"\r\n\005dtype\022\004type\"\024\n\005shape\022\005shape\032\004:\002\030\001\nw\n\rPlaceholderV2\032\017\n\006output\"\005dtype\"\r\n\005dtype\022\004type\"\016\n\005shape\022\005shapeB6\010\027\0222Placeholder now behaves the same as PlaceholderV2.\nX\n\026PlaceholderWithDefault\022\016\n\005input\"\005dtype\032\017\n\006output\"\005dtype\"\r\n\005dtype\022\004type\"\016\n\005shape\022\005shape\nL\n\017PreventGradient\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\025\n\007message\022\006string\032\002\022\000\n\352\001\n\025QuantizeAndDequantize\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\030\n\014signed_input\022\004bool\032\002(\001\"\023\n\010num_bits\022\003int\032\002\030\010\"\027\n\013range_given\022\004bool\032\002(\000\"\031\n\tinput_min\022\005float\032\005%\000\000\000\000\"\031\n\tinput_max\022\005float\032\005%\000\000\000\000\"\021\n\001T\022\004type:\006\n\0042\002\001\002B\'\010\026\022#Replaced by QuantizeAndDequantizeV2\n\255\001\n\027QuantizeAndDequantizeV2\022\n\n\005input\"\001T\022\016\n\tinput_min\"\001T\022\016\n\tinput_max\"\001T\032\013\n\006output\"\001T\"\030\n\014signed_input\022\004bool\032\002(\001\"\023\n\010num_bits\022\003int\032\002\030\010\"\027\n\013range_given\022\004bool\032\002(\000\"\021\n\001T\022\004type:\006\n\0042\002\001\002\n\246\001\n\027QuantizeAndDequantizeV3\022\n\n\005input\"\001T\022\016\n\tinput_min\"\001T\022\016\n\tinput_max\"\001T\022\014\n\010num_bits\030\003\032\013\n\006output\"\001T\"\030\n\014signed_input\022\004bool\032\002(\001\"\027\n\013range_given\022\004bool\032\002(\001\"\021\n\001T\022\004type:\006\n\0042\002\001\002\n\265\001\n\nQuantizeV2\022\t\n\005input\030\001\022\r\n\tmin_range\030\001\022\r\n\tmax_range\030\001\032\013\n\006output\"\001T\032\016\n\noutput_min\030\001\032\016\n\noutput_max\030\001\"\024\n\001T\022\004type:\t\n\0072\005\013\014\017\020\r\";\n\004mode\022\006string\032\016\022\014MIN_COMBINED:\033\n\031\022\014MIN_COMBINED\022\tMIN_FIRST\n\236\001\n\017QuantizedConcat\022\016\n\nconcat_dim\030\003\022\016\n\006values\"\001T*\001N\022\021\n\ninput_mins\030\001*\001N\022\022\n\013input_maxes\030\001*\001N\032\013\n\006output\"\001T\032\016\n\noutput_min\030\001\032\016\n\noutput_max\030\001\"\014\n\001N\022\003int(\0010\002\"\t\n\001T\022\004type\n\205\002\n\025QuantizedInstanceNorm\022\006\n\001x\"\001T\022\t\n\005x_min\030\001\022\t\n\005x_max\030\001\032\006\n\001y\"\001T\032\t\n\005y_min\030\001\032\t\n\005y_max\030\001\"\024\n\001T\022\004type:\t\n\0072\005\013\014\017\020\r\"\036\n\022output_range_given\022\004bool\032\002(\000\"\033\n\013given_y_min\022\005float\032\005%\000\000\000\000\"\033\n\013given_y_max\022\005float\032\005%\000\000\000\000\" \n\020variance_epsilon\022\005float\032\005%\254\305\'7\"\036\n\016min_separation\022\005float\032\005%o\022\203:\n\242\001\n\020QuantizedReshape\022\013\n\006tensor\"\001T\022\017\n\005shape\"\006Tshape\022\r\n\tinput_min\030\001\022\r\n\tinput_max\030\001\032\013\n\006output\"\001T\032\016\n\noutput_min\030\001\032\016\n\noutput_max\030\001\"\t\n\001T\022\004type\"\032\n\006Tshape\022\004type\032\0020\003:\006\n\0042\002\003\t\n)\n\004Rank\022\n\n\005input\"\001T\032\n\n\006output\030\003\"\t\n\001T\022\004type\n:\n\013RefIdentity\022\r\n\005input\"\001T\200\001\001\032\016\n\006output\"\001T\200\001\001\"\t\n\001T\022\004type\230\001\001\n[\n\007Reshape\022\013\n\006tensor\"\001T\022\017\n\005shape\"\006Tshape\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\032\n\006Tshape\022\004type\032\0020\003:\006\n\0042\002\003\t\n\203\002\n\032ResourceStridedSliceAssign\022\007\n\003ref\030\024\022\016\n\005begin\"\005Index\022\014\n\003end\"\005Index\022\020\n\007strides\"\005Index\022\n\n\005value\"\001T\"\t\n\001T\022\004type\"\025\n\005Index\022\004type:\006\n\0042\002\003\t\"\025\n\nbegin_mask\022\003int\032\002\030\000\"\023\n\010end_mask\022\003int\032\002\030\000\"\030\n\rellipsis_mask\022\003int\032\002\030\000\"\030\n\rnew_axis_mask\022\003int\032\002\030\000\"\033\n\020shrink_axis_mask\022\003int\032\002\030\000\210\001\001\nI\n\007Reverse\022\013\n\006tensor\"\001T\022\010\n\004dims\030\n\032\013\n\006output\"\001T\"\032\n\001T\022\004type:\017\n\r2\013\004\006\003\t\n\023\001\002\010\022\007\n\212\001\n\017ReverseSequence\022\n\n\005input\"\001T\022\023\n\013seq_lengths\"\004Tlen\032\013\n\006output\"\001T\"\016\n\007seq_dim\022\003int\"\024\n\tbatch_dim\022\003int\032\002\030\000\"\t\n\001T\022\004type\"\030\n\004Tlen\022\004type\032\0020\t:\006\n\0042\002\003\t\ni\n\tReverseV2\022\013\n\006tensor\"\001T\022\014\n\004axis\"\004Tidx\032\013\n\006output\"\001T\"\030\n\004Tidx\022\004type\032\0020\003:\006\n\0042\002\003\t\"\032\n\001T\022\004type:\017\n\r2\013\004\006\003\t\n\023\001\002\010\022\007\ns\n\tScatterNd\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\022\021\n\005shape\"\010Tindices\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\n\216\001\n\027ScatterNdNonAliasingAdd\022\n\n\005input\"\001T\022\023\n\007indices\"\010Tindices\022\014\n\007updates\"\001T\032\013\n\006output\"\001T\"\035\n\001T\022\004type:\022\n\0202\016\001\002\t\003\004\021\005\006\010\022\013\014\r\023\"\030\n\010Tindices\022\004type:\006\n\0042\002\003\t\nP\n\005Shape\022\n\n\005input\"\001T\032\022\n\006output\"\010out_type\"\t\n\001T\022\004type\"\034\n\010out_type\022\004type\032\0020\003:\006\n\0042\002\003\t\ne\n\006ShapeN\022\r\n\005input\"\001T*\001N\032\025\n\006output\"\010out_type*\001N\"\014\n\001N\022\003int(\0010\001\"\t\n\001T\022\004type\"\034\n\010out_type\022\004type\032\0020\003:\006\n\0042\002\003\t\nO\n\004Size\022\n\n\005input\"\001T\032\022\n\006output\"\010out_type\"\t\n\001T\022\004type\"\034\n\010out_type\022\004type\032\0020\003:\006\n\0042\002\003\t\na\n\005Slice\022\n\n\005input\"\001T\022\016\n\005begin\"\005Index\022\r\n\004size\"\005Index\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\025\n\005Index\022\004type:\006\n\0042\002\003\t\n\177\n\014SpaceToBatch\022\n\n\005input\"\001T\022\025\n\010paddings\"\tTpaddings\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\035\n\tTpaddings\022\004type\032\0020\003:\006\n\0042\002\003\t\"\025\n\nblock_size\022\003int(\0010\002\n\251\001\n\016SpaceToBatchND\022\n\n\005input\"\001T\022\033\n\013block_shape\"\014Tblock_shape\022\025\n\010paddings\"\tTpaddings\032\013\n\006output\"\001T\"\t\n\001T\022\004type\" \n\014Tblock_shape\022\004type\032\0020\003:\006\n\0042\002\003\t\"\035\n\tTpaddings\022\004type\032\0020\003:\006\n\0042\002\003\t\nI\n\014SpaceToDepth\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\025\n\nblock_size\022\003int(\0010\002\n[\n\005Split\022\r\n\tsplit_dim\030\003\022\n\n\005value\"\001T\032\026\n\006output\"\001T*\tnum_split\"\024\n\tnum_split\022\003int(\0010\001\"\t\n\001T\022\004type\n\213\001\n\006SplitV\022\n\n\005value\"\001T\022\023\n\013size_splits\"\004Tlen\022\r\n\tsplit_dim\030\003\032\026\n\006output\"\001T*\tnum_split\"\024\n\tnum_split\022\003int(\0010\001\"\t\n\001T\022\004type\"\030\n\004Tlen\022\004type\032\0020\t:\006\n\0042\002\003\t\nN\n\007Squeeze\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\037\n\014squeeze_dims\022\tlist(int)\032\002\n\000(\001\n2\n\014StopGradient\022\n\n\005input\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\n\366\001\n\014StridedSlice\022\n\n\005input\"\001T\022\016\n\005begin\"\005Index\022\014\n\003end\"\005Index\022\020\n\007strides\"\005Index\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\025\n\005Index\022\004type:\006\n\0042\002\003\t\"\025\n\nbegin_mask\022\003int\032\002\030\000\"\023\n\010end_mask\022\003int\032\002\030\000\"\030\n\rellipsis_mask\022\003int\032\002\030\000\"\030\n\rnew_axis_mask\022\003int\032\002\030\000\"\033\n\020shrink_axis_mask\022\003int\032\002\030\000\n\220\002\n\022StridedSliceAssign\022\013\n\003ref\"\001T\200\001\001\022\016\n\005begin\"\005Index\022\014\n\003end\"\005Index\022\020\n\007strides\"\005Index\022\n\n\005value\"\001T\032\022\n\noutput_ref\"\001T\200\001\001\"\t\n\001T\022\004type\"\025\n\005Index\022\004type:\006\n\0042\002\003\t\"\025\n\nbegin_mask\022\003int\032\002\030\000\"\023\n\010end_mask\022\003int\032\002\030\000\"\030\n\rellipsis_mask\022\003int\032\002\030\000\"\030\n\rnew_axis_mask\022\003int\032\002\030\000\"\033\n\020shrink_axis_mask\022\003int\032\002\030\000\n\207\002\n\020StridedSliceGrad\022\016\n\005shape\"\005Index\022\016\n\005begin\"\005Index\022\014\n\003end\"\005Index\022\020\n\007strides\"\005Index\022\007\n\002dy\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\025\n\005Index\022\004type:\006\n\0042\002\003\t\"\025\n\nbegin_mask\022\003int\032\002\030\000\"\023\n\010end_mask\022\003int\032\002\030\000\"\030\n\rellipsis_mask\022\003int\032\002\030\000\"\030\n\rnew_axis_mask\022\003int\032\002\030\000\"\033\n\020shrink_axis_mask\022\003int\032\002\030\000\nc\n\004Tile\022\n\n\005input\"\001T\022\027\n\tmultiples\"\nTmultiples\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\036\n\nTmultiples\022\004type\032\0020\003:\006\n\0042\002\003\t\nm\n\010TileGrad\022\n\n\005input\"\001T\022\r\n\tmultiples\030\003\032\013\n\006output\"\001T\"\t\n\001T\022\004typeB.\010\003\022*TileGrad has been replaced with reduce_sum\nP\n\tTranspose\022\006\n\001x\"\001T\022\r\n\004perm\"\005Tperm\032\006\n\001y\"\001T\"\t\n\001T\022\004type\"\031\n\005Tperm\022\004type\032\0020\003:\006\n\0042\002\003\t\nP\n\006Unique\022\006\n\001x\"\001T\032\006\n\001y\"\001T\032\016\n\003idx\"\007out_idx\"\t\n\001T\022\004type\"\033\n\007out_idx\022\004type\032\0020\003:\006\n\0042\002\003\t\nl\n\020UniqueWithCounts\022\006\n\001x\"\001T\032\006\n\001y\"\001T\032\016\n\003idx\"\007out_idx\032\020\n\005count\"\007out_idx\"\t\n\001T\022\004type\"\033\n\007out_idx\022\004type\032\0020\003:\006\n\0042\002\003\t\nP\n\006Unpack\022\n\n\005value\"\001T\032\020\n\006output\"\001T*\003num\"\014\n\003num\022\003int(\001\"\t\n\001T\022\004type\"\017\n\004axis\022\003int\032\002\030\000\n\035\n\005Where\022\t\n\005input\030\n\032\t\n\005index\030\t\n&\n\tZerosLike\022\006\n\001x\"\001T\032\006\n\001y\"\001T\"\t\n\001T\022\004type")

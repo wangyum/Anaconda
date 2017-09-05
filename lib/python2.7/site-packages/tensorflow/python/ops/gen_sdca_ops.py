@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -157,167 +155,164 @@ def sdca_shrink_l1(weights, l1, l2, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "SdcaFprint"
-  input_arg {
-    name: "input"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type: DT_INT64
-  }
-}
-op {
-  name: "SdcaOptimizer"
-  input_arg {
-    name: "sparse_example_indices"
-    type: DT_INT64
-    number_attr: "num_sparse_features"
-  }
-  input_arg {
-    name: "sparse_feature_indices"
-    type: DT_INT64
-    number_attr: "num_sparse_features"
-  }
-  input_arg {
-    name: "sparse_feature_values"
-    type: DT_FLOAT
-    number_attr: "num_sparse_features_with_values"
-  }
-  input_arg {
-    name: "dense_features"
-    type: DT_FLOAT
-    number_attr: "num_dense_features"
-  }
-  input_arg {
-    name: "example_weights"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "example_labels"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "sparse_indices"
-    type: DT_INT64
-    number_attr: "num_sparse_features"
-  }
-  input_arg {
-    name: "sparse_weights"
-    type: DT_FLOAT
-    number_attr: "num_sparse_features"
-  }
-  input_arg {
-    name: "dense_weights"
-    type: DT_FLOAT
-    number_attr: "num_dense_features"
-  }
-  input_arg {
-    name: "example_state_data"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "out_example_state_data"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "out_delta_sparse_weights"
-    type: DT_FLOAT
-    number_attr: "num_sparse_features"
-  }
-  output_arg {
-    name: "out_delta_dense_weights"
-    type: DT_FLOAT
-    number_attr: "num_dense_features"
-  }
-  attr {
-    name: "loss_type"
-    type: "string"
-    allowed_values {
-      list {
-        s: "logistic_loss"
-        s: "squared_loss"
-        s: "hinge_loss"
-        s: "smooth_hinge_loss"
-      }
-    }
-  }
-  attr {
-    name: "adaptative"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "num_sparse_features"
-    type: "int"
-    has_minimum: true
-  }
-  attr {
-    name: "num_sparse_features_with_values"
-    type: "int"
-    has_minimum: true
-  }
-  attr {
-    name: "num_dense_features"
-    type: "int"
-    has_minimum: true
-  }
-  attr {
-    name: "l1"
-    type: "float"
-  }
-  attr {
-    name: "l2"
-    type: "float"
-  }
-  attr {
-    name: "num_loss_partitions"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "num_inner_iterations"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "SdcaShrinkL1"
-  input_arg {
-    name: "weights"
-    type: DT_FLOAT
-    number_attr: "num_features"
-    is_ref: true
-  }
-  attr {
-    name: "num_features"
-    type: "int"
-    has_minimum: true
-  }
-  attr {
-    name: "l1"
-    type: "float"
-  }
-  attr {
-    name: "l2"
-    type: "float"
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "SdcaFprint"
+#   input_arg {
+#     name: "input"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_INT64
+#   }
+# }
+# op {
+#   name: "SdcaOptimizer"
+#   input_arg {
+#     name: "sparse_example_indices"
+#     type: DT_INT64
+#     number_attr: "num_sparse_features"
+#   }
+#   input_arg {
+#     name: "sparse_feature_indices"
+#     type: DT_INT64
+#     number_attr: "num_sparse_features"
+#   }
+#   input_arg {
+#     name: "sparse_feature_values"
+#     type: DT_FLOAT
+#     number_attr: "num_sparse_features_with_values"
+#   }
+#   input_arg {
+#     name: "dense_features"
+#     type: DT_FLOAT
+#     number_attr: "num_dense_features"
+#   }
+#   input_arg {
+#     name: "example_weights"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "example_labels"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "sparse_indices"
+#     type: DT_INT64
+#     number_attr: "num_sparse_features"
+#   }
+#   input_arg {
+#     name: "sparse_weights"
+#     type: DT_FLOAT
+#     number_attr: "num_sparse_features"
+#   }
+#   input_arg {
+#     name: "dense_weights"
+#     type: DT_FLOAT
+#     number_attr: "num_dense_features"
+#   }
+#   input_arg {
+#     name: "example_state_data"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "out_example_state_data"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "out_delta_sparse_weights"
+#     type: DT_FLOAT
+#     number_attr: "num_sparse_features"
+#   }
+#   output_arg {
+#     name: "out_delta_dense_weights"
+#     type: DT_FLOAT
+#     number_attr: "num_dense_features"
+#   }
+#   attr {
+#     name: "loss_type"
+#     type: "string"
+#     allowed_values {
+#       list {
+#         s: "logistic_loss"
+#         s: "squared_loss"
+#         s: "hinge_loss"
+#         s: "smooth_hinge_loss"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "adaptative"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "num_sparse_features"
+#     type: "int"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "num_sparse_features_with_values"
+#     type: "int"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "num_dense_features"
+#     type: "int"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "l1"
+#     type: "float"
+#   }
+#   attr {
+#     name: "l2"
+#     type: "float"
+#   }
+#   attr {
+#     name: "num_loss_partitions"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "num_inner_iterations"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+# }
+# op {
+#   name: "SdcaShrinkL1"
+#   input_arg {
+#     name: "weights"
+#     type: DT_FLOAT
+#     number_attr: "num_features"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "num_features"
+#     type: "int"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "l1"
+#     type: "float"
+#   }
+#   attr {
+#     name: "l2"
+#     type: "float"
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n#\n\nSdcaFprint\022\t\n\005input\030\007\032\n\n\006output\030\t\n\274\006\n\rSdcaOptimizer\022/\n\026sparse_example_indices\030\t*\023num_sparse_features\022/\n\026sparse_feature_indices\030\t*\023num_sparse_features\022:\n\025sparse_feature_values\030\001*\037num_sparse_features_with_values\022&\n\016dense_features\030\001*\022num_dense_features\022\023\n\017example_weights\030\001\022\022\n\016example_labels\030\001\022\'\n\016sparse_indices\030\t*\023num_sparse_features\022\'\n\016sparse_weights\030\001*\023num_sparse_features\022%\n\rdense_weights\030\001*\022num_dense_features\022\026\n\022example_state_data\030\001\032\032\n\026out_example_state_data\030\001\0321\n\030out_delta_sparse_weights\030\001*\023num_sparse_features\032/\n\027out_delta_dense_weights\030\001*\022num_dense_features\"S\n\tloss_type\022\006string:>\n<\022\rlogistic_loss\022\014squared_loss\022\nhinge_loss\022\021smooth_hinge_loss\"\026\n\nadaptative\022\004bool\032\002(\000\"\034\n\023num_sparse_features\022\003int(\001\"(\n\037num_sparse_features_with_values\022\003int(\001\"\033\n\022num_dense_features\022\003int(\001\"\013\n\002l1\022\005float\"\013\n\002l2\022\005float\"\036\n\023num_loss_partitions\022\003int(\0010\001\"\037\n\024num_inner_iterations\022\003int(\0010\001\n]\n\014SdcaShrinkL1\022\034\n\007weights\030\001*\014num_features\200\001\001\"\025\n\014num_features\022\003int(\001\"\013\n\002l1\022\005float\"\013\n\002l2\022\005float")

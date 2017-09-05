@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -149,8 +147,8 @@ def _ctc_loss(inputs, labels_indices, labels_values, sequence_length,
       individual labels.  This is a simplified version of CTC.
     ignore_longer_outputs_than_inputs: An optional `bool`. Defaults to `False`.
       Scalar. If set to true, during CTC
-      calculation items have longer input sequences than output sequences
-      are ignored by returning zero-gradient for those items.
+      calculation, items that have longer output sequences than input sequences
+      are skipped: they don't contribute to the loss term and have zero-gradient.
     name: A name for the operation (optional).
 
   Returns:
@@ -171,147 +169,144 @@ def _ctc_loss(inputs, labels_indices, labels_values, sequence_length,
   return _CTCLossOutput._make(result)
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "CTCBeamSearchDecoder"
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "sequence_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "decoded_indices"
-    type: DT_INT64
-    number_attr: "top_paths"
-  }
-  output_arg {
-    name: "decoded_values"
-    type: DT_INT64
-    number_attr: "top_paths"
-  }
-  output_arg {
-    name: "decoded_shape"
-    type: DT_INT64
-    number_attr: "top_paths"
-  }
-  output_arg {
-    name: "log_probability"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "beam_width"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "top_paths"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "merge_repeated"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "CTCGreedyDecoder"
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "sequence_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "decoded_indices"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "decoded_values"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "decoded_shape"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "log_probability"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "merge_repeated"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "CTCLoss"
-  input_arg {
-    name: "inputs"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "labels_indices"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "labels_values"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "sequence_length"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "loss"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "gradient"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "preprocess_collapse_repeated"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "ctc_merge_repeated"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "ignore_longer_outputs_than_inputs"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "CTCBeamSearchDecoder"
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "sequence_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "decoded_indices"
+#     type: DT_INT64
+#     number_attr: "top_paths"
+#   }
+#   output_arg {
+#     name: "decoded_values"
+#     type: DT_INT64
+#     number_attr: "top_paths"
+#   }
+#   output_arg {
+#     name: "decoded_shape"
+#     type: DT_INT64
+#     number_attr: "top_paths"
+#   }
+#   output_arg {
+#     name: "log_probability"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "beam_width"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "top_paths"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "merge_repeated"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "CTCGreedyDecoder"
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "sequence_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "decoded_indices"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "decoded_values"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "decoded_shape"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "log_probability"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "merge_repeated"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "CTCLoss"
+#   input_arg {
+#     name: "inputs"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "labels_indices"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "labels_values"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "sequence_length"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "loss"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "gradient"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "preprocess_collapse_repeated"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "ctc_merge_repeated"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "ignore_longer_outputs_than_inputs"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\362\001\n\024CTCBeamSearchDecoder\022\n\n\006inputs\030\001\022\023\n\017sequence_length\030\003\032\036\n\017decoded_indices\030\t*\ttop_paths\032\035\n\016decoded_values\030\t*\ttop_paths\032\034\n\rdecoded_shape\030\t*\ttop_paths\032\023\n\017log_probability\030\001\"\025\n\nbeam_width\022\003int(\0010\001\"\024\n\ttop_paths\022\003int(\0010\001\"\032\n\016merge_repeated\022\004bool\032\002(\001\n\240\001\n\020CTCGreedyDecoder\022\n\n\006inputs\030\001\022\023\n\017sequence_length\030\003\032\023\n\017decoded_indices\030\t\032\022\n\016decoded_values\030\t\032\021\n\rdecoded_shape\030\t\032\023\n\017log_probability\030\001\"\032\n\016merge_repeated\022\004bool\032\002(\000\n\342\001\n\007CTCLoss\022\n\n\006inputs\030\001\022\022\n\016labels_indices\030\t\022\021\n\rlabels_values\030\003\022\023\n\017sequence_length\030\003\032\010\n\004loss\030\001\032\014\n\010gradient\030\001\"(\n\034preprocess_collapse_repeated\022\004bool\032\002(\000\"\036\n\022ctc_merge_repeated\022\004bool\032\002(\001\"-\n!ignore_longer_outputs_than_inputs\022\004bool\032\002(\000")

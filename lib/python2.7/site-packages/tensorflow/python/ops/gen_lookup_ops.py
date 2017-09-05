@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -676,736 +674,733 @@ def _mutable_hash_table_v2(key_dtype, value_dtype, container=None,
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "HashTable"
-  output_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "use_node_name_sharing"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "key_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "HashTableV2"
-  output_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "use_node_name_sharing"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "key_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "InitializeTable"
-  input_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "keys"
-    type_attr: "Tkey"
-  }
-  input_arg {
-    name: "values"
-    type_attr: "Tval"
-  }
-  attr {
-    name: "Tkey"
-    type: "type"
-  }
-  attr {
-    name: "Tval"
-    type: "type"
-  }
-}
-op {
-  name: "InitializeTableFromTextFile"
-  input_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "filename"
-    type: DT_STRING
-  }
-  attr {
-    name: "key_index"
-    type: "int"
-    has_minimum: true
-    minimum: -2
-  }
-  attr {
-    name: "value_index"
-    type: "int"
-    has_minimum: true
-    minimum: -2
-  }
-  attr {
-    name: "vocab_size"
-    type: "int"
-    default_value {
-      i: -1
-    }
-    has_minimum: true
-    minimum: -1
-  }
-  attr {
-    name: "delimiter"
-    type: "string"
-    default_value {
-      s: "\t"
-    }
-  }
-}
-op {
-  name: "InitializeTableFromTextFileV2"
-  input_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "filename"
-    type: DT_STRING
-  }
-  attr {
-    name: "key_index"
-    type: "int"
-    has_minimum: true
-    minimum: -2
-  }
-  attr {
-    name: "value_index"
-    type: "int"
-    has_minimum: true
-    minimum: -2
-  }
-  attr {
-    name: "vocab_size"
-    type: "int"
-    default_value {
-      i: -1
-    }
-    has_minimum: true
-    minimum: -1
-  }
-  attr {
-    name: "delimiter"
-    type: "string"
-    default_value {
-      s: "\t"
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "InitializeTableV2"
-  input_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "keys"
-    type_attr: "Tkey"
-  }
-  input_arg {
-    name: "values"
-    type_attr: "Tval"
-  }
-  attr {
-    name: "Tkey"
-    type: "type"
-  }
-  attr {
-    name: "Tval"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "LookupTableExport"
-  input_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "keys"
-    type_attr: "Tkeys"
-  }
-  output_arg {
-    name: "values"
-    type_attr: "Tvalues"
-  }
-  attr {
-    name: "Tkeys"
-    type: "type"
-  }
-  attr {
-    name: "Tvalues"
-    type: "type"
-  }
-}
-op {
-  name: "LookupTableExportV2"
-  input_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "keys"
-    type_attr: "Tkeys"
-  }
-  output_arg {
-    name: "values"
-    type_attr: "Tvalues"
-  }
-  attr {
-    name: "Tkeys"
-    type: "type"
-  }
-  attr {
-    name: "Tvalues"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "LookupTableFind"
-  input_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "keys"
-    type_attr: "Tin"
-  }
-  input_arg {
-    name: "default_value"
-    type_attr: "Tout"
-  }
-  output_arg {
-    name: "values"
-    type_attr: "Tout"
-  }
-  attr {
-    name: "Tin"
-    type: "type"
-  }
-  attr {
-    name: "Tout"
-    type: "type"
-  }
-}
-op {
-  name: "LookupTableFindV2"
-  input_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "keys"
-    type_attr: "Tin"
-  }
-  input_arg {
-    name: "default_value"
-    type_attr: "Tout"
-  }
-  output_arg {
-    name: "values"
-    type_attr: "Tout"
-  }
-  attr {
-    name: "Tin"
-    type: "type"
-  }
-  attr {
-    name: "Tout"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "LookupTableImport"
-  input_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "keys"
-    type_attr: "Tin"
-  }
-  input_arg {
-    name: "values"
-    type_attr: "Tout"
-  }
-  attr {
-    name: "Tin"
-    type: "type"
-  }
-  attr {
-    name: "Tout"
-    type: "type"
-  }
-}
-op {
-  name: "LookupTableImportV2"
-  input_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "keys"
-    type_attr: "Tin"
-  }
-  input_arg {
-    name: "values"
-    type_attr: "Tout"
-  }
-  attr {
-    name: "Tin"
-    type: "type"
-  }
-  attr {
-    name: "Tout"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "LookupTableInsert"
-  input_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  input_arg {
-    name: "keys"
-    type_attr: "Tin"
-  }
-  input_arg {
-    name: "values"
-    type_attr: "Tout"
-  }
-  attr {
-    name: "Tin"
-    type: "type"
-  }
-  attr {
-    name: "Tout"
-    type: "type"
-  }
-}
-op {
-  name: "LookupTableInsertV2"
-  input_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  input_arg {
-    name: "keys"
-    type_attr: "Tin"
-  }
-  input_arg {
-    name: "values"
-    type_attr: "Tout"
-  }
-  attr {
-    name: "Tin"
-    type: "type"
-  }
-  attr {
-    name: "Tout"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "LookupTableSize"
-  input_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT64
-  }
-}
-op {
-  name: "LookupTableSizeV2"
-  input_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  output_arg {
-    name: "size"
-    type: DT_INT64
-  }
-  is_stateful: true
-}
-op {
-  name: "MutableDenseHashTable"
-  input_arg {
-    name: "empty_key"
-    type_attr: "key_dtype"
-  }
-  output_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "use_node_name_sharing"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "key_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_shape"
-    type: "shape"
-    default_value {
-      shape {
-      }
-    }
-  }
-  attr {
-    name: "initial_num_buckets"
-    type: "int"
-    default_value {
-      i: 131072
-    }
-  }
-  attr {
-    name: "max_load_factor"
-    type: "float"
-    default_value {
-      f: 0.8
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "MutableDenseHashTableV2"
-  input_arg {
-    name: "empty_key"
-    type_attr: "key_dtype"
-  }
-  output_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "use_node_name_sharing"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "key_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_shape"
-    type: "shape"
-    default_value {
-      shape {
-      }
-    }
-  }
-  attr {
-    name: "initial_num_buckets"
-    type: "int"
-    default_value {
-      i: 131072
-    }
-  }
-  attr {
-    name: "max_load_factor"
-    type: "float"
-    default_value {
-      f: 0.8
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "MutableHashTable"
-  output_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "use_node_name_sharing"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "key_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-op {
-  name: "MutableHashTableOfTensors"
-  output_arg {
-    name: "table_handle"
-    type: DT_STRING
-    is_ref: true
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "use_node_name_sharing"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "key_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_shape"
-    type: "shape"
-    default_value {
-      shape {
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "MutableHashTableOfTensorsV2"
-  output_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "use_node_name_sharing"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "key_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_shape"
-    type: "shape"
-    default_value {
-      shape {
-      }
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "MutableHashTableV2"
-  output_arg {
-    name: "table_handle"
-    type: DT_RESOURCE
-  }
-  attr {
-    name: "container"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "shared_name"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "use_node_name_sharing"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "key_dtype"
-    type: "type"
-  }
-  attr {
-    name: "value_dtype"
-    type: "type"
-  }
-  is_stateful: true
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "HashTable"
+#   output_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "use_node_name_sharing"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "key_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "HashTableV2"
+#   output_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "use_node_name_sharing"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "key_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "InitializeTable"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "keys"
+#     type_attr: "Tkey"
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "Tval"
+#   }
+#   attr {
+#     name: "Tkey"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tval"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "InitializeTableFromTextFile"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "key_index"
+#     type: "int"
+#     has_minimum: true
+#     minimum: -2
+#   }
+#   attr {
+#     name: "value_index"
+#     type: "int"
+#     has_minimum: true
+#     minimum: -2
+#   }
+#   attr {
+#     name: "vocab_size"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#     has_minimum: true
+#     minimum: -1
+#   }
+#   attr {
+#     name: "delimiter"
+#     type: "string"
+#     default_value {
+#       s: "\t"
+#     }
+#   }
+# }
+# op {
+#   name: "InitializeTableFromTextFileV2"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "filename"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "key_index"
+#     type: "int"
+#     has_minimum: true
+#     minimum: -2
+#   }
+#   attr {
+#     name: "value_index"
+#     type: "int"
+#     has_minimum: true
+#     minimum: -2
+#   }
+#   attr {
+#     name: "vocab_size"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#     has_minimum: true
+#     minimum: -1
+#   }
+#   attr {
+#     name: "delimiter"
+#     type: "string"
+#     default_value {
+#       s: "\t"
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "InitializeTableV2"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "keys"
+#     type_attr: "Tkey"
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "Tval"
+#   }
+#   attr {
+#     name: "Tkey"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tval"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "LookupTableExport"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "keys"
+#     type_attr: "Tkeys"
+#   }
+#   output_arg {
+#     name: "values"
+#     type_attr: "Tvalues"
+#   }
+#   attr {
+#     name: "Tkeys"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tvalues"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "LookupTableExportV2"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "keys"
+#     type_attr: "Tkeys"
+#   }
+#   output_arg {
+#     name: "values"
+#     type_attr: "Tvalues"
+#   }
+#   attr {
+#     name: "Tkeys"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tvalues"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "LookupTableFind"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "keys"
+#     type_attr: "Tin"
+#   }
+#   input_arg {
+#     name: "default_value"
+#     type_attr: "Tout"
+#   }
+#   output_arg {
+#     name: "values"
+#     type_attr: "Tout"
+#   }
+#   attr {
+#     name: "Tin"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "LookupTableFindV2"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "keys"
+#     type_attr: "Tin"
+#   }
+#   input_arg {
+#     name: "default_value"
+#     type_attr: "Tout"
+#   }
+#   output_arg {
+#     name: "values"
+#     type_attr: "Tout"
+#   }
+#   attr {
+#     name: "Tin"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "LookupTableImport"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "keys"
+#     type_attr: "Tin"
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "Tout"
+#   }
+#   attr {
+#     name: "Tin"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "LookupTableImportV2"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "keys"
+#     type_attr: "Tin"
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "Tout"
+#   }
+#   attr {
+#     name: "Tin"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "LookupTableInsert"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "keys"
+#     type_attr: "Tin"
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "Tout"
+#   }
+#   attr {
+#     name: "Tin"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "LookupTableInsertV2"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   input_arg {
+#     name: "keys"
+#     type_attr: "Tin"
+#   }
+#   input_arg {
+#     name: "values"
+#     type_attr: "Tout"
+#   }
+#   attr {
+#     name: "Tin"
+#     type: "type"
+#   }
+#   attr {
+#     name: "Tout"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "LookupTableSize"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT64
+#   }
+# }
+# op {
+#   name: "LookupTableSizeV2"
+#   input_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   output_arg {
+#     name: "size"
+#     type: DT_INT64
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MutableDenseHashTable"
+#   input_arg {
+#     name: "empty_key"
+#     type_attr: "key_dtype"
+#   }
+#   output_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "use_node_name_sharing"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "key_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#       }
+#     }
+#   }
+#   attr {
+#     name: "initial_num_buckets"
+#     type: "int"
+#     default_value {
+#       i: 131072
+#     }
+#   }
+#   attr {
+#     name: "max_load_factor"
+#     type: "float"
+#     default_value {
+#       f: 0.8
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MutableDenseHashTableV2"
+#   input_arg {
+#     name: "empty_key"
+#     type_attr: "key_dtype"
+#   }
+#   output_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "use_node_name_sharing"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "key_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#       }
+#     }
+#   }
+#   attr {
+#     name: "initial_num_buckets"
+#     type: "int"
+#     default_value {
+#       i: 131072
+#     }
+#   }
+#   attr {
+#     name: "max_load_factor"
+#     type: "float"
+#     default_value {
+#       f: 0.8
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MutableHashTable"
+#   output_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "use_node_name_sharing"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "key_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MutableHashTableOfTensors"
+#   output_arg {
+#     name: "table_handle"
+#     type: DT_STRING
+#     is_ref: true
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "use_node_name_sharing"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "key_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MutableHashTableOfTensorsV2"
+#   output_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "use_node_name_sharing"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "key_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_shape"
+#     type: "shape"
+#     default_value {
+#       shape {
+#       }
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "MutableHashTableV2"
+#   output_arg {
+#     name: "table_handle"
+#     type: DT_RESOURCE
+#   }
+#   attr {
+#     name: "container"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "shared_name"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "use_node_name_sharing"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "key_dtype"
+#     type: "type"
+#   }
+#   attr {
+#     name: "value_dtype"
+#     type: "type"
+#   }
+#   is_stateful: true
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\242\001\n\tHashTable\032\023\n\014table_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"!\n\025use_node_name_sharing\022\004bool\032\002(\000\"\021\n\tkey_dtype\022\004type\"\023\n\013value_dtype\022\004type\210\001\001\n\241\001\n\013HashTableV2\032\020\n\014table_handle\030\024\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"!\n\025use_node_name_sharing\022\004bool\032\002(\000\"\021\n\tkey_dtype\022\004type\"\023\n\013value_dtype\022\004type\210\001\001\n`\n\017InitializeTable\022\023\n\014table_handle\030\007\200\001\001\022\014\n\004keys\"\004Tkey\022\016\n\006values\"\004Tval\"\014\n\004Tkey\022\004type\"\014\n\004Tval\022\004type\n\307\001\n\033InitializeTableFromTextFile\022\023\n\014table_handle\030\007\200\001\001\022\014\n\010filename\030\007\"\035\n\tkey_index\022\003int(\0010\376\377\377\377\377\377\377\377\377\001\"\037\n\013value_index\022\003int(\0010\376\377\377\377\377\377\377\377\377\001\"+\n\nvocab_size\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001(\0010\377\377\377\377\377\377\377\377\377\001\"\030\n\tdelimiter\022\006string\032\003\022\001\t\n\311\001\n\035InitializeTableFromTextFileV2\022\020\n\014table_handle\030\024\022\014\n\010filename\030\007\"\035\n\tkey_index\022\003int(\0010\376\377\377\377\377\377\377\377\377\001\"\037\n\013value_index\022\003int(\0010\376\377\377\377\377\377\377\377\377\001\"+\n\nvocab_size\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001(\0010\377\377\377\377\377\377\377\377\377\001\"\030\n\tdelimiter\022\006string\032\003\022\001\t\210\001\001\nb\n\021InitializeTableV2\022\020\n\014table_handle\030\024\022\014\n\004keys\"\004Tkey\022\016\n\006values\"\004Tval\"\014\n\004Tkey\022\004type\"\014\n\004Tval\022\004type\210\001\001\nj\n\021LookupTableExport\022\023\n\014table_handle\030\007\200\001\001\032\r\n\004keys\"\005Tkeys\032\021\n\006values\"\007Tvalues\"\r\n\005Tkeys\022\004type\"\017\n\007Tvalues\022\004type\nl\n\023LookupTableExportV2\022\020\n\014table_handle\030\024\032\r\n\004keys\"\005Tkeys\032\021\n\006values\"\007Tvalues\"\r\n\005Tkeys\022\004type\"\017\n\007Tvalues\022\004type\210\001\001\nu\n\017LookupTableFind\022\023\n\014table_handle\030\007\200\001\001\022\013\n\004keys\"\003Tin\022\025\n\rdefault_value\"\004Tout\032\016\n\006values\"\004Tout\"\013\n\003Tin\022\004type\"\014\n\004Tout\022\004type\nw\n\021LookupTableFindV2\022\020\n\014table_handle\030\024\022\013\n\004keys\"\003Tin\022\025\n\rdefault_value\"\004Tout\032\016\n\006values\"\004Tout\"\013\n\003Tin\022\004type\"\014\n\004Tout\022\004type\210\001\001\n`\n\021LookupTableImport\022\023\n\014table_handle\030\007\200\001\001\022\013\n\004keys\"\003Tin\022\016\n\006values\"\004Tout\"\013\n\003Tin\022\004type\"\014\n\004Tout\022\004type\nb\n\023LookupTableImportV2\022\020\n\014table_handle\030\024\022\013\n\004keys\"\003Tin\022\016\n\006values\"\004Tout\"\013\n\003Tin\022\004type\"\014\n\004Tout\022\004type\210\001\001\n`\n\021LookupTableInsert\022\023\n\014table_handle\030\007\200\001\001\022\013\n\004keys\"\003Tin\022\016\n\006values\"\004Tout\"\013\n\003Tin\022\004type\"\014\n\004Tout\022\004type\nb\n\023LookupTableInsertV2\022\020\n\014table_handle\030\024\022\013\n\004keys\"\003Tin\022\016\n\006values\"\004Tout\"\013\n\003Tin\022\004type\"\014\n\004Tout\022\004type\210\001\001\n0\n\017LookupTableSize\022\023\n\014table_handle\030\007\200\001\001\032\010\n\004size\030\t\n2\n\021LookupTableSizeV2\022\020\n\014table_handle\030\024\032\010\n\004size\030\t\210\001\001\n\243\002\n\025MutableDenseHashTable\022\026\n\tempty_key\"\tkey_dtype\032\023\n\014table_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"!\n\025use_node_name_sharing\022\004bool\032\002(\000\"\021\n\tkey_dtype\022\004type\"\023\n\013value_dtype\022\004type\"\030\n\013value_shape\022\005shape\032\002:\000\" \n\023initial_num_buckets\022\003int\032\004\030\200\200\010\"\037\n\017max_load_factor\022\005float\032\005%\315\314L?\210\001\001\n\242\002\n\027MutableDenseHashTableV2\022\026\n\tempty_key\"\tkey_dtype\032\020\n\014table_handle\030\024\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"!\n\025use_node_name_sharing\022\004bool\032\002(\000\"\021\n\tkey_dtype\022\004type\"\023\n\013value_dtype\022\004type\"\030\n\013value_shape\022\005shape\032\002:\000\" \n\023initial_num_buckets\022\003int\032\004\030\200\200\010\"\037\n\017max_load_factor\022\005float\032\005%\315\314L?\210\001\001\n\251\001\n\020MutableHashTable\032\023\n\014table_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"!\n\025use_node_name_sharing\022\004bool\032\002(\000\"\021\n\tkey_dtype\022\004type\"\023\n\013value_dtype\022\004type\210\001\001\n\314\001\n\031MutableHashTableOfTensors\032\023\n\014table_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"!\n\025use_node_name_sharing\022\004bool\032\002(\000\"\021\n\tkey_dtype\022\004type\"\023\n\013value_dtype\022\004type\"\030\n\013value_shape\022\005shape\032\002:\000\210\001\001\n\313\001\n\033MutableHashTableOfTensorsV2\032\020\n\014table_handle\030\024\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"!\n\025use_node_name_sharing\022\004bool\032\002(\000\"\021\n\tkey_dtype\022\004type\"\023\n\013value_dtype\022\004type\"\030\n\013value_shape\022\005shape\032\002:\000\210\001\001\n\250\001\n\022MutableHashTableV2\032\020\n\014table_handle\030\024\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"!\n\025use_node_name_sharing\022\004bool\032\002(\000\"\021\n\tkey_dtype\022\004type\"\023\n\013value_dtype\022\004type\210\001\001")

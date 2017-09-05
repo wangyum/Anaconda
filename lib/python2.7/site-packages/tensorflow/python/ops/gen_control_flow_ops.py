@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -357,314 +355,311 @@ def _switch(data, pred, name=None):
   return _SwitchOutput._make(result)
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "Abort"
-  attr {
-    name: "error_msg"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "exit_without_error"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ControlTrigger"
-}
-op {
-  name: "Enter"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "frame_name"
-    type: "string"
-  }
-  attr {
-    name: "is_constant"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "parallel_iterations"
-    type: "int"
-    default_value {
-      i: 10
-    }
-  }
-}
-op {
-  name: "Exit"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "LoopCond"
-  input_arg {
-    name: "input"
-    type: DT_BOOL
-  }
-  output_arg {
-    name: "output"
-    type: DT_BOOL
-  }
-}
-op {
-  name: "Merge"
-  input_arg {
-    name: "inputs"
-    type_attr: "T"
-    number_attr: "N"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "value_index"
-    type: DT_INT32
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "NextIteration"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "NoOp"
-}
-op {
-  name: "RefEnter"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-    is_ref: true
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "frame_name"
-    type: "string"
-  }
-  attr {
-    name: "is_constant"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "parallel_iterations"
-    type: "int"
-    default_value {
-      i: 10
-    }
-  }
-}
-op {
-  name: "RefExit"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-    is_ref: true
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "RefMerge"
-  input_arg {
-    name: "inputs"
-    type_attr: "T"
-    number_attr: "N"
-    is_ref: true
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    is_ref: true
-  }
-  output_arg {
-    name: "value_index"
-    type: DT_INT32
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "RefNextIteration"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-    is_ref: true
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-op {
-  name: "RefSelect"
-  input_arg {
-    name: "index"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "inputs"
-    type_attr: "T"
-    number_attr: "N"
-    is_ref: true
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  attr {
-    name: "N"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-}
-op {
-  name: "RefSwitch"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-    is_ref: true
-  }
-  input_arg {
-    name: "pred"
-    type: DT_BOOL
-  }
-  output_arg {
-    name: "output_false"
-    type_attr: "T"
-    is_ref: true
-  }
-  output_arg {
-    name: "output_true"
-    type_attr: "T"
-    is_ref: true
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-  allows_uninitialized_input: true
-}
-op {
-  name: "Switch"
-  input_arg {
-    name: "data"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "pred"
-    type: DT_BOOL
-  }
-  output_arg {
-    name: "output_false"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output_true"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "Abort"
+#   attr {
+#     name: "error_msg"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "exit_without_error"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ControlTrigger"
+# }
+# op {
+#   name: "Enter"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "frame_name"
+#     type: "string"
+#   }
+#   attr {
+#     name: "is_constant"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "parallel_iterations"
+#     type: "int"
+#     default_value {
+#       i: 10
+#     }
+#   }
+# }
+# op {
+#   name: "Exit"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "LoopCond"
+#   input_arg {
+#     name: "input"
+#     type: DT_BOOL
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_BOOL
+#   }
+# }
+# op {
+#   name: "Merge"
+#   input_arg {
+#     name: "inputs"
+#     type_attr: "T"
+#     number_attr: "N"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "value_index"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+# }
+# op {
+#   name: "NextIteration"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "NoOp"
+# }
+# op {
+#   name: "RefEnter"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "frame_name"
+#     type: "string"
+#   }
+#   attr {
+#     name: "is_constant"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "parallel_iterations"
+#     type: "int"
+#     default_value {
+#       i: 10
+#     }
+#   }
+# }
+# op {
+#   name: "RefExit"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "RefMerge"
+#   input_arg {
+#     name: "inputs"
+#     type_attr: "T"
+#     number_attr: "N"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "value_index"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+# }
+# op {
+#   name: "RefNextIteration"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "RefSelect"
+#   input_arg {
+#     name: "index"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "inputs"
+#     type_attr: "T"
+#     number_attr: "N"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   attr {
+#     name: "N"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+# }
+# op {
+#   name: "RefSwitch"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   input_arg {
+#     name: "pred"
+#     type: DT_BOOL
+#   }
+#   output_arg {
+#     name: "output_false"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   output_arg {
+#     name: "output_true"
+#     type_attr: "T"
+#     is_ref: true
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+#   allows_uninitialized_input: true
+# }
+# op {
+#   name: "Switch"
+#   input_arg {
+#     name: "data"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "pred"
+#     type: DT_BOOL
+#   }
+#   output_arg {
+#     name: "output_false"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output_true"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n@\n\005Abort\"\027\n\terror_msg\022\006string\032\002\022\000\"\036\n\022exit_without_error\022\004bool\032\002(\000\n\020\n\016ControlTrigger\ny\n\005Enter\022\t\n\004data\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\"\024\n\nframe_name\022\006string\"\027\n\013is_constant\022\004bool\032\002(\000\"\036\n\023parallel_iterations\022\003int\032\002\030\n\n)\n\004Exit\022\t\n\004data\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\n!\n\010LoopCond\022\t\n\005input\030\n\032\n\n\006output\030\n\nN\n\005Merge\022\016\n\006inputs\"\001T*\001N\032\013\n\006output\"\001T\032\017\n\013value_index\030\003\"\t\n\001T\022\004type\"\014\n\001N\022\003int(\0010\001\n2\n\rNextIteration\022\t\n\004data\"\001T\032\013\n\006output\"\001T\"\t\n\001T\022\004type\n\006\n\004NoOp\n\202\001\n\010RefEnter\022\014\n\004data\"\001T\200\001\001\032\016\n\006output\"\001T\200\001\001\"\t\n\001T\022\004type\"\024\n\nframe_name\022\006string\"\027\n\013is_constant\022\004bool\032\002(\000\"\036\n\023parallel_iterations\022\003int\032\002\030\n\n2\n\007RefExit\022\014\n\004data\"\001T\200\001\001\032\016\n\006output\"\001T\200\001\001\"\t\n\001T\022\004type\nW\n\010RefMerge\022\021\n\006inputs\"\001T*\001N\200\001\001\032\016\n\006output\"\001T\200\001\001\032\017\n\013value_index\030\003\"\t\n\001T\022\004type\"\014\n\001N\022\003int(\0010\001\n;\n\020RefNextIteration\022\014\n\004data\"\001T\200\001\001\032\016\n\006output\"\001T\200\001\001\"\t\n\001T\022\004type\nR\n\tRefSelect\022\t\n\005index\030\003\022\021\n\006inputs\"\001T*\001N\200\001\001\032\016\n\006output\"\001T\200\001\001\"\t\n\001T\022\004type\"\014\n\001N\022\003int(\0010\001\n\\\n\tRefSwitch\022\014\n\004data\"\001T\200\001\001\022\010\n\004pred\030\n\032\024\n\014output_false\"\001T\200\001\001\032\023\n\013output_true\"\001T\200\001\001\"\t\n\001T\022\004type\230\001\001\nM\n\006Switch\022\t\n\004data\"\001T\022\010\n\004pred\030\n\032\021\n\014output_false\"\001T\032\020\n\013output_true\"\001T\"\t\n\001T\022\004type")

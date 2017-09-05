@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -16,7 +14,8 @@ from tensorflow.python.framework import op_def_registry as _op_def_registry
 from tensorflow.python.framework import ops as _ops
 from tensorflow.python.framework import op_def_library as _op_def_library
 
-def decode_csv(records, record_defaults, field_delim=None, name=None):
+def decode_csv(records, record_defaults, field_delim=None,
+               use_quote_delim=None, name=None):
   r"""Convert CSV records to tensors. Each column maps to one tensor.
 
   RFC 4180 format is expected for the CSV records.
@@ -31,7 +30,11 @@ def decode_csv(records, record_defaults, field_delim=None, name=None):
       One tensor per column of the input record, with either a
       scalar default value for that column or empty if the column is required.
     field_delim: An optional `string`. Defaults to `","`.
-      delimiter to separate fields in a record.
+      char delimiter to separate fields in a record.
+    use_quote_delim: An optional `bool`. Defaults to `True`.
+      If false, treats double quotation marks as regular
+      characters inside of the string fields (ignoring RFC 4180, Section 2,
+      Bullet 5).
     name: A name for the operation (optional).
 
   Returns:
@@ -40,7 +43,8 @@ def decode_csv(records, record_defaults, field_delim=None, name=None):
   """
   result = _op_def_lib.apply_op("DecodeCSV", records=records,
                                 record_defaults=record_defaults,
-                                field_delim=field_delim, name=name)
+                                field_delim=field_delim,
+                                use_quote_delim=use_quote_delim, name=name)
   return result
 
 
@@ -335,409 +339,413 @@ def string_to_number(string_tensor, out_type=None, name=None):
   return result
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "DecodeCSV"
-  input_arg {
-    name: "records"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "record_defaults"
-    type_list_attr: "OUT_TYPE"
-  }
-  output_arg {
-    name: "output"
-    type_list_attr: "OUT_TYPE"
-  }
-  attr {
-    name: "OUT_TYPE"
-    type: "list(type)"
-    has_minimum: true
-    minimum: 1
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_STRING
-      }
-    }
-  }
-  attr {
-    name: "field_delim"
-    type: "string"
-    default_value {
-      s: ","
-    }
-  }
-}
-op {
-  name: "DecodeJSONExample"
-  input_arg {
-    name: "json_examples"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "binary_examples"
-    type: DT_STRING
-  }
-}
-op {
-  name: "DecodeRaw"
-  input_arg {
-    name: "bytes"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type_attr: "out_type"
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_UINT8
-        type: DT_INT16
-        type: DT_INT8
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "little_endian"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "ParseExample"
-  input_arg {
-    name: "serialized"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "names"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "sparse_keys"
-    type: DT_STRING
-    number_attr: "Nsparse"
-  }
-  input_arg {
-    name: "dense_keys"
-    type: DT_STRING
-    number_attr: "Ndense"
-  }
-  input_arg {
-    name: "dense_defaults"
-    type_list_attr: "Tdense"
-  }
-  output_arg {
-    name: "sparse_indices"
-    type: DT_INT64
-    number_attr: "Nsparse"
-  }
-  output_arg {
-    name: "sparse_values"
-    type_list_attr: "sparse_types"
-  }
-  output_arg {
-    name: "sparse_shapes"
-    type: DT_INT64
-    number_attr: "Nsparse"
-  }
-  output_arg {
-    name: "dense_values"
-    type_list_attr: "Tdense"
-  }
-  attr {
-    name: "Nsparse"
-    type: "int"
-    has_minimum: true
-  }
-  attr {
-    name: "Ndense"
-    type: "int"
-    has_minimum: true
-  }
-  attr {
-    name: "sparse_types"
-    type: "list(type)"
-    has_minimum: true
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_INT64
-        type: DT_STRING
-      }
-    }
-  }
-  attr {
-    name: "Tdense"
-    type: "list(type)"
-    has_minimum: true
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_INT64
-        type: DT_STRING
-      }
-    }
-  }
-  attr {
-    name: "dense_shapes"
-    type: "list(shape)"
-    has_minimum: true
-  }
-}
-op {
-  name: "ParseSingleSequenceExample"
-  input_arg {
-    name: "serialized"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "feature_list_dense_missing_assumed_empty"
-    type: DT_STRING
-  }
-  input_arg {
-    name: "context_sparse_keys"
-    type: DT_STRING
-    number_attr: "Ncontext_sparse"
-  }
-  input_arg {
-    name: "context_dense_keys"
-    type: DT_STRING
-    number_attr: "Ncontext_dense"
-  }
-  input_arg {
-    name: "feature_list_sparse_keys"
-    type: DT_STRING
-    number_attr: "Nfeature_list_sparse"
-  }
-  input_arg {
-    name: "feature_list_dense_keys"
-    type: DT_STRING
-    number_attr: "Nfeature_list_dense"
-  }
-  input_arg {
-    name: "context_dense_defaults"
-    type_list_attr: "Tcontext_dense"
-  }
-  input_arg {
-    name: "debug_name"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "context_sparse_indices"
-    type: DT_INT64
-    number_attr: "Ncontext_sparse"
-  }
-  output_arg {
-    name: "context_sparse_values"
-    type_list_attr: "context_sparse_types"
-  }
-  output_arg {
-    name: "context_sparse_shapes"
-    type: DT_INT64
-    number_attr: "Ncontext_sparse"
-  }
-  output_arg {
-    name: "context_dense_values"
-    type_list_attr: "Tcontext_dense"
-  }
-  output_arg {
-    name: "feature_list_sparse_indices"
-    type: DT_INT64
-    number_attr: "Nfeature_list_sparse"
-  }
-  output_arg {
-    name: "feature_list_sparse_values"
-    type_list_attr: "feature_list_sparse_types"
-  }
-  output_arg {
-    name: "feature_list_sparse_shapes"
-    type: DT_INT64
-    number_attr: "Nfeature_list_sparse"
-  }
-  output_arg {
-    name: "feature_list_dense_values"
-    type_list_attr: "feature_list_dense_types"
-  }
-  attr {
-    name: "Ncontext_sparse"
-    type: "int"
-    default_value {
-      i: 0
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "Ncontext_dense"
-    type: "int"
-    default_value {
-      i: 0
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "Nfeature_list_sparse"
-    type: "int"
-    default_value {
-      i: 0
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "Nfeature_list_dense"
-    type: "int"
-    default_value {
-      i: 0
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "context_sparse_types"
-    type: "list(type)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_INT64
-        type: DT_STRING
-      }
-    }
-  }
-  attr {
-    name: "Tcontext_dense"
-    type: "list(type)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_INT64
-        type: DT_STRING
-      }
-    }
-  }
-  attr {
-    name: "feature_list_dense_types"
-    type: "list(type)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_INT64
-        type: DT_STRING
-      }
-    }
-  }
-  attr {
-    name: "context_dense_shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "feature_list_sparse_types"
-    type: "list(type)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_INT64
-        type: DT_STRING
-      }
-    }
-  }
-  attr {
-    name: "feature_list_dense_shapes"
-    type: "list(shape)"
-    default_value {
-      list {
-      }
-    }
-    has_minimum: true
-  }
-}
-op {
-  name: "ParseTensor"
-  input_arg {
-    name: "serialized"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type_attr: "out_type"
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-  }
-}
-op {
-  name: "StringToNumber"
-  input_arg {
-    name: "string_tensor"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "output"
-    type_attr: "out_type"
-  }
-  attr {
-    name: "out_type"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "DecodeCSV"
+#   input_arg {
+#     name: "records"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "record_defaults"
+#     type_list_attr: "OUT_TYPE"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_list_attr: "OUT_TYPE"
+#   }
+#   attr {
+#     name: "OUT_TYPE"
+#     type: "list(type)"
+#     has_minimum: true
+#     minimum: 1
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_STRING
+#       }
+#     }
+#   }
+#   attr {
+#     name: "field_delim"
+#     type: "string"
+#     default_value {
+#       s: ","
+#     }
+#   }
+#   attr {
+#     name: "use_quote_delim"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "DecodeJSONExample"
+#   input_arg {
+#     name: "json_examples"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "binary_examples"
+#     type: DT_STRING
+#   }
+# }
+# op {
+#   name: "DecodeRaw"
+#   input_arg {
+#     name: "bytes"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "out_type"
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_UINT8
+#         type: DT_INT16
+#         type: DT_INT8
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "little_endian"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "ParseExample"
+#   input_arg {
+#     name: "serialized"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "names"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "sparse_keys"
+#     type: DT_STRING
+#     number_attr: "Nsparse"
+#   }
+#   input_arg {
+#     name: "dense_keys"
+#     type: DT_STRING
+#     number_attr: "Ndense"
+#   }
+#   input_arg {
+#     name: "dense_defaults"
+#     type_list_attr: "Tdense"
+#   }
+#   output_arg {
+#     name: "sparse_indices"
+#     type: DT_INT64
+#     number_attr: "Nsparse"
+#   }
+#   output_arg {
+#     name: "sparse_values"
+#     type_list_attr: "sparse_types"
+#   }
+#   output_arg {
+#     name: "sparse_shapes"
+#     type: DT_INT64
+#     number_attr: "Nsparse"
+#   }
+#   output_arg {
+#     name: "dense_values"
+#     type_list_attr: "Tdense"
+#   }
+#   attr {
+#     name: "Nsparse"
+#     type: "int"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "Ndense"
+#     type: "int"
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "sparse_types"
+#     type: "list(type)"
+#     has_minimum: true
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_INT64
+#         type: DT_STRING
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tdense"
+#     type: "list(type)"
+#     has_minimum: true
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_INT64
+#         type: DT_STRING
+#       }
+#     }
+#   }
+#   attr {
+#     name: "dense_shapes"
+#     type: "list(shape)"
+#     has_minimum: true
+#   }
+# }
+# op {
+#   name: "ParseSingleSequenceExample"
+#   input_arg {
+#     name: "serialized"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "feature_list_dense_missing_assumed_empty"
+#     type: DT_STRING
+#   }
+#   input_arg {
+#     name: "context_sparse_keys"
+#     type: DT_STRING
+#     number_attr: "Ncontext_sparse"
+#   }
+#   input_arg {
+#     name: "context_dense_keys"
+#     type: DT_STRING
+#     number_attr: "Ncontext_dense"
+#   }
+#   input_arg {
+#     name: "feature_list_sparse_keys"
+#     type: DT_STRING
+#     number_attr: "Nfeature_list_sparse"
+#   }
+#   input_arg {
+#     name: "feature_list_dense_keys"
+#     type: DT_STRING
+#     number_attr: "Nfeature_list_dense"
+#   }
+#   input_arg {
+#     name: "context_dense_defaults"
+#     type_list_attr: "Tcontext_dense"
+#   }
+#   input_arg {
+#     name: "debug_name"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "context_sparse_indices"
+#     type: DT_INT64
+#     number_attr: "Ncontext_sparse"
+#   }
+#   output_arg {
+#     name: "context_sparse_values"
+#     type_list_attr: "context_sparse_types"
+#   }
+#   output_arg {
+#     name: "context_sparse_shapes"
+#     type: DT_INT64
+#     number_attr: "Ncontext_sparse"
+#   }
+#   output_arg {
+#     name: "context_dense_values"
+#     type_list_attr: "Tcontext_dense"
+#   }
+#   output_arg {
+#     name: "feature_list_sparse_indices"
+#     type: DT_INT64
+#     number_attr: "Nfeature_list_sparse"
+#   }
+#   output_arg {
+#     name: "feature_list_sparse_values"
+#     type_list_attr: "feature_list_sparse_types"
+#   }
+#   output_arg {
+#     name: "feature_list_sparse_shapes"
+#     type: DT_INT64
+#     number_attr: "Nfeature_list_sparse"
+#   }
+#   output_arg {
+#     name: "feature_list_dense_values"
+#     type_list_attr: "feature_list_dense_types"
+#   }
+#   attr {
+#     name: "Ncontext_sparse"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "Ncontext_dense"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "Nfeature_list_sparse"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "Nfeature_list_dense"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "context_sparse_types"
+#     type: "list(type)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_INT64
+#         type: DT_STRING
+#       }
+#     }
+#   }
+#   attr {
+#     name: "Tcontext_dense"
+#     type: "list(type)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_INT64
+#         type: DT_STRING
+#       }
+#     }
+#   }
+#   attr {
+#     name: "feature_list_dense_types"
+#     type: "list(type)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_INT64
+#         type: DT_STRING
+#       }
+#     }
+#   }
+#   attr {
+#     name: "context_dense_shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "feature_list_sparse_types"
+#     type: "list(type)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_INT64
+#         type: DT_STRING
+#       }
+#     }
+#   }
+#   attr {
+#     name: "feature_list_dense_shapes"
+#     type: "list(shape)"
+#     default_value {
+#       list {
+#       }
+#     }
+#     has_minimum: true
+#   }
+# }
+# op {
+#   name: "ParseTensor"
+#   input_arg {
+#     name: "serialized"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "out_type"
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#   }
+# }
+# op {
+#   name: "StringToNumber"
+#   input_arg {
+#     name: "string_tensor"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "out_type"
+#   }
+#   attr {
+#     name: "out_type"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\250\001\n\tDecodeCSV\022\013\n\007records\030\007\022\033\n\017record_defaults2\010OUT_TYPE\032\022\n\006output2\010OUT_TYPE\"$\n\010OUT_TYPE\022\nlist(type)(\0010\001:\010\n\0062\004\001\003\t\007\"\032\n\013field_delim\022\006string\032\003\022\001,\"\033\n\017use_quote_delim\022\004bool\032\002(\001\n;\n\021DecodeJSONExample\022\021\n\rjson_examples\030\007\032\023\n\017binary_examples\030\007\ne\n\tDecodeRaw\022\t\n\005bytes\030\007\032\022\n\006output\"\010out_type\"\036\n\010out_type\022\004type:\014\n\n2\010\023\001\002\003\004\005\006\t\"\031\n\rlittle_endian\022\004bool\032\002(\001\n\357\002\n\014ParseExample\022\016\n\nserialized\030\007\022\t\n\005names\030\007\022\030\n\013sparse_keys\030\007*\007Nsparse\022\026\n\ndense_keys\030\007*\006Ndense\022\030\n\016dense_defaults2\006Tdense\032\033\n\016sparse_indices\030\t*\007Nsparse\032\035\n\rsparse_values2\014sparse_types\032\032\n\rsparse_shapes\030\t*\007Nsparse\032\026\n\014dense_values2\006Tdense\"\020\n\007Nsparse\022\003int(\001\"\017\n\006Ndense\022\003int(\001\"%\n\014sparse_types\022\nlist(type)(\001:\007\n\0052\003\001\t\007\"\037\n\006Tdense\022\nlist(type)(\001:\007\n\0052\003\001\t\007\"\035\n\014dense_shapes\022\013list(shape)(\001\n\203\t\n\032ParseSingleSequenceExample\022\016\n\nserialized\030\007\022,\n(feature_list_dense_missing_assumed_empty\030\007\022(\n\023context_sparse_keys\030\007*\017Ncontext_sparse\022&\n\022context_dense_keys\030\007*\016Ncontext_dense\0222\n\030feature_list_sparse_keys\030\007*\024Nfeature_list_sparse\0220\n\027feature_list_dense_keys\030\007*\023Nfeature_list_dense\022(\n\026context_dense_defaults2\016Tcontext_dense\022\016\n\ndebug_name\030\007\032+\n\026context_sparse_indices\030\t*\017Ncontext_sparse\032-\n\025context_sparse_values2\024context_sparse_types\032*\n\025context_sparse_shapes\030\t*\017Ncontext_sparse\032&\n\024context_dense_values2\016Tcontext_dense\0325\n\033feature_list_sparse_indices\030\t*\024Nfeature_list_sparse\0327\n\032feature_list_sparse_values2\031feature_list_sparse_types\0324\n\032feature_list_sparse_shapes\030\t*\024Nfeature_list_sparse\0325\n\031feature_list_dense_values2\030feature_list_dense_types\"\034\n\017Ncontext_sparse\022\003int\032\002\030\000(\001\"\033\n\016Ncontext_dense\022\003int\032\002\030\000(\001\"!\n\024Nfeature_list_sparse\022\003int\032\002\030\000(\001\" \n\023Nfeature_list_dense\022\003int\032\002\030\000(\001\"1\n\024context_sparse_types\022\nlist(type)\032\002\n\000(\001:\007\n\0052\003\001\t\007\"+\n\016Tcontext_dense\022\nlist(type)\032\002\n\000(\001:\007\n\0052\003\001\t\007\"5\n\030feature_list_dense_types\022\nlist(type)\032\002\n\000(\001:\007\n\0052\003\001\t\007\")\n\024context_dense_shapes\022\013list(shape)\032\002\n\000(\001\"6\n\031feature_list_sparse_types\022\nlist(type)\032\002\n\000(\001:\007\n\0052\003\001\t\007\".\n\031feature_list_dense_shapes\022\013list(shape)\032\002\n\000(\001\nC\n\013ParseTensor\022\016\n\nserialized\030\007\032\022\n\006output\"\010out_type\"\020\n\010out_type\022\004type\nW\n\016StringToNumber\022\021\n\rstring_tensor\030\007\032\022\n\006output\"\010out_type\"\036\n\010out_type\022\004type\032\0020\001:\010\n\0062\004\001\002\003\t")

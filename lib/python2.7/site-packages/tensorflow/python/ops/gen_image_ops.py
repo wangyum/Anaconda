@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -137,7 +135,7 @@ def crop_and_resize(image, boxes, box_ind, crop_size, method=None,
       in normalized coordinates `[y1, x1, y2, x2]`. A normalized coordinate value of
       `y` is mapped to the image coordinate at `y * (image_height - 1)`, so as the
       `[0, 1]` interval of normalized image height is mapped to
-      `[0, image_height - 1] in image height coordinates. We do allow y1 > y2, in
+      `[0, image_height - 1]` in image height coordinates. We do allow `y1` > `y2`, in
       which case the sampled crop is an up-down flipped version of the original
       image. The width dimension is treated similarly. Normalized coordinates
       outside the `[0, 1]` range are allowed, in which case we use
@@ -248,6 +246,33 @@ def crop_and_resize_grad_image(grads, boxes, box_ind, image_size, T,
                                 boxes=boxes, box_ind=box_ind,
                                 image_size=image_size, T=T, method=method,
                                 name=name)
+  return result
+
+
+
+def decode_bmp(contents, channels=None, name=None):
+  r"""Decode the first frame of a BMP-encoded image to a uint8 tensor.
+
+  The attr `channels` indicates the desired number of color channels for the
+  decoded image.
+
+  Accepted values are:
+
+  *   0: Use the number of channels in the BMP-encoded image.
+  *   3: output an RGB image.
+  *   4: output an RGBA image.
+
+  Args:
+    contents: A `Tensor` of type `string`. 0-D.  The BMP-encoded image.
+    channels: An optional `int`. Defaults to `0`.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `uint8`.
+    3-D with shape `[height, width, channels]`. RGB order
+  """
+  result = _op_def_lib.apply_op("DecodeBmp", contents=contents,
+                                channels=channels, name=name)
   return result
 
 
@@ -591,12 +616,10 @@ def non_max_suppression(boxes, scores, max_output_size, iou_threshold=None,
   algorithm is invariant to orthogonal transformations and translations
   of the coordinate system; thus translating or reflections of the coordinate
   system result in the same boxes being selected by the algorithm.
-
   The output of this operation is a set of integers indexing into the input
   collection of bounding boxes representing the selected boxes.  The bounding
   box coordinates corresponding to the selected indices can then be obtained
   using the `tf.gather operation`.  For example:
-
     selected_indices = tf.image.non_max_suppression(
         boxes, scores, max_output_size, iou_threshold)
     selected_boxes = tf.gather(boxes, selected_indices)
@@ -625,6 +648,95 @@ def non_max_suppression(boxes, scores, max_output_size, iou_threshold=None,
                                 max_output_size=max_output_size,
                                 iou_threshold=iou_threshold, name=name)
   return result
+
+
+
+def non_max_suppression_v2(boxes, scores, max_output_size, iou_threshold,
+                           name=None):
+  r"""Greedily selects a subset of bounding boxes in descending order of score,
+
+  pruning away boxes that have high intersection-over-union (IOU) overlap
+  with previously selected boxes.  Bounding boxes are supplied as
+  [y1, x1, y2, x2], where (y1, x1) and (y2, x2) are the coordinates of any
+  diagonal pair of box corners and the coordinates can be provided as normalized
+  (i.e., lying in the interval [0, 1]) or absolute.  Note that this algorithm
+  is agnostic to where the origin is in the coordinate system.  Note that this
+  algorithm is invariant to orthogonal transformations and translations
+  of the coordinate system; thus translating or reflections of the coordinate
+  system result in the same boxes being selected by the algorithm.
+
+  The output of this operation is a set of integers indexing into the input
+  collection of bounding boxes representing the selected boxes.  The bounding
+  box coordinates corresponding to the selected indices can then be obtained
+  using the `tf.gather operation`.  For example:
+
+    selected_indices = tf.image.non_max_suppression_v2(
+        boxes, scores, max_output_size, iou_threshold)
+    selected_boxes = tf.gather(boxes, selected_indices)
+
+  Args:
+    boxes: A `Tensor` of type `float32`.
+      A 2-D float tensor of shape `[num_boxes, 4]`.
+    scores: A `Tensor` of type `float32`.
+      A 1-D float tensor of shape `[num_boxes]` representing a single
+      score corresponding to each box (each row of boxes).
+    max_output_size: A `Tensor` of type `int32`.
+      A scalar integer tensor representing the maximum number of
+      boxes to be selected by non max suppression.
+    iou_threshold: A `Tensor` of type `float32`.
+      A 0-D float tensor representing the threshold for deciding whether
+      boxes overlap too much with respect to IOU.
+    name: A name for the operation (optional).
+
+  Returns:
+    A `Tensor` of type `int32`.
+    A 1-D integer tensor of shape `[M]` representing the selected
+    indices from the boxes tensor, where `M <= max_output_size`.
+  """
+  result = _op_def_lib.apply_op("NonMaxSuppressionV2", boxes=boxes,
+                                scores=scores,
+                                max_output_size=max_output_size,
+                                iou_threshold=iou_threshold, name=name)
+  return result
+
+
+
+_quantized_resize_bilinear_outputs = ["resized_images", "out_min", "out_max"]
+_QuantizedResizeBilinearOutput = _collections.namedtuple(
+    "QuantizedResizeBilinear", _quantized_resize_bilinear_outputs)
+
+
+def quantized_resize_bilinear(images, size, min, max, align_corners=None,
+                              name=None):
+  r"""Resize quantized `images` to `size` using quantized bilinear interpolation.
+
+  Input images and output images must be quantized types.
+
+  Args:
+    images: A `Tensor`. Must be one of the following types: `quint8`, `qint32`, `float32`.
+      4-D with shape `[batch, height, width, channels]`.
+    size:  A 1-D int32 Tensor of 2 elements: `new_height, new_width`.  The
+      new size for the images.
+    min: A `Tensor` of type `float32`.
+    max: A `Tensor` of type `float32`.
+    align_corners: An optional `bool`. Defaults to `False`.
+      If true, rescale input by (new_height - 1) / (height - 1), which
+      exactly aligns the 4 corners of images and resized images. If false, rescale
+      by new_height / height. Treat similarly the width dimension.
+    name: A name for the operation (optional).
+
+  Returns:
+    A tuple of `Tensor` objects (resized_images, out_min, out_max).
+
+    resized_images: A `Tensor`. Has the same type as `images`. 4-D with shape
+      `[batch, new_height, new_width, channels]`.
+    out_min: A `Tensor` of type `float32`.
+    out_max: A `Tensor` of type `float32`.
+  """
+  result = _op_def_lib.apply_op("QuantizedResizeBilinear", images=images,
+                                size=size, min=min, max=max,
+                                align_corners=align_corners, name=name)
+  return _QuantizedResizeBilinearOutput._make(result)
 
 
 
@@ -843,17 +955,17 @@ def _resize_nearest_neighbor_grad(grads, size, align_corners=None, name=None):
 
 
 
-_sample_distorted_bounding_box_outputs = ["begin", "size", "bboxes"]
+__sample_distorted_bounding_box_outputs = ["begin", "size", "bboxes"]
 _SampleDistortedBoundingBoxOutput = _collections.namedtuple(
-    "SampleDistortedBoundingBox", _sample_distorted_bounding_box_outputs)
+    "SampleDistortedBoundingBox", __sample_distorted_bounding_box_outputs)
 
 
-def sample_distorted_bounding_box(image_size, bounding_boxes, seed=None,
-                                  seed2=None, min_object_covered=None,
-                                  aspect_ratio_range=None, area_range=None,
-                                  max_attempts=None,
-                                  use_image_if_no_bounding_boxes=None,
-                                  name=None):
+def _sample_distorted_bounding_box(image_size, bounding_boxes, seed=None,
+                                   seed2=None, min_object_covered=None,
+                                   aspect_ratio_range=None, area_range=None,
+                                   max_attempts=None,
+                                   use_image_if_no_bounding_boxes=None,
+                                   name=None):
   r"""Generate a single randomly distorted bounding box for an image.
 
   Bounding box annotations are often supplied in addition to ground-truth labels
@@ -951,975 +1063,1261 @@ def sample_distorted_bounding_box(image_size, bounding_boxes, seed=None,
   return _SampleDistortedBoundingBoxOutput._make(result)
 
 
-def _InitOpDefLibrary():
+
+__sample_distorted_bounding_box_v2_outputs = ["begin", "size", "bboxes"]
+_SampleDistortedBoundingBoxV2Output = _collections.namedtuple(
+    "SampleDistortedBoundingBoxV2",
+    __sample_distorted_bounding_box_v2_outputs)
+
+
+def _sample_distorted_bounding_box_v2(image_size, bounding_boxes,
+                                      min_object_covered, seed=None,
+                                      seed2=None, aspect_ratio_range=None,
+                                      area_range=None, max_attempts=None,
+                                      use_image_if_no_bounding_boxes=None,
+                                      name=None):
+  r"""Generate a single randomly distorted bounding box for an image.
+
+  Bounding box annotations are often supplied in addition to ground-truth labels
+  in image recognition or object localization tasks. A common technique for
+  training such a system is to randomly distort an image while preserving
+  its content, i.e. *data augmentation*. This Op outputs a randomly distorted
+  localization of an object, i.e. bounding box, given an `image_size`,
+  `bounding_boxes` and a series of constraints.
+
+  The output of this Op is a single bounding box that may be used to crop the
+  original image. The output is returned as 3 tensors: `begin`, `size` and
+  `bboxes`. The first 2 tensors can be fed directly into `tf.slice` to crop the
+  image. The latter may be supplied to `tf.image.draw_bounding_boxes` to visualize
+  what the bounding box looks like.
+
+  Bounding boxes are supplied and returned as `[y_min, x_min, y_max, x_max]`. The
+  bounding box coordinates are floats in `[0.0, 1.0]` relative to the width and
+  height of the underlying image.
+
+  For example,
+
+  ```python
+      # Generate a single distorted bounding box.
+      begin, size, bbox_for_draw = tf.image.sample_distorted_bounding_box(
+          tf.shape(image),
+          bounding_boxes=bounding_boxes)
+
+      # Draw the bounding box in an image summary.
+      image_with_box = tf.image.draw_bounding_boxes(tf.expand_dims(image, 0),
+                                                    bbox_for_draw)
+      tf.image_summary('images_with_box', image_with_box)
+
+      # Employ the bounding box to distort the image.
+      distorted_image = tf.slice(image, begin, size)
+  ```
+
+  Note that if no bounding box information is available, setting
+  `use_image_if_no_bounding_boxes = true` will assume there is a single implicit
+  bounding box covering the whole image. If `use_image_if_no_bounding_boxes` is
+  false and no bounding boxes are supplied, an error is raised.
+
+  Args:
+    image_size: A `Tensor`. Must be one of the following types: `uint8`, `int8`, `int16`, `int32`, `int64`.
+      1-D, containing `[height, width, channels]`.
+    bounding_boxes: A `Tensor` of type `float32`.
+      3-D with shape `[batch, N, 4]` describing the N bounding boxes
+      associated with the image.
+    min_object_covered: A `Tensor` of type `float32`.
+      The cropped area of the image must contain at least this
+      fraction of any bounding box supplied. The value of this parameter should be
+      non-negative. In the case of 0, the cropped area does not need to overlap
+      any of the bounding boxes supplied.
+    seed: An optional `int`. Defaults to `0`.
+      If either `seed` or `seed2` are set to non-zero, the random number
+      generator is seeded by the given `seed`.  Otherwise, it is seeded by a random
+      seed.
+    seed2: An optional `int`. Defaults to `0`.
+      A second seed to avoid seed collision.
+    aspect_ratio_range: An optional list of `floats`. Defaults to `[0.75, 1.33]`.
+      The cropped area of the image must have an aspect ratio =
+      width / height within this range.
+    area_range: An optional list of `floats`. Defaults to `[0.05, 1]`.
+      The cropped area of the image must contain a fraction of the
+      supplied image within in this range.
+    max_attempts: An optional `int`. Defaults to `100`.
+      Number of attempts at generating a cropped region of the image
+      of the specified constraints. After `max_attempts` failures, return the entire
+      image.
+    use_image_if_no_bounding_boxes: An optional `bool`. Defaults to `False`.
+      Controls behavior if no bounding boxes supplied.
+      If true, assume an implicit bounding box covering the whole input. If false,
+      raise an error.
+    name: A name for the operation (optional).
+
+  Returns:
+    A tuple of `Tensor` objects (begin, size, bboxes).
+
+    begin: A `Tensor`. Has the same type as `image_size`. 1-D, containing `[offset_height, offset_width, 0]`. Provide as input to
+      `tf.slice`.
+    size: A `Tensor`. Has the same type as `image_size`. 1-D, containing `[target_height, target_width, -1]`. Provide as input to
+      `tf.slice`.
+    bboxes: A `Tensor` of type `float32`. 3-D with shape `[1, 1, 4]` containing the distorted bounding box.
+      Provide as input to `tf.image.draw_bounding_boxes`.
+  """
+  result = _op_def_lib.apply_op("SampleDistortedBoundingBoxV2",
+                                image_size=image_size,
+                                bounding_boxes=bounding_boxes,
+                                min_object_covered=min_object_covered,
+                                seed=seed, seed2=seed2,
+                                aspect_ratio_range=aspect_ratio_range,
+                                area_range=area_range,
+                                max_attempts=max_attempts,
+                                use_image_if_no_bounding_boxes=use_image_if_no_bounding_boxes,
+                                name=name)
+  return _SampleDistortedBoundingBoxV2Output._make(result)
+
+
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "AdjustContrast"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "contrast_factor"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "min_value"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_value"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  deprecation {
-    version: 2
-    explanation: "Use AdjustContrastv2 instead"
-  }
-}
-op {
-  name: "AdjustContrastv2"
-  input_arg {
-    name: "images"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "contrast_factor"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-}
-op {
-  name: "AdjustHue"
-  input_arg {
-    name: "images"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "delta"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-}
-op {
-  name: "AdjustSaturation"
-  input_arg {
-    name: "images"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "scale"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-}
-op {
-  name: "CropAndResize"
-  input_arg {
-    name: "image"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "boxes"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "box_ind"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "crop_size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "crops"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "method"
-    type: "string"
-    default_value {
-      s: "bilinear"
-    }
-    allowed_values {
-      list {
-        s: "bilinear"
-      }
-    }
-  }
-  attr {
-    name: "extrapolation_value"
-    type: "float"
-    default_value {
-      f: 0
-    }
-  }
-}
-op {
-  name: "CropAndResizeGradBoxes"
-  input_arg {
-    name: "grads"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "image"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "boxes"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "box_ind"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "method"
-    type: "string"
-    default_value {
-      s: "bilinear"
-    }
-    allowed_values {
-      list {
-        s: "bilinear"
-      }
-    }
-  }
-}
-op {
-  name: "CropAndResizeGradImage"
-  input_arg {
-    name: "grads"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "boxes"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "box_ind"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "image_size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_HALF
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "method"
-    type: "string"
-    default_value {
-      s: "bilinear"
-    }
-    allowed_values {
-      list {
-        s: "bilinear"
-      }
-    }
-  }
-}
-op {
-  name: "DecodeGif"
-  input_arg {
-    name: "contents"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "image"
-    type: DT_UINT8
-  }
-}
-op {
-  name: "DecodeJpeg"
-  input_arg {
-    name: "contents"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "image"
-    type: DT_UINT8
-  }
-  attr {
-    name: "channels"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "ratio"
-    type: "int"
-    default_value {
-      i: 1
-    }
-  }
-  attr {
-    name: "fancy_upscaling"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "try_recover_truncated"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "acceptable_fraction"
-    type: "float"
-    default_value {
-      f: 1
-    }
-  }
-  attr {
-    name: "dct_method"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-}
-op {
-  name: "DecodePng"
-  input_arg {
-    name: "contents"
-    type: DT_STRING
-  }
-  output_arg {
-    name: "image"
-    type_attr: "dtype"
-  }
-  attr {
-    name: "channels"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "dtype"
-    type: "type"
-    default_value {
-      type: DT_UINT8
-    }
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_UINT16
-      }
-    }
-  }
-}
-op {
-  name: "DrawBoundingBoxes"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "boxes"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_HALF
-      }
-    }
-  }
-}
-op {
-  name: "EncodeJpeg"
-  input_arg {
-    name: "image"
-    type: DT_UINT8
-  }
-  output_arg {
-    name: "contents"
-    type: DT_STRING
-  }
-  attr {
-    name: "format"
-    type: "string"
-    default_value {
-      s: ""
-    }
-    allowed_values {
-      list {
-        s: ""
-        s: "grayscale"
-        s: "rgb"
-      }
-    }
-  }
-  attr {
-    name: "quality"
-    type: "int"
-    default_value {
-      i: 95
-    }
-  }
-  attr {
-    name: "progressive"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "optimize_size"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  attr {
-    name: "chroma_downsampling"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "density_unit"
-    type: "string"
-    default_value {
-      s: "in"
-    }
-    allowed_values {
-      list {
-        s: "in"
-        s: "cm"
-      }
-    }
-  }
-  attr {
-    name: "x_density"
-    type: "int"
-    default_value {
-      i: 300
-    }
-  }
-  attr {
-    name: "y_density"
-    type: "int"
-    default_value {
-      i: 300
-    }
-  }
-  attr {
-    name: "xmp_metadata"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-}
-op {
-  name: "EncodePng"
-  input_arg {
-    name: "image"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "contents"
-    type: DT_STRING
-  }
-  attr {
-    name: "compression"
-    type: "int"
-    default_value {
-      i: -1
-    }
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_UINT8
-    }
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_UINT16
-      }
-    }
-  }
-}
-op {
-  name: "ExtractGlimpse"
-  input_arg {
-    name: "input"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  input_arg {
-    name: "offsets"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "glimpse"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "centered"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "normalized"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-  attr {
-    name: "uniform_noise"
-    type: "bool"
-    default_value {
-      b: true
-    }
-  }
-}
-op {
-  name: "HSVToRGB"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "NonMaxSuppression"
-  input_arg {
-    name: "boxes"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "scores"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "max_output_size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "selected_indices"
-    type: DT_INT32
-  }
-  attr {
-    name: "iou_threshold"
-    type: "float"
-    default_value {
-      f: 0.5
-    }
-  }
-}
-op {
-  name: "RGBToHSV"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    default_value {
-      type: DT_FLOAT
-    }
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-}
-op {
-  name: "RandomCrop"
-  input_arg {
-    name: "image"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "size"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  deprecation {
-    version: 8
-    explanation: "Random crop is now pure Python"
-  }
-  is_stateful: true
-}
-op {
-  name: "ResizeArea"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "resized_images"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "align_corners"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ResizeBicubic"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "resized_images"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "align_corners"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ResizeBilinear"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "resized_images"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "align_corners"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ResizeBilinearGrad"
-  input_arg {
-    name: "grads"
-    type: DT_FLOAT
-  }
-  input_arg {
-    name: "original_image"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_FLOAT
-        type: DT_HALF
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "align_corners"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ResizeNearestNeighbor"
-  input_arg {
-    name: "images"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "resized_images"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "align_corners"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "ResizeNearestNeighborGrad"
-  input_arg {
-    name: "grads"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "size"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "output"
-    type_attr: "T"
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT32
-        type: DT_HALF
-        type: DT_FLOAT
-        type: DT_DOUBLE
-      }
-    }
-  }
-  attr {
-    name: "align_corners"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-}
-op {
-  name: "SampleDistortedBoundingBox"
-  input_arg {
-    name: "image_size"
-    type_attr: "T"
-  }
-  input_arg {
-    name: "bounding_boxes"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "begin"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "size"
-    type_attr: "T"
-  }
-  output_arg {
-    name: "bboxes"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "T"
-    type: "type"
-    allowed_values {
-      list {
-        type: DT_UINT8
-        type: DT_INT8
-        type: DT_INT16
-        type: DT_INT32
-        type: DT_INT64
-      }
-    }
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "min_object_covered"
-    type: "float"
-    default_value {
-      f: 0.1
-    }
-  }
-  attr {
-    name: "aspect_ratio_range"
-    type: "list(float)"
-    default_value {
-      list {
-        f: 0.75
-        f: 1.33
-      }
-    }
-  }
-  attr {
-    name: "area_range"
-    type: "list(float)"
-    default_value {
-      list {
-        f: 0.05
-        f: 1
-      }
-    }
-  }
-  attr {
-    name: "max_attempts"
-    type: "int"
-    default_value {
-      i: 100
-    }
-  }
-  attr {
-    name: "use_image_if_no_bounding_boxes"
-    type: "bool"
-    default_value {
-      b: false
-    }
-  }
-  is_stateful: true
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "AdjustContrast"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "contrast_factor"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min_value"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_value"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   deprecation {
+#     version: 2
+#     explanation: "Use AdjustContrastv2 instead"
+#   }
+# }
+# op {
+#   name: "AdjustContrastv2"
+#   input_arg {
+#     name: "images"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "contrast_factor"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+# }
+# op {
+#   name: "AdjustHue"
+#   input_arg {
+#     name: "images"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "delta"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+# }
+# op {
+#   name: "AdjustSaturation"
+#   input_arg {
+#     name: "images"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "scale"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+# }
+# op {
+#   name: "CropAndResize"
+#   input_arg {
+#     name: "image"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "boxes"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "box_ind"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "crop_size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "crops"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "method"
+#     type: "string"
+#     default_value {
+#       s: "bilinear"
+#     }
+#     allowed_values {
+#       list {
+#         s: "bilinear"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "extrapolation_value"
+#     type: "float"
+#     default_value {
+#       f: 0
+#     }
+#   }
+# }
+# op {
+#   name: "CropAndResizeGradBoxes"
+#   input_arg {
+#     name: "grads"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "image"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "boxes"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "box_ind"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "method"
+#     type: "string"
+#     default_value {
+#       s: "bilinear"
+#     }
+#     allowed_values {
+#       list {
+#         s: "bilinear"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "CropAndResizeGradImage"
+#   input_arg {
+#     name: "grads"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "boxes"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "box_ind"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "image_size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_HALF
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "method"
+#     type: "string"
+#     default_value {
+#       s: "bilinear"
+#     }
+#     allowed_values {
+#       list {
+#         s: "bilinear"
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "DecodeBmp"
+#   input_arg {
+#     name: "contents"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "image"
+#     type: DT_UINT8
+#   }
+#   attr {
+#     name: "channels"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+# }
+# op {
+#   name: "DecodeGif"
+#   input_arg {
+#     name: "contents"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "image"
+#     type: DT_UINT8
+#   }
+# }
+# op {
+#   name: "DecodeJpeg"
+#   input_arg {
+#     name: "contents"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "image"
+#     type: DT_UINT8
+#   }
+#   attr {
+#     name: "channels"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "ratio"
+#     type: "int"
+#     default_value {
+#       i: 1
+#     }
+#   }
+#   attr {
+#     name: "fancy_upscaling"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "try_recover_truncated"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "acceptable_fraction"
+#     type: "float"
+#     default_value {
+#       f: 1
+#     }
+#   }
+#   attr {
+#     name: "dct_method"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+# }
+# op {
+#   name: "DecodePng"
+#   input_arg {
+#     name: "contents"
+#     type: DT_STRING
+#   }
+#   output_arg {
+#     name: "image"
+#     type_attr: "dtype"
+#   }
+#   attr {
+#     name: "channels"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "dtype"
+#     type: "type"
+#     default_value {
+#       type: DT_UINT8
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_UINT16
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "DrawBoundingBoxes"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "boxes"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_HALF
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "EncodeJpeg"
+#   input_arg {
+#     name: "image"
+#     type: DT_UINT8
+#   }
+#   output_arg {
+#     name: "contents"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "format"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#     allowed_values {
+#       list {
+#         s: ""
+#         s: "grayscale"
+#         s: "rgb"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "quality"
+#     type: "int"
+#     default_value {
+#       i: 95
+#     }
+#   }
+#   attr {
+#     name: "progressive"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "optimize_size"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   attr {
+#     name: "chroma_downsampling"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "density_unit"
+#     type: "string"
+#     default_value {
+#       s: "in"
+#     }
+#     allowed_values {
+#       list {
+#         s: "in"
+#         s: "cm"
+#       }
+#     }
+#   }
+#   attr {
+#     name: "x_density"
+#     type: "int"
+#     default_value {
+#       i: 300
+#     }
+#   }
+#   attr {
+#     name: "y_density"
+#     type: "int"
+#     default_value {
+#       i: 300
+#     }
+#   }
+#   attr {
+#     name: "xmp_metadata"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+# }
+# op {
+#   name: "EncodePng"
+#   input_arg {
+#     name: "image"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "contents"
+#     type: DT_STRING
+#   }
+#   attr {
+#     name: "compression"
+#     type: "int"
+#     default_value {
+#       i: -1
+#     }
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_UINT8
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_UINT16
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "ExtractGlimpse"
+#   input_arg {
+#     name: "input"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "offsets"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "glimpse"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "centered"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "normalized"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+#   attr {
+#     name: "uniform_noise"
+#     type: "bool"
+#     default_value {
+#       b: true
+#     }
+#   }
+# }
+# op {
+#   name: "HSVToRGB"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "NonMaxSuppression"
+#   input_arg {
+#     name: "boxes"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "scores"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_output_size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "selected_indices"
+#     type: DT_INT32
+#   }
+#   attr {
+#     name: "iou_threshold"
+#     type: "float"
+#     default_value {
+#       f: 0.5
+#     }
+#   }
+# }
+# op {
+#   name: "NonMaxSuppressionV2"
+#   input_arg {
+#     name: "boxes"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "scores"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max_output_size"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "iou_threshold"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "selected_indices"
+#     type: DT_INT32
+#   }
+# }
+# op {
+#   name: "QuantizedResizeBilinear"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   input_arg {
+#     name: "min"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "max"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "resized_images"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "out_min"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "out_max"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_QUINT8
+#         type: DT_QINT32
+#         type: DT_FLOAT
+#       }
+#     }
+#   }
+#   attr {
+#     name: "align_corners"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "RGBToHSV"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     default_value {
+#       type: DT_FLOAT
+#     }
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+# }
+# op {
+#   name: "RandomCrop"
+#   input_arg {
+#     name: "image"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   deprecation {
+#     version: 8
+#     explanation: "Random crop is now pure Python"
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ResizeArea"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "resized_images"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "align_corners"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ResizeBicubic"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "resized_images"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "align_corners"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ResizeBilinear"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "resized_images"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "align_corners"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ResizeBilinearGrad"
+#   input_arg {
+#     name: "grads"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "original_image"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_FLOAT
+#         type: DT_HALF
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "align_corners"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ResizeNearestNeighbor"
+#   input_arg {
+#     name: "images"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "resized_images"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "align_corners"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "ResizeNearestNeighborGrad"
+#   input_arg {
+#     name: "grads"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "size"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "output"
+#     type_attr: "T"
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT32
+#         type: DT_HALF
+#         type: DT_FLOAT
+#         type: DT_DOUBLE
+#       }
+#     }
+#   }
+#   attr {
+#     name: "align_corners"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+# }
+# op {
+#   name: "SampleDistortedBoundingBox"
+#   input_arg {
+#     name: "image_size"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "bounding_boxes"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "begin"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "size"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "bboxes"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "min_object_covered"
+#     type: "float"
+#     default_value {
+#       f: 0.1
+#     }
+#   }
+#   attr {
+#     name: "aspect_ratio_range"
+#     type: "list(float)"
+#     default_value {
+#       list {
+#         f: 0.75
+#         f: 1.33
+#       }
+#     }
+#   }
+#   attr {
+#     name: "area_range"
+#     type: "list(float)"
+#     default_value {
+#       list {
+#         f: 0.05
+#         f: 1
+#       }
+#     }
+#   }
+#   attr {
+#     name: "max_attempts"
+#     type: "int"
+#     default_value {
+#       i: 100
+#     }
+#   }
+#   attr {
+#     name: "use_image_if_no_bounding_boxes"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "SampleDistortedBoundingBoxV2"
+#   input_arg {
+#     name: "image_size"
+#     type_attr: "T"
+#   }
+#   input_arg {
+#     name: "bounding_boxes"
+#     type: DT_FLOAT
+#   }
+#   input_arg {
+#     name: "min_object_covered"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "begin"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "size"
+#     type_attr: "T"
+#   }
+#   output_arg {
+#     name: "bboxes"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "T"
+#     type: "type"
+#     allowed_values {
+#       list {
+#         type: DT_UINT8
+#         type: DT_INT8
+#         type: DT_INT16
+#         type: DT_INT32
+#         type: DT_INT64
+#       }
+#     }
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "aspect_ratio_range"
+#     type: "list(float)"
+#     default_value {
+#       list {
+#         f: 0.75
+#         f: 1.33
+#       }
+#     }
+#   }
+#   attr {
+#     name: "area_range"
+#     type: "list(float)"
+#     default_value {
+#       list {
+#         f: 0.05
+#         f: 1
+#       }
+#     }
+#   }
+#   attr {
+#     name: "max_attempts"
+#     type: "int"
+#     default_value {
+#       i: 100
+#     }
+#   }
+#   attr {
+#     name: "use_image_if_no_bounding_boxes"
+#     type: "bool"
+#     default_value {
+#       b: false
+#     }
+#   }
+#   is_stateful: true
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\226\001\n\016AdjustContrast\022\013\n\006images\"\001T\022\023\n\017contrast_factor\030\001\022\r\n\tmin_value\030\001\022\r\n\tmax_value\030\001\032\n\n\006output\030\001\"\026\n\001T\022\004type:\013\n\t2\007\004\006\005\003\t\001\002B \010\002\022\034Use AdjustContrastv2 instead\n?\n\020AdjustContrastv2\022\n\n\006images\030\001\022\023\n\017contrast_factor\030\001\032\n\n\006output\030\001\n.\n\tAdjustHue\022\n\n\006images\030\001\022\t\n\005delta\030\001\032\n\n\006output\030\001\n5\n\020AdjustSaturation\022\n\n\006images\030\001\022\t\n\005scale\030\001\032\n\n\006output\030\001\n\267\001\n\rCropAndResize\022\n\n\005image\"\001T\022\t\n\005boxes\030\001\022\013\n\007box_ind\030\003\022\r\n\tcrop_size\030\003\032\t\n\005crops\030\001\"\027\n\001T\022\004type:\014\n\n2\010\004\006\005\003\t\023\001\002\"*\n\006method\022\006string\032\n\022\010bilinear:\014\n\n\022\010bilinear\"#\n\023extrapolation_value\022\005float\032\005%\000\000\000\000\n\230\001\n\026CropAndResizeGradBoxes\022\t\n\005grads\030\001\022\n\n\005image\"\001T\022\t\n\005boxes\030\001\022\013\n\007box_ind\030\003\032\n\n\006output\030\001\"\027\n\001T\022\004type:\014\n\n2\010\004\006\005\003\t\023\001\002\"*\n\006method\022\006string\032\n\022\010bilinear:\014\n\n\022\010bilinear\n\230\001\n\026CropAndResizeGradImage\022\t\n\005grads\030\001\022\t\n\005boxes\030\001\022\013\n\007box_ind\030\003\022\016\n\nimage_size\030\003\032\013\n\006output\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\001\023\002\"*\n\006method\022\006string\032\n\022\010bilinear:\014\n\n\022\010bilinear\n9\n\tDecodeBmp\022\014\n\010contents\030\007\032\t\n\005image\030\004\"\023\n\010channels\022\003int\032\002\030\000\n$\n\tDecodeGif\022\014\n\010contents\030\007\032\t\n\005image\030\004\n\313\001\n\nDecodeJpeg\022\014\n\010contents\030\007\032\t\n\005image\030\004\"\023\n\010channels\022\003int\032\002\030\000\"\020\n\005ratio\022\003int\032\002\030\001\"\033\n\017fancy_upscaling\022\004bool\032\002(\001\"!\n\025try_recover_truncated\022\004bool\032\002(\000\"#\n\023acceptable_fraction\022\005float\032\005%\000\000\200?\"\030\n\ndct_method\022\006string\032\002\022\000\nY\n\tDecodePng\022\014\n\010contents\030\007\032\016\n\005image\"\005dtype\"\023\n\010channels\022\003int\032\002\030\000\"\031\n\005dtype\022\004type\032\0020\004:\006\n\0042\002\004\021\nO\n\021DrawBoundingBoxes\022\013\n\006images\"\001T\022\t\n\005boxes\030\001\032\013\n\006output\"\001T\"\025\n\001T\022\004type\032\0020\001:\006\n\0042\002\001\023\n\256\002\n\nEncodeJpeg\022\t\n\005image\030\004\032\014\n\010contents\030\007\"*\n\006format\022\006string\032\002\022\000:\024\n\022\022\000\022\tgrayscale\022\003rgb\"\022\n\007quality\022\003int\032\002\030_\"\027\n\013progressive\022\004bool\032\002(\000\"\031\n\roptimize_size\022\004bool\032\002(\000\"\037\n\023chroma_downsampling\022\004bool\032\002(\001\"(\n\014density_unit\022\006string\032\004\022\002in:\n\n\010\022\002in\022\002cm\"\025\n\tx_density\022\003int\032\003\030\254\002\"\025\n\ty_density\022\003int\032\003\030\254\002\"\032\n\014xmp_metadata\022\006string\032\002\022\000\n]\n\tEncodePng\022\n\n\005image\"\001T\032\014\n\010contents\030\007\"\037\n\013compression\022\003int\032\013\030\377\377\377\377\377\377\377\377\377\001\"\025\n\001T\022\004type\032\0020\004:\006\n\0042\002\004\021\n\210\001\n\016ExtractGlimpse\022\t\n\005input\030\001\022\010\n\004size\030\003\022\013\n\007offsets\030\001\032\013\n\007glimpse\030\001\"\024\n\010centered\022\004bool\032\002(\001\"\026\n\nnormalized\022\004bool\032\002(\001\"\031\n\runiform_noise\022\004bool\032\002(\001\n;\n\010HSVToRGB\022\013\n\006images\"\001T\032\013\n\006output\"\001T\"\025\n\001T\022\004type\032\0020\001:\006\n\0042\002\001\002\nt\n\021NonMaxSuppression\022\t\n\005boxes\030\001\022\n\n\006scores\030\001\022\023\n\017max_output_size\030\003\032\024\n\020selected_indices\030\003\"\035\n\riou_threshold\022\005float\032\005%\000\000\000?\nj\n\023NonMaxSuppressionV2\022\t\n\005boxes\030\001\022\n\n\006scores\030\001\022\023\n\017max_output_size\030\003\022\021\n\riou_threshold\030\001\032\024\n\020selected_indices\030\003\n\240\001\n\027QuantizedResizeBilinear\022\013\n\006images\"\001T\022\010\n\004size\030\003\022\007\n\003min\030\001\022\007\n\003max\030\001\032\023\n\016resized_images\"\001T\032\013\n\007out_min\030\001\032\013\n\007out_max\030\001\"\022\n\001T\022\004type:\007\n\0052\003\014\r\001\"\031\n\ralign_corners\022\004bool\032\002(\000\n;\n\010RGBToHSV\022\013\n\006images\"\001T\032\013\n\006output\"\001T\"\025\n\001T\022\004type\032\0020\001:\006\n\0042\002\001\002\n\221\001\n\nRandomCrop\022\n\n\005image\"\001T\022\010\n\004size\030\t\032\013\n\006output\"\001T\"\026\n\001T\022\004type:\013\n\t2\007\004\006\005\003\t\001\002\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000B\"\010\010\022\036Random crop is now pure Python\210\001\001\nk\n\nResizeArea\022\013\n\006images\"\001T\022\010\n\004size\030\003\032\022\n\016resized_images\030\001\"\027\n\001T\022\004type:\014\n\n2\010\004\006\005\003\t\023\001\002\"\031\n\ralign_corners\022\004bool\032\002(\000\nn\n\rResizeBicubic\022\013\n\006images\"\001T\022\010\n\004size\030\003\032\022\n\016resized_images\030\001\"\027\n\001T\022\004type:\014\n\n2\010\004\006\005\003\t\023\001\002\"\031\n\ralign_corners\022\004bool\032\002(\000\no\n\016ResizeBilinear\022\013\n\006images\"\001T\022\010\n\004size\030\003\032\022\n\016resized_images\030\001\"\027\n\001T\022\004type:\014\n\n2\010\004\006\005\003\t\023\001\002\"\031\n\ralign_corners\022\004bool\032\002(\000\np\n\022ResizeBilinearGrad\022\t\n\005grads\030\001\022\023\n\016original_image\"\001T\032\013\n\006output\"\001T\"\022\n\001T\022\004type:\007\n\0052\003\001\023\002\"\031\n\ralign_corners\022\004bool\032\002(\000\nw\n\025ResizeNearestNeighbor\022\013\n\006images\"\001T\022\010\n\004size\030\003\032\023\n\016resized_images\"\001T\"\027\n\001T\022\004type:\014\n\n2\010\004\006\005\003\t\023\001\002\"\031\n\ralign_corners\022\004bool\032\002(\000\np\n\031ResizeNearestNeighborGrad\022\n\n\005grads\"\001T\022\010\n\004size\030\003\032\013\n\006output\"\001T\"\025\n\001T\022\004type:\n\n\0102\006\004\006\003\023\001\002\"\031\n\ralign_corners\022\004bool\032\002(\000\n\343\002\n\032SampleDistortedBoundingBox\022\017\n\nimage_size\"\001T\022\022\n\016bounding_boxes\030\001\032\n\n\005begin\"\001T\032\t\n\004size\"\001T\032\n\n\006bboxes\030\001\"\024\n\001T\022\004type:\t\n\0072\005\004\006\005\003\t\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"\"\n\022min_object_covered\022\005float\032\005%\315\314\314=\"/\n\022aspect_ratio_range\022\013list(float)\032\014\n\n\"\010\000\000@?q=\252?\"\'\n\narea_range\022\013list(float)\032\014\n\n\"\010\315\314L=\000\000\200?\"\027\n\014max_attempts\022\003int\032\002\030d\"*\n\036use_image_if_no_bounding_boxes\022\004bool\032\002(\000\210\001\001\n\331\002\n\034SampleDistortedBoundingBoxV2\022\017\n\nimage_size\"\001T\022\022\n\016bounding_boxes\030\001\022\026\n\022min_object_covered\030\001\032\n\n\005begin\"\001T\032\t\n\004size\"\001T\032\n\n\006bboxes\030\001\"\024\n\001T\022\004type:\t\n\0072\005\004\006\005\003\t\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\"/\n\022aspect_ratio_range\022\013list(float)\032\014\n\n\"\010\000\000@?q=\252?\"\'\n\narea_range\022\013list(float)\032\014\n\n\"\010\315\314L=\000\000\200?\"\027\n\014max_attempts\022\003int\032\002\030d\"*\n\036use_image_if_no_bounding_boxes\022\004bool\032\002(\000\210\001\001")

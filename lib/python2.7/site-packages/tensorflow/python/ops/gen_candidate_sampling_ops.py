@@ -5,8 +5,6 @@ This file is MACHINE GENERATED! Do not edit.
 
 import collections as _collections
 
-from google.protobuf import text_format as _text_format
-
 from tensorflow.core.framework import op_def_pb2 as _op_def_pb2
 
 # Needed to trigger the call to _set_call_cpp_shape_fn.
@@ -489,433 +487,430 @@ def _uniform_candidate_sampler(true_classes, num_true, num_sampled, unique,
   return _UniformCandidateSamplerOutput._make(result)
 
 
-def _InitOpDefLibrary():
+def _InitOpDefLibrary(op_list_proto_bytes):
   op_list = _op_def_pb2.OpList()
-  _text_format.Merge(_InitOpDefLibrary.op_list_ascii, op_list)
+  op_list.ParseFromString(op_list_proto_bytes)
   _op_def_registry.register_op_list(op_list)
   op_def_lib = _op_def_library.OpDefLibrary()
   op_def_lib.add_op_list(op_list)
   return op_def_lib
 
 
-_InitOpDefLibrary.op_list_ascii = """op {
-  name: "AllCandidateSampler"
-  input_arg {
-    name: "true_classes"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "sampled_candidates"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "true_expected_count"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "sampled_expected_count"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_true"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "num_sampled"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "unique"
-    type: "bool"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "ComputeAccidentalHits"
-  input_arg {
-    name: "true_classes"
-    type: DT_INT64
-  }
-  input_arg {
-    name: "sampled_candidates"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "indices"
-    type: DT_INT32
-  }
-  output_arg {
-    name: "ids"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "weights"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_true"
-    type: "int"
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-}
-op {
-  name: "FixedUnigramCandidateSampler"
-  input_arg {
-    name: "true_classes"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "sampled_candidates"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "true_expected_count"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "sampled_expected_count"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_true"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "num_sampled"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "unique"
-    type: "bool"
-  }
-  attr {
-    name: "range_max"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "vocab_file"
-    type: "string"
-    default_value {
-      s: ""
-    }
-  }
-  attr {
-    name: "distortion"
-    type: "float"
-    default_value {
-      f: 1
-    }
-  }
-  attr {
-    name: "num_reserved_ids"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "num_shards"
-    type: "int"
-    default_value {
-      i: 1
-    }
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "shard"
-    type: "int"
-    default_value {
-      i: 0
-    }
-    has_minimum: true
-  }
-  attr {
-    name: "unigrams"
-    type: "list(float)"
-    default_value {
-      list {
-      }
-    }
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "LearnedUnigramCandidateSampler"
-  input_arg {
-    name: "true_classes"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "sampled_candidates"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "true_expected_count"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "sampled_expected_count"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_true"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "num_sampled"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "unique"
-    type: "bool"
-  }
-  attr {
-    name: "range_max"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "LogUniformCandidateSampler"
-  input_arg {
-    name: "true_classes"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "sampled_candidates"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "true_expected_count"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "sampled_expected_count"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_true"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "num_sampled"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "unique"
-    type: "bool"
-  }
-  attr {
-    name: "range_max"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "ThreadUnsafeUnigramCandidateSampler"
-  input_arg {
-    name: "true_classes"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "sampled_candidates"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "true_expected_count"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "sampled_expected_count"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_true"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "num_sampled"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "unique"
-    type: "bool"
-  }
-  attr {
-    name: "range_max"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  is_stateful: true
-}
-op {
-  name: "UniformCandidateSampler"
-  input_arg {
-    name: "true_classes"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "sampled_candidates"
-    type: DT_INT64
-  }
-  output_arg {
-    name: "true_expected_count"
-    type: DT_FLOAT
-  }
-  output_arg {
-    name: "sampled_expected_count"
-    type: DT_FLOAT
-  }
-  attr {
-    name: "num_true"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "num_sampled"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "unique"
-    type: "bool"
-  }
-  attr {
-    name: "range_max"
-    type: "int"
-    has_minimum: true
-    minimum: 1
-  }
-  attr {
-    name: "seed"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  attr {
-    name: "seed2"
-    type: "int"
-    default_value {
-      i: 0
-    }
-  }
-  is_stateful: true
-}
-"""
-
-
-_op_def_lib = _InitOpDefLibrary()
+# op {
+#   name: "AllCandidateSampler"
+#   input_arg {
+#     name: "true_classes"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "sampled_candidates"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "true_expected_count"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "sampled_expected_count"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_true"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "num_sampled"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "unique"
+#     type: "bool"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ComputeAccidentalHits"
+#   input_arg {
+#     name: "true_classes"
+#     type: DT_INT64
+#   }
+#   input_arg {
+#     name: "sampled_candidates"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "indices"
+#     type: DT_INT32
+#   }
+#   output_arg {
+#     name: "ids"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "weights"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_true"
+#     type: "int"
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+# }
+# op {
+#   name: "FixedUnigramCandidateSampler"
+#   input_arg {
+#     name: "true_classes"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "sampled_candidates"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "true_expected_count"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "sampled_expected_count"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_true"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "num_sampled"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "unique"
+#     type: "bool"
+#   }
+#   attr {
+#     name: "range_max"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "vocab_file"
+#     type: "string"
+#     default_value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     name: "distortion"
+#     type: "float"
+#     default_value {
+#       f: 1
+#     }
+#   }
+#   attr {
+#     name: "num_reserved_ids"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "num_shards"
+#     type: "int"
+#     default_value {
+#       i: 1
+#     }
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "shard"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#     has_minimum: true
+#   }
+#   attr {
+#     name: "unigrams"
+#     type: "list(float)"
+#     default_value {
+#       list {
+#       }
+#     }
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "LearnedUnigramCandidateSampler"
+#   input_arg {
+#     name: "true_classes"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "sampled_candidates"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "true_expected_count"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "sampled_expected_count"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_true"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "num_sampled"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "unique"
+#     type: "bool"
+#   }
+#   attr {
+#     name: "range_max"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "LogUniformCandidateSampler"
+#   input_arg {
+#     name: "true_classes"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "sampled_candidates"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "true_expected_count"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "sampled_expected_count"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_true"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "num_sampled"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "unique"
+#     type: "bool"
+#   }
+#   attr {
+#     name: "range_max"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "ThreadUnsafeUnigramCandidateSampler"
+#   input_arg {
+#     name: "true_classes"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "sampled_candidates"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "true_expected_count"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "sampled_expected_count"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_true"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "num_sampled"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "unique"
+#     type: "bool"
+#   }
+#   attr {
+#     name: "range_max"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   is_stateful: true
+# }
+# op {
+#   name: "UniformCandidateSampler"
+#   input_arg {
+#     name: "true_classes"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "sampled_candidates"
+#     type: DT_INT64
+#   }
+#   output_arg {
+#     name: "true_expected_count"
+#     type: DT_FLOAT
+#   }
+#   output_arg {
+#     name: "sampled_expected_count"
+#     type: DT_FLOAT
+#   }
+#   attr {
+#     name: "num_true"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "num_sampled"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "unique"
+#     type: "bool"
+#   }
+#   attr {
+#     name: "range_max"
+#     type: "int"
+#     has_minimum: true
+#     minimum: 1
+#   }
+#   attr {
+#     name: "seed"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   attr {
+#     name: "seed2"
+#     type: "int"
+#     default_value {
+#       i: 0
+#     }
+#   }
+#   is_stateful: true
+# }
+_op_def_lib = _InitOpDefLibrary(b"\n\327\001\n\023AllCandidateSampler\022\020\n\014true_classes\030\t\032\026\n\022sampled_candidates\030\t\032\027\n\023true_expected_count\030\001\032\032\n\026sampled_expected_count\030\001\"\023\n\010num_true\022\003int(\0010\001\"\026\n\013num_sampled\022\003int(\0010\001\"\016\n\006unique\022\004bool\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\210\001\001\n\230\001\n\025ComputeAccidentalHits\022\020\n\014true_classes\030\t\022\026\n\022sampled_candidates\030\t\032\013\n\007indices\030\003\032\007\n\003ids\030\t\032\013\n\007weights\030\001\"\017\n\010num_true\022\003int\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\n\225\003\n\034FixedUnigramCandidateSampler\022\020\n\014true_classes\030\t\032\026\n\022sampled_candidates\030\t\032\027\n\023true_expected_count\030\001\032\032\n\026sampled_expected_count\030\001\"\023\n\010num_true\022\003int(\0010\001\"\026\n\013num_sampled\022\003int(\0010\001\"\016\n\006unique\022\004bool\"\024\n\trange_max\022\003int(\0010\001\"\030\n\nvocab_file\022\006string\032\002\022\000\"\032\n\ndistortion\022\005float\032\005%\000\000\200?\"\033\n\020num_reserved_ids\022\003int\032\002\030\000\"\031\n\nnum_shards\022\003int\032\002\030\001(\0010\001\"\022\n\005shard\022\003int\032\002\030\000(\001\"\033\n\010unigrams\022\013list(float)\032\002\n\000\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\210\001\001\n\370\001\n\036LearnedUnigramCandidateSampler\022\020\n\014true_classes\030\t\032\026\n\022sampled_candidates\030\t\032\027\n\023true_expected_count\030\001\032\032\n\026sampled_expected_count\030\001\"\023\n\010num_true\022\003int(\0010\001\"\026\n\013num_sampled\022\003int(\0010\001\"\016\n\006unique\022\004bool\"\024\n\trange_max\022\003int(\0010\001\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\210\001\001\n\364\001\n\032LogUniformCandidateSampler\022\020\n\014true_classes\030\t\032\026\n\022sampled_candidates\030\t\032\027\n\023true_expected_count\030\001\032\032\n\026sampled_expected_count\030\001\"\023\n\010num_true\022\003int(\0010\001\"\026\n\013num_sampled\022\003int(\0010\001\"\016\n\006unique\022\004bool\"\024\n\trange_max\022\003int(\0010\001\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\210\001\001\n\375\001\n#ThreadUnsafeUnigramCandidateSampler\022\020\n\014true_classes\030\t\032\026\n\022sampled_candidates\030\t\032\027\n\023true_expected_count\030\001\032\032\n\026sampled_expected_count\030\001\"\023\n\010num_true\022\003int(\0010\001\"\026\n\013num_sampled\022\003int(\0010\001\"\016\n\006unique\022\004bool\"\024\n\trange_max\022\003int(\0010\001\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\210\001\001\n\361\001\n\027UniformCandidateSampler\022\020\n\014true_classes\030\t\032\026\n\022sampled_candidates\030\t\032\027\n\023true_expected_count\030\001\032\032\n\026sampled_expected_count\030\001\"\023\n\010num_true\022\003int(\0010\001\"\026\n\013num_sampled\022\003int(\0010\001\"\016\n\006unique\022\004bool\"\024\n\trange_max\022\003int(\0010\001\"\017\n\004seed\022\003int\032\002\030\000\"\020\n\005seed2\022\003int\032\002\030\000\210\001\001")
